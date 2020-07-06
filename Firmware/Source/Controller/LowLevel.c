@@ -6,22 +6,9 @@
 
 // Functions
 //
-void LL_ToggleBoardLED()
+void LL_ToggleLED()
 {
 	GPIO_Toggle(GPIO_LED);
-}
-//-----------------------------
-
-void LL_Fan(bool State)
-{
-	GPIO_SetState(GPIO_FAN, State);
-}
-//-----------------------------
-
-void LL_BatteryDischarge(bool State)
-{
-	// Разряд происходит при низком уровне на пине
-	GPIO_SetState(GPIO_BAT_CHARGE, !State);
 }
 //-----------------------------
 
@@ -31,63 +18,108 @@ void LL_ExternalLED(bool State)
 }
 //-----------------------------
 
-void LL_MeanWellRelay(bool State)
+void LL_CTRL_VDUTAmp11V(bool State)
 {
-	GPIO_SetState(GPIO_MW_CTRL, State);
+	GPIO_SetState(GPIO_CTRL_SEN_11V, State);
 }
 //-----------------------------
 
-void LL_PSBoardOutput(bool State)
+void LL_CTRL_VDUTAmp1500mV(bool State)
 {
-	GPIO_SetState(GPIO_HVPS_CTRL, State);
+	GPIO_SetState(GPIO_CTRL_SEN_1500mV, State);
 }
 //-----------------------------
 
-void LL_SoftSpiSRCK(bool State)
+void LL_CTRL_VDUTAmp250mV(bool State)
 {
-	GPIO_SetState(GPIO_SRCK, State);
+	GPIO_SetState(GPIO_CTRL_SEN_250mV, State);
 }
 //-----------------------------
 
-void LL_SoftSpiRCK(bool State)
+void LL_CTRL_VDUTAmp30mV(bool State)
 {
-	GPIO_SetState(GPIO_RCK, State);
+	GPIO_SetState(GPIO_CTRL_SEN_30mV, State);
 }
 //-----------------------------
 
-void LL_SoftSpiData(bool State)
+void LL_EN_Range20mA(bool State)
 {
-	GPIO_SetState(GPIO_DATA, State);
+	GPIO_SetState(GPIO_EN_RANGE_20mA, State);
 }
 //-----------------------------
 
-void LL_WriteToGateRegister(uint16_t Data)
+void LL_EN_Range200mA(bool State)
 {
-	for(uint8_t i = 0; i < 16; ++i)
-	{
-		LL_SoftSpiData((Data >> i) & 0x1);
-		DELAY_US(1);
-		LL_SoftSpiSRCK(TRUE);
-		DELAY_US(1);
-		LL_SoftSpiSRCK(FALSE);
-	}
+	GPIO_SetState(GPIO_EN_RANGE_200mA, State);
+}
+//-----------------------------
 
-	LL_SoftSpiRCK(TRUE);
+void LL_EN_Range2A(bool State)
+{
+	GPIO_SetState(GPIO_EN_RANGE_2A, State);
+}
+//-----------------------------
+
+void LL_EN_Range20A(bool State)
+{
+	GPIO_SetState(GPIO_CTRL_RLC_20A, State);
+}
+//-----------------------------
+
+void LL_EN_Range270A(bool State)
+{
+	bool ResState;
+
+	ResState=!State;
+
+	GPIO_SetState(GPIO_SET_RLC_270A, State);
+	GPIO_SetState(GPIO_RES_RLC_270A, ResState);
+}
+//-----------------------------
+
+void LL_BatteryDischarge(bool State)
+{
+	GPIO_SetState(GPIO_BAT_DISCHARGE, State);
+}
+//-----------------------------
+
+void LL_PSBoardOff(bool State)
+{
+	GPIO_SetState(GPIO_PS_CTRL, State);
+}
+//-----------------------------
+
+void LL_ForceSYNC1(bool State)
+{
+	GPIO_SetState(GPIO_SYNC_OUT1, State);
+}
+//-----------------------------
+
+void LL_ForceSYNC2(bool State)
+{
+	GPIO_SetState(GPIO_SYNC_OUT2, State);
+}
+//-----------------------------
+
+void LL_WriteDACx(uint16_t Data, GPIO_PortPinSetting GPIO_LDACx)
+{
+	GPIO_SetState(GPIO_CS, false);
+	SPI_WriteByte(SPI1, Data);
+	GPIO_SetState(GPIO_CS, true);
 	DELAY_US(1);
-	LL_SoftSpiRCK(FALSE);
-	LL_SoftSpiData(FALSE);
+
+	GPIO_SetState(GPIO_LDACx, false);
+	DELAY_US(1);
+	GPIO_SetState(GPIO_LDACx, true);
+	DELAY_US(1);
 }
 //-----------------------------
 
-void LL_ForceSYNC(bool State)
+void LL_OutputRegister_Write(uint16_t Data)
 {
-	// Синхронизация происходит при низком уровне на пине
-	GPIO_SetState(GPIO_SYNC, !State);
-}
-//-----------------------------
-
-bool LL_GetSYNCState()
-{
-	return GPIO_GetState(GPIO_SYNC);
+	GPIO_SetState(GPIO_SREG_CS, false);
+	SPI_WriteByte(SPI1, Data);
+	GPIO_SetState(GPIO_SREG_CS, true);
+	GPIO_SetState(GPIO_SREG_OE, false);
 }
 //-----------------------------

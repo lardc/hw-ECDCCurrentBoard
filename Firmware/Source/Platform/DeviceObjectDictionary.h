@@ -4,17 +4,28 @@
 // Команды
 #define ACT_ENABLE_POWER				1	// Переход в состояние ожидания
 #define ACT_DISABLE_POWER				2	// Отключение блока
-#define ACT_FAULT_CLEAR					3	// Очистка fault
-#define ACT_WARNING_CLEAR				4	// Очистка warning
+#define ACT_START_PROCESS				3	// Страрт процесса формирования импульса
+#define ACT_STOP_PROCESS				4	// Остановка процесса формирования импульса
+#define ACT_FAULT_CLEAR					5	// Очистка fault
+#define ACT_WARNING_CLEAR				6	// Очистка warning
 
-#define ACT_DBG_FAN						10	// Импульсное включение вентилятора
-#define ACT_DBG_DISCHARGE				11	// Импульсное включение реле разряда конденстаторов
-#define ACT_DBG_EXT_LED					12	// Импульсное включение внешней индикации
-#define ACT_DBG_MW_RELAY				13	// Импульсное включение реле питания БП MeanWell
-#define ACT_DBG_PSBOARD_OUTPUT			14	// Импульсное включение сигнала для PSBOARD
-#define ACT_DBG_GATE_CONTROL			15	// Запись значения в сдвиговый регистр управления затворами
-
-#define ACT_PULSE_CONFIG				100	// Конфигурация напряжения и настройка затворов транзисторов
+#define ACT_DBG_Implse_ExternalLED		10	// Импульсное включение внешней индикации
+#define ACT_DBG_CTRL_VDUTAmp11V			11	// Импульсное включение канала усиления напряжения DUT 11В
+#define ACT_DBG_CTRL_VDUTAmp1500mV		12	// Импульсное включение канала усиления напряжения DUT 1.5В
+#define ACT_DBG_CTRL_VDUTAmp250mV		13	// Импульсное включение канала усиления напряжения DUT 250мВ
+#define ACT_DBG_CTRL_VDUTAmp30mV		14	// Импульсное включение канала усиления напряжения DUT 30мВ
+#define ACT_DBG_EN_Range20mA			15	// Импульсное включение реле шунта канала формирования тока до 20мА
+#define ACT_DBG_EN_Range200mA			16	// Импульсное включение реле шунта канала формирования тока до 200мА
+#define ACT_DBG_EN_Range2A				17	// Импульсное включение реле шунта канала формирования тока до 2А
+#define ACT_DBG_EN_Range20A				18	// Импульсное включение реле шунта канала формирования тока до 20А
+#define ACT_DBG_EN_Range270A			19	// Импульсное включение реле шунта канала формирования тока до 270А
+#define ACT_DBG_EN_BatteryDischarge		20	// Импульсное включение реле разряда батареи
+#define ACT_ACT_DBG_EN_PSBoardOutput	21	// Импульсное включение разрешения работы заряда батареи
+#define ACT_DBG_Impulse_ForceSYNC1		22	// Импульсное включение первого выхода синхронизации
+#define ACT_DBG_Impulse_ForceSYNC2		23	// Импульсное включение второго выхода синхронизации
+#define ACT_DBG_SendDataToDACx			24	// Отправка тестовых данных на ЦАП
+#define ACT_DBG_SendDataToOutRegister	25	// Отправка тестовых данных на внешний сдвиговый регистр
+#define ACT_DBG_MEASURE_ADC_CH			26	// Чтение каналов АЦП
 
 #define ACT_SAVE_TO_ROM					200	// Сохранение пользовательских данных во FLASH процессора
 #define ACT_RESTORE_FROM_ROM			201	// Восстановление данных из FLASH
@@ -24,17 +35,31 @@
 // -----------------------------
 
 // Регистры
+//Регистры отладки
+#define REG_DBG_IOData					0	// Регистор приема передачи тестовых данных
+#define REG_DBG_ChanellSelect			1	// Тестовый регистр выбора ЦАП
+
 // Сохраняемые регистры
-#define REG_V_BAT_OFFSET				0	// Смещение оцифрованного напряжения батареи 1 (в тиках)
-#define REG_V_BAT_K						1	// Коэффициент пересчёта напряжения АЦП (в мВ) в напряжение батареи (в В) x1000
-#define REG_VOLTAGE_ERROR_LIMIT			2	// Допустимая ошибка регулирования напряжения (в В)
-#define REG_BAT_CHARGE_TIMEOUT			3	// Таймаут выхода батареи на заданное напряжение (в мс)
-#define REG_FAN_OPERATE_TIME			4	// Время работы вентилятора после импульса (в с)
-#define REG_FAN_OPERATE_PERIOD			5	// В простое вентилятор включается не реже чем (в с)
+#define REG_V_BAT_MEASURE				2	// Измеренное значение напряжения на батареи (в В)
+#define REG_V_BAT_OFFSET				3	// Смещение оцифрованного напряжения батареи (в тиках)
+#define REG_V_BAT_K						4	// Коэффициент пересчёта напряжения АЦП (в мВ) в напряжение (в В) x1000
+
+#define REG_V_DUT_MEASURE				5	// Измеренное значение напряжения на DUT (в В)
+#define REG_V_DUT_OFFSET				6	// Смещение оцифрованного напряжения DUT (в тиках)
+#define REG_V_DUT_K						7	// Коэффициент пересчёта напряжения АЦП (в мВ) в напряжение (в В) x1000
+#define REG_V_DUT_P0					8	// Полином точной корректировки напряжения DUT P0 (в вольтах)
+#define REG_V_DUT_P1					9	// Полином точной корректировки напряжения DUT P1 x1000
+#define REG_V_DUT_P2					10	// Полином точной корректировки напряжения DUT P2 x1e6
+
+#define REG_I_DUT_MEASURE				11	// Измеренное значение импульса тока (в В)
+#define REG_I_DUT_OFFSET				12	// Смещение оцифрованного импульса тока (в тиках)
+#define REG_I_DUT_K						13	// Коэффициент пересчёта напряжения АЦП (в мВ) в напряжение (в В) x1000
+#define REG_I_DUT_P0					14	// Полином точной корректировки тока DUT P0 (в вольтах)
+#define REG_I_DUT_P1					15	// Полином точной корректировки тока DUT P1 x1000
+#define REG_I_DUT_P2					16	// Полином точной корректировки тока DUT P2 x1e6
 
 // Несохраняемы регистры чтения-записи
-#define REG_VOLTAGE_SETPOINT			128	// Значение задания напряжения (в В)
-#define REG_GATE_REGISTER				129	// Значение-маска конфигурации затворов
+#define REG_CURRENT_SETPOINT			128	// Значение задания тока (в А)
 
 // Регистры только чтение
 #define REG_DEV_STATE					192	// Регистр состояния

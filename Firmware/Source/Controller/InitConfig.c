@@ -4,52 +4,60 @@
 
 // Functions
 //
-Boolean SysClk_Config()
+Boolean INITCFG_ConfigSystemClock()
 {
 	return RCC_PLL_HSE_Config(QUARTZ_FREQUENCY, PREDIV_4, PLL_14);
 }
 //------------------------------------------------
 
-void EI_Config()
-{
-	EXTI_Config(EXTI_PA, EXTI_8, RISE_TRIG, 0);
-	EXTI_EnableInterrupt(EXTI3_IRQn, 0, true);
-}
-//------------------------------------------------
-
-void IO_Config()
+void INITCFG_ConfigIO()
 {
 	// Включение тактирования портов
 	RCC_GPIO_Clk_EN(PORTA);
 	RCC_GPIO_Clk_EN(PORTB);
+	RCC_GPIO_Clk_EN(PORTC);
 	
 	// Аналаговые входы
-	GPIO_Config(GPIOA, Pin_3, Analog, NoPull, HighSpeed, NoPull);
+	GPIO_Config(GPIOA, Pin_0, Analog, NoPull, HighSpeed, NoPull);
+	GPIO_Config(GPIOA, Pin_4, Analog, NoPull, HighSpeed, NoPull);
+	GPIO_Config(GPIOA, Pin_6, Analog, NoPull, HighSpeed, NoPull);
 	
-	// Линия синхронизации (вход - выход)
-	GPIO_Config(GPIOA, Pin_8, Output, OpenDrain, HighSpeed, NoPull);
-	GPIO_SetState(GPIO_SYNC, true);
+	// Линия синхронизации (выходы)
+	GPIO_InitPushPullOutput(GPIO_SYNC_OUT2);
+	GPIO_InitPushPullOutput(GPIO_SYNC_OUT1);
 	
 	// Выходы
-	GPIO_InitPushPullOutput(GPIO_RCK);
-	GPIO_InitPushPullOutput(GPIO_SRCK);
-	GPIO_InitPushPullOutput(GPIO_DATA);
-	GPIO_InitPushPullOutput(GPIO_FAN);
+	GPIO_InitPushPullOutput(GPIO_CS);
+	GPIO_InitPushPullOutput(GPIO_LDAC1);
+	GPIO_InitPushPullOutput(GPIO_LDAC2);
+	GPIO_InitPushPullOutput(GPIO_CTRL_SEN_11V);
+	GPIO_InitPushPullOutput(GPIO_CTRL_SEN_1500mV);
+	GPIO_InitPushPullOutput(GPIO_SREG_OE);
+	GPIO_InitPushPullOutput(GPIO_SREG_CS);
+	GPIO_InitPushPullOutput(GPIO_EN_RANGE_200mA);
+	GPIO_InitPushPullOutput(GPIO_CTRL_SEN_250mV);
+	GPIO_InitPushPullOutput(GPIO_CTRL_SEN_30mV);
+	GPIO_InitPushPullOutput(GPIO_CTRL_RLC_20A);
+	GPIO_InitPushPullOutput(GPIO_SET_RLC_270A);
+	GPIO_InitPushPullOutput(GPIO_RES_RLC_270A);
+	GPIO_InitPushPullOutput(GPIO_BAT_DISCHARGE);
+	GPIO_InitPushPullOutput(GPIO_PS_CTRL);
+	GPIO_InitPushPullOutput(GPIO_EN_RANGE_2A);
+	GPIO_InitPushPullOutput(GPIO_EN_RANGE_20mA);
 	GPIO_InitPushPullOutput(GPIO_LED);
 	GPIO_InitPushPullOutput(GPIO_LED_EXT);
-	GPIO_InitPushPullOutput(GPIO_BAT_CHARGE);
-	GPIO_InitPushPullOutput(GPIO_HVPS_CTRL);
-	GPIO_InitPushPullOutput(GPIO_MW_CTRL);
 	
 	// Альтернативные функции
 	GPIO_InitAltFunction(GPIO_ALT_CAN_RX, AltFn_9);
 	GPIO_InitAltFunction(GPIO_ALT_CAN_TX, AltFn_9);
 	GPIO_InitAltFunction(GPIO_ALT_UART_RX, AltFn_7);
 	GPIO_InitAltFunction(GPIO_ALT_UART_TX, AltFn_7);
+	GPIO_InitAltFunction(GPIO_ALT_SPI1_CLK, AltFn_5);
+	GPIO_InitAltFunction(GPIO_ALT_SPI1_MOSI, AltFn_5);
 }
 //------------------------------------------------
 
-void CAN_Config()
+void INITCFG_ConfigCAN()
 {
 	RCC_CAN_Clk_EN(CAN_1_ClkEN);
 	NCAN_Init(SYSCLK, CAN_BAUDRATE, FALSE);
@@ -58,24 +66,36 @@ void CAN_Config()
 }
 //------------------------------------------------
 
-void UART_Config()
+void INITCFG_ConfigUART()
 {
 	USART_Init(USART1, SYSCLK, USART_BAUDRATE);
 	USART_Recieve_Interupt(USART1, 0, true);
 }
 //------------------------------------------------
 
-void ADC_Init()
+void INITCFG_ConfigSPI()
+{
+	SPI_Init(SPI1, SPI_CR1_BR, true);
+}
+//------------------------------------------------------------------------------
+
+
+void  INITCFG_ConfigADC()
 {
 	RCC_ADC_Clk_EN(ADC_12_ClkEN);
-	
 	ADC_Calibration(ADC1);
+	ADC_Calibration(ADC2);
 	ADC_SoftTrigConfig(ADC1);
+	ADC_SoftTrigConfig(ADC2);
+	ADC_ChannelSet_SampleTime(ADC1, 1, ADC_SMPL_TIME_7_5);
+	ADC_ChannelSet_SampleTime(ADC2, 1, ADC_SMPL_TIME_7_5);
+	ADC_ChannelSet_SampleTime(ADC2, 3, ADC_SMPL_TIME_7_5);
 	ADC_Enable(ADC1);
+	ADC_Enable(ADC2);
 }
 //------------------------------------------------
 
-void Timer7_Config()
+void INITCFG_ConfigTimer7()
 {
 	TIM_Clock_En(TIM_7);
 	TIM_Config(TIM7, SYSCLK, TIMER7_uS);
@@ -84,7 +104,7 @@ void Timer7_Config()
 }
 //------------------------------------------------
 
-void WatchDog_Config()
+void INITCFG_ConfigWatchDog()
 {
 	IWDG_Config();
 	IWDG_ConfigureFastUpdate();

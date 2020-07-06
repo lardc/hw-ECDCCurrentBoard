@@ -5,13 +5,13 @@
 
 //Functions
 //
-Boolean SysClk_Config();
-void EI_Config();
-void IO_Config();
-void CAN_Config();
-void UART_Config();
-void ADC_Init();
-void Timer7_Config();
-void WatchDog_Config();
+Boolean INITCFG_ConfigSystemClock();
+void INITCFG_ConfigIO();
+void INITCFG_ConfigSPI();
+void INITCFG_ConfigCAN();
+void INITCFG_ConfigUART();
+void INITCFG_ConfigADC();
+void INITCFG_ConfigTimer7();
+void INITCFG_ConfigWatchDog();
 
 #endif //__INITCONFIG_H

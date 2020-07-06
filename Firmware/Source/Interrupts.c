@@ -15,8 +15,6 @@ void EXTI3_IRQnHandler()
 {
 	DataTable[REG_OP_RESULT] = OPRESULT_OK;
 
-	CONTROL_HandleFanLogic(true);
-
 	LL_ExternalLED(true);
 	CONTROL_LEDTimeout = CONTROL_TimeCounter + TIME_EXT_LED_BLINK;
 
@@ -50,12 +48,11 @@ void TIM7_IRQHandler()
 
 	if(TIM_StatusCheck(TIM7))
 	{
-		CONTROL_HandleFanLogic(false);
 
 		CONTROL_TimeCounter++;
 		if(++LED_BlinkTimeCounter > TIME_LED_BLINK)
 		{
-			LL_ToggleBoardLED();
+			LL_ToggleLED();
 			LED_BlinkTimeCounter = 0;
 		}
 
