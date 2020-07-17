@@ -11,7 +11,6 @@
 #include "DeviceObjectDictionary.h"
 #include "DeviceProfile.h"
 
-
 // Constants
 //
 #define DATA_TABLE_SIZE         256
@@ -34,7 +33,6 @@
  * DATA TABLE END 					------------- [255]
  */
 
-
 // Types
 //
 typedef void (*FUNC_SetDefaultValues)();
@@ -47,11 +45,9 @@ typedef struct __EPROMServiceConfig
 	FUNC_EPROM_ReadValues ReadService;
 } EPROMServiceConfig, *pERPOMServiceConfig;
 
-
 // Variables
 //
 extern volatile Int16U DataTable[DATA_TABLE_SIZE];
-
 
 // Functions
 //

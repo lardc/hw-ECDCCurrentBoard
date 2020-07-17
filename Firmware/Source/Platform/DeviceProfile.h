@@ -15,7 +15,6 @@
 
 extern BCCIM_Interface MASTER_DEVICE_CAN_Interface;
 
-
 // Functions
 //
 // Initialize device profile engine
@@ -31,12 +30,13 @@ void DEVPROFILE_ResetControlSection();
 // Update diagnostic registers
 void DEVPROFILE_UpdateCANDiagStatus();
 //
-Int16U DEVPROFILE_CallbackReadX(Int16U Endpoint, pInt16U *Buffer, Boolean Streamed,
-									   Boolean RepeatLastTransmission, void *EPStateAddress, Int16U MaxNonStreamSize);
+Int16U DEVPROFILE_CallbackReadX(Int16U Endpoint, pInt16U *Buffer, Boolean Streamed, Boolean RepeatLastTransmission,
+		void *EPStateAddress, Int16U MaxNonStreamSize);
 
 void DEVPROFILE_ResetEPReadState();
 void DEVPROFILE_ResetScopes(Int16U ResetPosition);
 void DEVPROFILE_InitEPWriteService(pInt16U Indexes, pInt16U Sizes, pInt16U *Counters, pInt16U *Datas);
-Boolean DEVPROFILE_CallbackWriteX(Int16U Endpoint, pInt16U Buffer, Boolean Streamed, Int16U Length, void *EPStateAddress);
+Boolean DEVPROFILE_CallbackWriteX(Int16U Endpoint, pInt16U Buffer, Boolean Streamed, Int16U Length,
+		void *EPStateAddress);
 void DEVPROFILE_FillNVPartDefault(void);
 #endif // __DEV_PROFILE_H

@@ -18,9 +18,9 @@ void INITCFG_ConfigIO()
 	RCC_GPIO_Clk_EN(PORTC);
 	
 	// Аналаговые входы
-	GPIO_Config(GPIOA, Pin_0, Analog, NoPull, HighSpeed, NoPull);
-	GPIO_Config(GPIOA, Pin_4, Analog, NoPull, HighSpeed, NoPull);
-	GPIO_Config(GPIOA, Pin_6, Analog, NoPull, HighSpeed, NoPull);
+	GPIO_InitAnalog(GPIO_MEASURE_V);
+	GPIO_InitAnalog(GPIO_MEASURE_I);
+	GPIO_InitAnalog(GPIO_MEASURE_VBAT);
 	
 	// Линия синхронизации (выходы)
 	GPIO_InitPushPullOutput(GPIO_SYNC_OUT2);
@@ -30,20 +30,20 @@ void INITCFG_ConfigIO()
 	GPIO_InitPushPullOutput(GPIO_CS);
 	GPIO_InitPushPullOutput(GPIO_LDAC1);
 	GPIO_InitPushPullOutput(GPIO_LDAC2);
-	GPIO_InitPushPullOutput(GPIO_CTRL_SEN_11V);
-	GPIO_InitPushPullOutput(GPIO_CTRL_SEN_1500mV);
+	GPIO_InitPushPullOutput(GPIO_ENABLE_11V);
+	GPIO_InitPushPullOutput(GPIO_ENABLE_1500MV);
 	GPIO_InitPushPullOutput(GPIO_SREG_OE);
 	GPIO_InitPushPullOutput(GPIO_SREG_CS);
-	GPIO_InitPushPullOutput(GPIO_EN_RANGE_200mA);
-	GPIO_InitPushPullOutput(GPIO_CTRL_SEN_250mV);
-	GPIO_InitPushPullOutput(GPIO_CTRL_SEN_30mV);
-	GPIO_InitPushPullOutput(GPIO_CTRL_RLC_20A);
+	GPIO_InitPushPullOutput(GPIO_ENABLE_200MA);
+	GPIO_InitPushPullOutput(GPIO_ENABLE_250MV);
+	GPIO_InitPushPullOutput(GPIO_ENABLE_30MV);
+	GPIO_InitPushPullOutput(GPIO_ENABLE_20A);
 	GPIO_InitPushPullOutput(GPIO_SET_RLC_270A);
-	GPIO_InitPushPullOutput(GPIO_RES_RLC_270A);
-	GPIO_InitPushPullOutput(GPIO_BAT_DISCHARGE);
-	GPIO_InitPushPullOutput(GPIO_PS_CTRL);
-	GPIO_InitPushPullOutput(GPIO_EN_RANGE_2A);
-	GPIO_InitPushPullOutput(GPIO_EN_RANGE_20mA);
+	GPIO_InitPushPullOutput(GPIO_RESET_RLC_270A);
+	GPIO_InitPushPullOutput(GPIO_DISCHARGE_BAT);
+	GPIO_InitPushPullOutput(GPIO_CTRL_PS);
+	GPIO_InitPushPullOutput(GPIO_ENABLE_2A);
+	GPIO_InitPushPullOutput(GPIO_ENABLE_20MA);
 	GPIO_InitPushPullOutput(GPIO_LED);
 	GPIO_InitPushPullOutput(GPIO_LED_EXT);
 	
@@ -79,8 +79,7 @@ void INITCFG_ConfigSPI()
 }
 //------------------------------------------------------------------------------
 
-
-void  INITCFG_ConfigADC()
+void INITCFG_ConfigADC()
 {
 	RCC_ADC_Clk_EN(ADC_12_ClkEN);
 	ADC_Calibration(ADC1);

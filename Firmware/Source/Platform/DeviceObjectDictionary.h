@@ -9,23 +9,23 @@
 #define ACT_FAULT_CLEAR					5	// Очистка fault
 #define ACT_WARNING_CLEAR				6	// Очистка warning
 
-#define ACT_DBG_Implse_ExternalLED		10	// Импульсное включение внешней индикации
-#define ACT_DBG_CTRL_VDUTAmp11V			11	// Импульсное включение канала усиления напряжения DUT 11В
-#define ACT_DBG_CTRL_VDUTAmp1500mV		12	// Импульсное включение канала усиления напряжения DUT 1.5В
-#define ACT_DBG_CTRL_VDUTAmp250mV		13	// Импульсное включение канала усиления напряжения DUT 250мВ
-#define ACT_DBG_CTRL_VDUTAmp30mV		14	// Импульсное включение канала усиления напряжения DUT 30мВ
-#define ACT_DBG_EN_Range20mA			15	// Импульсное включение реле шунта канала формирования тока до 20мА
-#define ACT_DBG_EN_Range200mA			16	// Импульсное включение реле шунта канала формирования тока до 200мА
-#define ACT_DBG_EN_Range2A				17	// Импульсное включение реле шунта канала формирования тока до 2А
-#define ACT_DBG_EN_Range20A				18	// Импульсное включение реле шунта канала формирования тока до 20А
-#define ACT_DBG_EN_Range270A			19	// Импульсное включение реле шунта канала формирования тока до 270А
-#define ACT_DBG_EN_BatteryDischarge		20	// Импульсное включение реле разряда батареи
-#define ACT_ACT_DBG_EN_PSBoardOutput	21	// Импульсное включение разрешения работы заряда батареи
-#define ACT_DBG_Impulse_ForceSYNC1		22	// Импульсное включение первого выхода синхронизации
-#define ACT_DBG_Impulse_ForceSYNC2		23	// Импульсное включение второго выхода синхронизации
-#define ACT_DBG_SendDataToDACx			24	// Отправка тестовых данных на ЦАП
-#define ACT_DBG_SendDataToOutRegister	25	// Отправка тестовых данных на внешний сдвиговый регистр
-#define ACT_DBG_MEASURE_ADC_CH			26	// Чтение каналов АЦП
+#define ACT_DBG_IMPULSE_LED				10	// Импульсное включение внешней индикации
+#define ACT_DBG_ENABLE_AMP11V			11	// Импульсное включение канала усиления напряжения DUT 11В
+#define ACT_DBG_ENABLE_AMP1500MV		12	// Импульсное включение канала усиления напряжения DUT 1.5В
+#define ACT_DBG_ENABLE_AMP250MV			13	// Импульсное включение канала усиления напряжения DUT 250мВ
+#define ACT_DBG_ENABLE_AMP30MV			14	// Импульсное включение канала усиления напряжения DUT 30мВ
+#define ACT_DBG_ENABLE_RNG20MA			15	// Импульсное включение реле шунта канала формирования тока до 20мА
+#define ACT_DBG_ENABLE_RNG200MA			16	// Импульсное включение реле шунта канала формирования тока до 200мА
+#define ACT_DBG_ENABLE_RNG2A			17	// Импульсное включение реле шунта канала формирования тока до 2А
+#define ACT_DBG_ENABLE_RNG20A			18	// Импульсное включение реле шунта канала формирования тока до 20А
+#define ACT_DBG_ENABLE_RNG270A			19	// Импульсное включение реле шунта канала формирования тока до 270А
+#define ACT_DBG_ENABLE_DISCHARGE		20	// Импульсное включение реле разряда батареи
+#define ACT_DBG_ENABLE_PSBOARD			21	// Импульсное включение разрешения работы заряда батареи
+#define ACT_DBG_IMPULSE_SYNC1			22	// Импульсное включение первого выхода синхронизации
+#define ACT_DBG_IMPULSE_SYNC2			23	// Импульсное включение второго выхода синхронизации
+#define ACT_DBG_SEND_DATA_TO_DAC		24	// Отправка тестовых данных на ЦАП
+#define ACT_DBG_SEND_DATA_TO_REG		25	// Отправка тестовых данных на внешний сдвиговый регистр
+#define ACT_DBG_MEASURE_ADC				26	// Чтение каналов АЦП
 
 #define ACT_SAVE_TO_ROM					200	// Сохранение пользовательских данных во FLASH процессора
 #define ACT_RESTORE_FROM_ROM			201	// Восстановление данных из FLASH
@@ -35,10 +35,6 @@
 // -----------------------------
 
 // Регистры
-//Регистры отладки
-#define REG_DBG_IOData					0	// Регистор приема передачи тестовых данных
-#define REG_DBG_ChanellSelect			1	// Тестовый регистр выбора ЦАП
-
 // Сохраняемые регистры
 #define REG_V_BAT_MEASURE				2	// Измеренное значение напряжения на батареи (в В)
 #define REG_V_BAT_OFFSET				3	// Смещение оцифрованного напряжения батареи (в тиках)
@@ -60,6 +56,10 @@
 
 // Несохраняемы регистры чтения-записи
 #define REG_CURRENT_SETPOINT			128	// Значение задания тока (в А)
+
+//Регистры отладки
+#define REG_DBG_DATA					140	// Регистор приема передачи тестовых данных
+#define REG_DBG_ENABLE_DEVICE			141	// Тестовый регистр выбора ЦАП
 
 // Регистры только чтение
 #define REG_DEV_STATE					192	// Регистр состояния

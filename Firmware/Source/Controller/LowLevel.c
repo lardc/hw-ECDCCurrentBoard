@@ -6,96 +6,96 @@
 
 // Functions
 //
-void LL_ToggleLED()
+void LL_ToggleLed()
 {
 	GPIO_Toggle(GPIO_LED);
 }
 //-----------------------------
 
-void LL_ExternalLED(bool State)
+void LL_ExternalLed(bool State)
 {
 	GPIO_SetState(GPIO_LED_EXT, State);
 }
 //-----------------------------
 
-void LL_CTRL_VDUTAmp11V(bool State)
+void LL_EnableAmp11V(bool State)
 {
-	GPIO_SetState(GPIO_CTRL_SEN_11V, State);
+	GPIO_SetState(GPIO_ENABLE_11V, State);
 }
 //-----------------------------
 
-void LL_CTRL_VDUTAmp1500mV(bool State)
+void LL_EnableAmp1500MV(bool State)
 {
-	GPIO_SetState(GPIO_CTRL_SEN_1500mV, State);
+	GPIO_SetState(GPIO_ENABLE_1500MV, State);
 }
 //-----------------------------
 
-void LL_CTRL_VDUTAmp250mV(bool State)
+void LL_EnableAmp250MV(bool State)
 {
-	GPIO_SetState(GPIO_CTRL_SEN_250mV, State);
+	GPIO_SetState(GPIO_ENABLE_250MV, State);
 }
 //-----------------------------
 
-void LL_CTRL_VDUTAmp30mV(bool State)
+void LL_EnableAmp30MV(bool State)
 {
-	GPIO_SetState(GPIO_CTRL_SEN_30mV, State);
+	GPIO_SetState(GPIO_ENABLE_30MV, State);
 }
 //-----------------------------
 
-void LL_EN_Range20mA(bool State)
+void LL_EnableRange20MA(bool State)
 {
-	GPIO_SetState(GPIO_EN_RANGE_20mA, State);
+	GPIO_SetState(GPIO_ENABLE_20MA, State);
 }
 //-----------------------------
 
-void LL_EN_Range200mA(bool State)
+void LL_EnableRange200MA(bool State)
 {
-	GPIO_SetState(GPIO_EN_RANGE_200mA, State);
+	GPIO_SetState(GPIO_ENABLE_200MA, State);
 }
 //-----------------------------
 
-void LL_EN_Range2A(bool State)
+void LL_EnableRange2A(bool State)
 {
-	GPIO_SetState(GPIO_EN_RANGE_2A, State);
+	GPIO_SetState(GPIO_ENABLE_2A, State);
 }
 //-----------------------------
 
-void LL_EN_Range20A(bool State)
+void LL_EnableRange20A(bool State)
 {
-	GPIO_SetState(GPIO_CTRL_RLC_20A, State);
+	GPIO_SetState(GPIO_ENABLE_20A, State);
 }
 //-----------------------------
 
-void LL_EN_Range270A(bool State)
+void LL_EnableRange270A(bool State)
 {
 	bool ResState;
-
-	ResState=!State;
-
+	
+	ResState = !State;
+	
 	GPIO_SetState(GPIO_SET_RLC_270A, State);
-	GPIO_SetState(GPIO_RES_RLC_270A, ResState);
+	GPIO_SetState(GPIO_RESET_RLC_270A, ResState);
 }
 //-----------------------------
 
-void LL_BatteryDischarge(bool State)
+void LL_DischargeBattery(bool State)
 {
-	GPIO_SetState(GPIO_BAT_DISCHARGE, State);
+	GPIO_SetState(GPIO_DISCHARGE_BAT, State);
 }
 //-----------------------------
 
-void LL_PSBoardOff(bool State)
+void LL_SwitchPsBoard(bool State)
 {
-	GPIO_SetState(GPIO_PS_CTRL, State);
+	GPIO_SetState(GPIO_CTRL_PS, State);
 }
 //-----------------------------
 
-void LL_ForceSYNC1(bool State)
+void LL_ForceSync1(bool State)
 {
 	GPIO_SetState(GPIO_SYNC_OUT1, State);
 }
 //-----------------------------
 
-void LL_ForceSYNC2(bool State)
+void LL_ForceSync2(bool State)
 {
 	GPIO_SetState(GPIO_SYNC_OUT2, State);
 }
@@ -107,7 +107,7 @@ void LL_WriteDACx(uint16_t Data, GPIO_PortPinSetting GPIO_LDACx)
 	SPI_WriteByte(SPI1, Data);
 	GPIO_SetState(GPIO_CS, true);
 	DELAY_US(1);
-
+	
 	GPIO_SetState(GPIO_LDACx, false);
 	DELAY_US(1);
 	GPIO_SetState(GPIO_LDACx, true);
@@ -115,7 +115,7 @@ void LL_WriteDACx(uint16_t Data, GPIO_PortPinSetting GPIO_LDACx)
 }
 //-----------------------------
 
-void LL_OutputRegister_Write(uint16_t Data)
+void LL_WriteOutReg(uint16_t Data)
 {
 	GPIO_SetState(GPIO_SREG_CS, false);
 	SPI_WriteByte(SPI1, Data);

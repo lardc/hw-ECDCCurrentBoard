@@ -3,22 +3,22 @@
 
 #include "stdinc.h"
 
-void DBGACT_GenerateImpulseExternalLED();
-void DBGACT_GenerateCTRL_VDUTAmp11V();
-void DBGACT_GenerateCTRL_VDUTAmp1500mV();
-void DBGACT_GenerateCTRL_VDUTAmp250mV();
-void DBGACT_GenerateCTRL_VDUTAmp30mV();
-void DBGACT_GenerateEN_Range20mA();
-void DBGACT_GenerateEN_Range200mA();
-void DBGACT_GenerateEN_Range2A();
-void DBGACT_GenerateEN_Range20A();
-void DBGACT_GenerateEN_Range270A();
-void DBGACT_GenerateImpulseBatteryDischarge();
-void DBGACT_GenerateImpulsePSBoardOff();
-void DBGACT_GenerateImpulseForceSYNC1();
-void DBGACT_GenerateImpulseForceSYNC2();
+void DBGACT_ImpulseExternalLed();
+void DBGACT_SwitchAmp11V();
+void DBGACT_SwitchAmp1500MV();
+void DBGACT_SwitchAmp250MV();
+void DBGACT_SwitchAmp30MV();
+void DBGACT_SwitchRange20MA();
+void DBGACT_SwitchRange200MA();
+void DBGACT_SwitchRange2A();
+void DBGACT_SwitchRange20A();
+void DBGACT_SwitchRange270A();
+void DBGACT_SwitchBatteryDischarge();
+void DBGACT_SwitchPsBoard();
+void DBGACT_ImpulseSync1();
+void DBGACT_ImpulseSync2();
 void DBGACT_GenerateWriteToDACx(uint16_t Data, uint16_t LDACx);
-void DBGACT_GenerateWriteToOutputRegister(uint16_t Data);
 void DBGACT_MEASURE(uint16_t Data, uint16_t ADC_CHx);
+bool DBGDBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError);
 
 #endif //__DEBUGACTIONS_H

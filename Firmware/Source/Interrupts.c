@@ -14,10 +14,10 @@
 void EXTI3_IRQnHandler()
 {
 	DataTable[REG_OP_RESULT] = OPRESULT_OK;
-
-	LL_ExternalLED(true);
+	
+	LL_ExternalLed(true);
 	CONTROL_LEDTimeout = CONTROL_TimeCounter + TIME_EXT_LED_BLINK;
-
+	
 	EXTI_FlagReset(EXTI_3);
 }
 //-----------------------------------------
@@ -45,17 +45,17 @@ void USB_LP_CAN_RX0_IRQHandler()
 void TIM7_IRQHandler()
 {
 	static uint16_t LED_BlinkTimeCounter = 0;
-
+	
 	if(TIM_StatusCheck(TIM7))
 	{
-
+		
 		CONTROL_TimeCounter++;
 		if(++LED_BlinkTimeCounter > TIME_LED_BLINK)
 		{
-			LL_ToggleLED();
+			LL_ToggleLed();
 			LED_BlinkTimeCounter = 0;
 		}
-
+		
 		TIM_StatusClear(TIM7);
 	}
 }

@@ -9,31 +9,31 @@ int main()
 	__enable_irq();
 	
 	// Настройка системной частоты тактирования
-		INITCFG_ConfigSystemClock();
-
-		// Настройка портов
-		INITCFG_ConfigIO();
-
-		// Настройка SPI
-		INITCFG_ConfigSPI();
-
-		// Настройка CAN
-		INITCFG_ConfigCAN();
-
-		// Настройка UART
-		INITCFG_ConfigUART();
-
-		// Настройка ADC
-		INITCFG_ConfigADC();
-
-		// Настройка системного счетчика
-		INITCFG_ConfigTimer7();
-
-		// Настройка сторожевого таймера
-		INITCFG_ConfigWatchDog();
-
-		// Инициализация логики контроллера
-		CONTROL_Init();
+	INITCFG_ConfigSystemClock();
+	
+	// Настройка портов
+	INITCFG_ConfigIO();
+	
+	// Настройка SPI
+	INITCFG_ConfigSPI();
+	
+	// Настройка CAN
+	INITCFG_ConfigCAN();
+	
+	// Настройка UART
+	INITCFG_ConfigUART();
+	
+	// Настройка ADC
+	INITCFG_ConfigADC();
+	
+	// Настройка системного счетчика
+	INITCFG_ConfigTimer7();
+	
+	// Настройка сторожевого таймера
+	INITCFG_ConfigWatchDog();
+	
+	// Инициализация логики контроллера
+	CONTROL_Init();
 	
 	// Фоновый цикл
 	while(TRUE)
