@@ -15,7 +15,7 @@
 
 // Параметры АЦП
 #define V_ADC1_CH				1		// Номер канала АЦП V_DUT
-#define V_ADC2_CH				1		// Номер канала АЦП I_DUT
+#define I_ADC2_CH				1		// Номер канала АЦП I_DUT
 #define VBAT_ADC2_CH			3		// Номер канала АЦП батареи
 #define ADC_REF_VOLTAGE			3300.0f	// Опорное напряжение (в мВ)
 #define ADC_RESOLUTION			4095	// Разрешение АЦП
