@@ -135,7 +135,7 @@ void DBGACT_GenerateWriteToDACx(uint16_t Data, uint16_t LDACx)
 }
 //-----------------------------
 
-void DBGACT_MEASURE(uint16_t Data, uint16_t ADC_CHx)
+void DBGACT_Measure(uint16_t Data, uint16_t ADC_CHx)
 {
 	if(ADC_CHx == 1)
 	{
@@ -152,7 +152,7 @@ void DBGACT_MEASURE(uint16_t Data, uint16_t ADC_CHx)
 }
 //-----------------------------
 
-bool DBGDBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
+bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 {
 	switch (ActionID)
 	{
@@ -164,79 +164,79 @@ bool DBGDBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			
 		case ACT_DBG_ENABLE_AMP11V:
 			{
-				DBGACT_GenerateCTRL_VDUTAmp11V();
+				DBGACT_SwitchAmp11V();
 			}
 			break;
 			
 		case ACT_DBG_ENABLE_AMP1500MV:
 			{
-				DBGACT_GenerateCTRL_VDUTAmp1500mV();
+				DBGACT_SwitchAmp1500MV();
 			}
 			break;
 			
 		case ACT_DBG_ENABLE_AMP250MV:
 			{
-				DBGACT_GenerateCTRL_VDUTAmp250mV();
+				DBGACT_SwitchAmp250MV();
 			}
 			break;
 			
 		case ACT_DBG_ENABLE_AMP30MV:
 			{
-				DBGACT_GenerateCTRL_VDUTAmp30mV();
+				DBGACT_SwitchAmp30MV();
 			}
 			break;
 			
 		case ACT_DBG_ENABLE_RNG20MA:
 			{
-				DBGACT_GenerateEN_Range20mA();
+				DBGACT_SwitchRange20MA();
 			}
 			break;
 			
 		case ACT_DBG_ENABLE_RNG200MA:
 			{
-				DBGACT_GenerateEN_Range200mA();
+				DBGACT_SwitchRange200MA();
 			}
 			break;
 			
 		case ACT_DBG_ENABLE_RNG2A:
 			{
-				DBGACT_GenerateEN_Range2A();
+				DBGACT_SwitchRange2A();
 			}
 			break;
 			
 		case ACT_DBG_ENABLE_RNG20A:
 			{
-				DBGACT_GenerateEN_Range20A();
+				DBGACT_SwitchRange20A();
 			}
 			break;
 			
 		case ACT_DBG_ENABLE_RNG270A:
 			{
-				DBGACT_GenerateEN_Range270A();
+				DBGACT_SwitchRange270A();
 			}
 			break;
 			
 		case ACT_DBG_ENABLE_DISCHARGE:
 			{
-				DBGACT_GenerateImpulseBatteryDischarge();
+				DBGACT_SwitchBatteryDischarge();
 			}
 			break;
 			
 		case ACT_DBG_ENABLE_PSBOARD:
 			{
-				DBGACT_GenerateImpulsePSBoardOff();
+				DBGACT_SwitchPsBoard();
 			}
 			break;
 			
 		case ACT_DBG_IMPULSE_SYNC1:
 			{
-				DBGACT_GenerateImpulseForceSYNC1();
+				DBGACT_ImpulseSync1();
 			}
 			break;
 			
 		case ACT_DBG_IMPULSE_SYNC2:
 			{
-				DBGACT_GenerateImpulseForceSYNC2();
+				DBGACT_ImpulseSync2();
 			}
 			break;
 			
@@ -246,15 +246,9 @@ bool DBGDBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			}
 			break;
 			
-		case ACT_DBG_SEND_DATA_TO_REG:
-			{
-				DBGACT_GenerateWriteToOutputRegister(DataTable[REG_DBG_DATA]);
-			}
-			break;
-			
 		case ACT_DBG_MEASURE_ADC:
 			{
-				DBGACT_MEASURE(DataTable[REG_DBG_DATA], DataTable[REG_DBG_ENABLE_DEVICE]);
+				DBGACT_Measure(DataTable[REG_DBG_DATA], DataTable[REG_DBG_ENABLE_DEVICE]);
 			}
 			break;
 			

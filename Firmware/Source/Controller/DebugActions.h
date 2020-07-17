@@ -18,7 +18,7 @@ void DBGACT_SwitchPsBoard();
 void DBGACT_ImpulseSync1();
 void DBGACT_ImpulseSync2();
 void DBGACT_GenerateWriteToDACx(uint16_t Data, uint16_t LDACx);
-void DBGACT_MEASURE(uint16_t Data, uint16_t ADC_CHx);
-bool DBGDBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError);
+void DBGACT_Measure(uint16_t Data, uint16_t ADC_CHx);
+bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError);
 
 #endif //__DEBUGACTIONS_H
