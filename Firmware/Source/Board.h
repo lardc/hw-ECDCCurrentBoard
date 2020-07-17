@@ -14,6 +14,7 @@
 #include "ZwSCI.h"
 #include "ZwIWDG.h"
 #include "ZwNFLASH.h"
+#include "ZwSPI.h"
 
 //Определения для аналоговых портов
 GPIO_PortPinSettingMacro GPIO_MEASURE_V = {GPIOA, Pin_0};

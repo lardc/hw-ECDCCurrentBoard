@@ -8,7 +8,7 @@
 #include "DeviceObjectDictionary.h"
 
 // Forward functions
-uint16_t ÑÑ_ItoDAC(float Current)
+uint16_t CC_ItoDAC(float Current)
 {
 	float K = (float)DataTable[REG_DAC_I_SET_K] / 1000;
 	float Offset = (float)((int16_t)DataTable[REG_DAC_I_SET_OFFSET]);
@@ -18,7 +18,7 @@ uint16_t ÑÑ_ItoDAC(float Current)
 }
 //---------------------
 
-void ÑÑ_SetCurrent(float Current)
+void CC_SetCurrent(float Current)
 {
 	if(Current <= I_RANGE_2A)
 	{
