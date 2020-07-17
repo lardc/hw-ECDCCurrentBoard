@@ -15,18 +15,22 @@
 
 // Параметры АЦП
 #define V_ADC1_CH				1		// Номер канала АЦП V_DUT
-#define V_ADC1_CH				1		// Номер канала АЦП I_DUT
+#define V_ADC2_CH				1		// Номер канала АЦП I_DUT
 #define VBAT_ADC2_CH			3		// Номер канала АЦП батареи
 #define ADC_REF_VOLTAGE			3300.0f	// Опорное напряжение (в мВ)
 #define ADC_RESOLUTION			4095	// Разрешение АЦП
+
+// Параметры ЦАП
+#define DAC_REF_VOLTAGE			3300.0f	// Опорное напряжение (в мВ)
+#define DAC_RESOLUTION			4095	// Разрешение ЦАП
 
 // Параметры батареи
 #define BAT_VOLTAGE_THRESHOLD	50		// Пороговое напряжение батареи (в В)
 #define BAT_VOLTAGE_DELTA		5.0f	// Гистерезис поддержания напряжения (в В)
 
 //Параметры формирования тока
-#define I_RANGE_20mA			20		// Диапазон до 20мА
-#define I_RANGE_200mA			200		// Диапазон до 200мА
+#define I_RANGE_20MA			20		// Диапазон до 20мА
+#define I_RANGE_200MA			200		// Диапазон до 200мА
 #define I_RANGE_2A				2000	// Диапазон до 2А
 #define I_RANGE_20A				20000	// Диапазон до 20А
 #define I_RANGE_270A			270000	// Диапазон до 270А
