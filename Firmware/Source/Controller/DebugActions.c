@@ -2,6 +2,8 @@
 #include "DebugActions.h"
 
 // Include
+#include "CurrentControl.h"
+#include "Measurement.h"
 #include "LowLevel.h"
 #include "Board.h"
 #include "Delay.h"
@@ -122,36 +124,6 @@ void DBGACT_ImpulseSync2()
 }
 //-----------------------------
 
-void DBGACT_GenerateWriteToDACx(uint16_t Data, uint16_t LDACx)
-{
-	if(LDACx == 1)
-	{
-		LL_WriteDACx(Data, GPIO_LDAC1);
-	}
-	else if(LDACx == 2)
-	{
-		LL_WriteDACx(Data, GPIO_LDAC2);
-	}
-}
-//-----------------------------
-
-void DBGACT_Measure(uint16_t Data, uint16_t ADC_CHx)
-{
-	if(ADC_CHx == 1)
-	{
-		Data = ((uint16_t)ADC_Measure(ADC1, V_ADC1_CH)) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
-	}
-	else if(ADC_CHx == 2)
-	{
-		Data = ((uint16_t)ADC_Measure(ADC2, V_ADC1_CH)) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
-	}
-	else if(ADC_CHx == 3)
-	{
-		Data = ((uint16_t)ADC_Measure(ADC2, VBAT_ADC2_CH)) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
-	}
-}
-//-----------------------------
-
 bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 {
 	switch (ActionID)
@@ -242,13 +214,37 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			
 		case ACT_DBG_SEND_DATA_TO_DAC:
 			{
-				DBGACT_GenerateWriteToDACx(DataTable[REG_DBG_DATA], DataTable[REG_DBG_ENABLE_DEVICE]);
+				CC_SetCurrent(DataTable[REG_DBG_DATA]);
 			}
 			break;
 			
-		case ACT_DBG_MEASURE_ADC:
+		case ACT_DBG_SEND_DATA_TO_REG:
 			{
-				DBGACT_Measure(DataTable[REG_DBG_DATA], DataTable[REG_DBG_ENABLE_DEVICE]);
+				LL_WriteOutReg(DataTable[REG_DBG_DATA]);
+			}
+			break;
+			
+		case ACT_DBG_MEASURE_ID2A:
+			{
+				DataTable[REG_DBG_DATA] = MEASURE_ReadCurrent2A();
+			}
+			break;
+			
+		case ACT_DBG_MEASURE_ID270A:
+			{
+				DataTable[REG_DBG_DATA] = MEASURE_ReadCurrent270A();
+			}
+			break;
+			
+		case ACT_DBG_MEASURE_VD250MV:
+			{
+				DataTable[REG_DBG_DATA] = MEASURE_ReadVoltage250MV();
+			}
+			break;
+			
+		case ACT_DBG_MEASURE_VD11V:
+			{
+				DataTable[REG_DBG_DATA] = MEASURE_ReadVoltage11V();
 			}
 			break;
 			
