@@ -25,7 +25,10 @@
 #define ACT_DBG_IMPULSE_SYNC2			23	// Импульсное включение второго выхода синхронизации
 #define ACT_DBG_SEND_DATA_TO_DAC		24	// Отправка тестовых данных на ЦАП
 #define ACT_DBG_SEND_DATA_TO_REG		25	// Отправка тестовых данных на внешний сдвиговый регистр
-#define ACT_DBG_MEASURE_ADC				26	// Чтение каналов АЦП
+#define ACT_DBG_MEASURE_ID2A			26	// Измерение тока до 2А
+#define ACT_DBG_MEASURE_ID270A			27	// Измерение тока до 270А
+#define ACT_DBG_MEASURE_VD250MV			28	// Измерение напряжения до 250мВ
+#define ACT_DBG_MEASURE_VD11V			29	// Измерение напряжения до 11В
 
 #define ACT_SAVE_TO_ROM					200	// Сохранение пользовательских данных во FLASH процессора
 #define ACT_RESTORE_FROM_ROM			201	// Восстановление данных из FLASH
@@ -36,27 +39,37 @@
 
 // Регистры
 // Сохраняемые регистры
-#define REG_V_BAT_MEASURE				2	// Измеренное значение напряжения на батареи (в В)
-#define REG_V_BAT_OFFSET				3	// Смещение оцифрованного напряжения батареи (в тиках)
-#define REG_V_BAT_K						4	// Коэффициент пересчёта напряжения АЦП (в мВ) в напряжение (в В) x1000
 
-#define REG_V_DUT_MEASURE				5	// Измеренное значение напряжения на DUT (в В)
-#define REG_V_DUT_OFFSET				6	// Смещение оцифрованного напряжения DUT (в тиках)
-#define REG_V_DUT_K						7	// Коэффициент пересчёта напряжения АЦП (в мВ) в напряжение (в В) x1000
-#define REG_V_DUT_P0					8	// Полином точной корректировки напряжения DUT P0 (в вольтах)
-#define REG_V_DUT_P1					9	// Полином точной корректировки напряжения DUT P1 x1000
-#define REG_V_DUT_P2					10	// Полином точной корректировки напряжения DUT P2 x1e6
+#define REG_ADC_VBAT_MEASURE			1	// Хранение напряжения заряда батареи (в В)
+#define REG_ADC_VBAT_OFFSET				2	// Смещение оцифрованного напряжения батареи (в тиках)
+#define REG_ADC_VBAT_K					3	// Коэффициент пересчёта напряжения АЦП (в мВ) в напряжение (в В) x1000
 
-#define REG_I_DUT_MEASURE				11	// Измеренное значение импульса тока (в В)
-#define REG_I_DUT_OFFSET				12	// Смещение оцифрованного импульса тока (в тиках)
-#define REG_I_DUT_K						13	// Коэффициент пересчёта напряжения АЦП (в мВ) в напряжение (в В) x1000
-#define REG_I_DUT_P0					14	// Полином точной корректировки тока DUT P0 (в вольтах)
-#define REG_I_DUT_P1					15	// Полином точной корректировки тока DUT P1 x1000
-#define REG_I_DUT_P2					16	// Полином точной корректировки тока DUT P2 x1e6
+#define REG_ADC_VD250MV_OFFSET			4	// Смещение пересчета до 250мВ (в тиках)
+#define REG_ADC_VD250MV_K				5	// Коэффициент пересчета до 250мВ (в В) x1000
+#define REG_ADC_VD250MV_FINE_P0			6	// Полином точной корректировки до 250мВ P0 (в вольтах)
+#define REG_ADC_VD250MV_FINE_P1			7	// Полином точной корректировки до 250мВ P1 x1000
+#define REG_ADC_VD250MV_FINE_P2			8	// Полином точной корректировки до 250мВ P2 x1e6
 
-#define REG_DAC_I_SET_K					17	// Пропорцианальный коэффициент пересчета ЦАП
-#define REG_DAC_I_SET_OFFSET			18	// Смещение при пересчете ЦАП
+#define REG_ADC_VD11V_OFFSET			9	// Смещение пересчета до 11В (в тиках)
+#define REG_ADC_VD11V_K					10	// Коэффициент пересчета до 11В (в В) x1000
+#define REG_ADC_VD11V_FINE_P0			11	// Полином точной корректировки до 11В P0 (в вольтах)
+#define REG_ADC_VD11V_FINE_P1			12	// Полином точной корректировки до 11В P1 x1000
+#define REG_ADC_VD11V_FINE_P2			13	// Полином точной корректировки до 11В P2 x1e6
 
+#define REG_ADC_ID2A_OFFSET				14	// Смещение пересчета до 2А (в В)
+#define REG_ADC_ID2A_K					15	// Коэффициент пересчета до 2А (в тиках)
+#define REG_ADC_ID2A_FINE_P0			16	// Полином точной корректировки до 2А P0 (в вольтах)
+#define REG_ADC_ID2A_FINE_P1			17	// Полином точной корректировки до 2А P1 x1000
+#define REG_ADC_ID2A_FINE_P2			18	// Полином точной корректировки до 2А P2 x1e6
+
+#define REG_ADC_ID270A_OFFSET			19	// Смещение пересчета до 270А (в В)
+#define REG_ADC_ID270A_K				20	// Коэффициент пересчета до 270А (в тиках)
+#define REG_ADC_ID270A_FINE_P0			21	// Полином точной корректировки до 270А P0 (в вольтах)
+#define REG_ADC_ID270A_FINE_P1			22	// Полином точной корректировки до 270А P1 x1000
+#define REG_ADC_ID270A_FINE_P2			23	// Полином точной корректировки до 270А P2 x1e6
+
+#define REG_DAC_I_SET_K					24	// Пропорцианальный коэффициент пересчета ЦАП
+#define REG_DAC_I_SET_OFFSET			25	// Смещение при пересчете ЦАП
 
 // Несохраняемы регистры чтения-записи
 #define REG_CURRENT_SETPOINT			128	// Значение задания тока (в А)
