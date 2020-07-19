@@ -11,7 +11,7 @@ void MEASURE_ConvertRawArray(uint16_t* RawArray, uint16_t* OutputArray, uint16_t
 	float tmp;
 	
 	float Offset = (float)((int16_t)DataTable[RegisterOffSet]);
-	float K = (float)DataTable[RegisterGain] / 1000;
+	float K = (float)DataTable[RegistergGain] / 1000;
 	
 	float P0 = (float)((int16_t)DataTable[RegisterP0]);
 	float P1 = (float)DataTable[RegisterP1] / 1000;
@@ -32,7 +32,7 @@ uint16_t MEASURE_ReadCurrent2A()
 	
 	raw = ADC_Measure(ADC2, I_ADC2_CH);
 	MEASURE_ConvertRawArray(&raw, &result, 1, REG_ADC_ID2A_OFFSET, REG_ADC_ID2A_K, REG_ADC_ID2A_FINE_P0,
-			REG_ADC_ID2A_FINE_P1, REG_ADC_ID2A_FINE_P2);
+	REG_ADC_ID2A_FINE_P1, REG_ADC_ID2A_FINE_P2);
 	
 	return result;
 }
@@ -44,7 +44,7 @@ uint16_t MEASURE_ReadCurrent270A()
 	
 	raw = ADC_Measure(ADC2, I_ADC2_CH);
 	MEASURE_ConvertRawArray(&raw, &result, 1, REG_ADC_ID270A_OFFSET, REG_ADC_ID270A_K, REG_ADC_ID270A_FINE_P0,
-			REG_ADC_ID270A_FINE_P1, REG_ADC_ID270A_FINE_P2);
+	REG_ADC_ID270A_FINE_P1, REG_ADC_ID270A_FINE_P2);
 	
 	return result;
 }
@@ -56,7 +56,7 @@ uint16_t MEASURE_ReadVoltage250MV()
 	
 	raw = ADC_Measure(ADC1, V_ADC1_CH);
 	MEASURE_ConvertRawArray(&raw, &result, 1, REG_ADC_VD250MV_OFFSET, REG_ADC_VD250MV_K, REG_ADC_VD250MV_FINE_P0,
-			REG_ADC_VD250MV_FINE_P1, REG_ADC_VD250MV_FINE_P2);
+	REG_ADC_VD250MV_FINE_P1, REG_ADC_VD250MV_FINE_P2);
 	
 	return result;
 }
@@ -68,7 +68,7 @@ uint16_t MEASURE_ReadVoltage11V()
 	
 	raw = ADC_Measure(ADC1, V_ADC1_CH);
 	MEASURE_ConvertRawArray(&raw, &result, 1, REG_ADC_VD11V_OFFSET, REG_ADC_VD11V_K, REG_ADC_VD11V_FINE_P0,
-			REG_ADC_VD11V_FINE_P1, REG_ADC_VD11V_FINE_P2);
+	REG_ADC_VD11V_FINE_P1, REG_ADC_VD11V_FINE_P2);
 	
 	return result;
 }

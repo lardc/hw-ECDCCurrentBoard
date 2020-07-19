@@ -13,7 +13,6 @@
 #include "SysConfig.h"
 #include "DebugActions.h"
 
-
 // Types
 //
 typedef void (*FUNC_AsyncDelegate)();
@@ -153,7 +152,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			{
 				if(CONTROL_State == DS_Ready)
 				{
-
+					
 				}
 				else
 					*pUserError = ERR_DEVICE_NOT_READY;
@@ -184,34 +183,28 @@ void CONTROL_StartBatteryCharge()
 	
 	CONTROL_ChargeTimeout = CONTROL_TimeCounter + TIME_BAT_CHARGE;
 	
-	CONTROL_SetDeviceState(DS_BatteryCharge);
+	CONTROL_SetDeviceState(DS_InProcess);
 }
 //------------------------------------------
 
 void CONTROL_BatteryChargeMonitorLogic()
 {
-	if(CONTROL_State == DS_BatteryCharge || CONTROL_State == DS_Ready || CONTROL_State == DS_InProcess)
+	
+	if(CONTROL_State == DS_Ready || CONTROL_State == DS_InProcess)
 	{
 		float BatteryVoltage = MEASURE_GetBatteryVoltage();
-		DataTable[REG_V_BAT_MEASURE] = (uint16_t)(BatteryVoltage * 10);
+		DataTable[REG_ADC_VBAT_MEASURE] = BatteryVoltage;
 		
-		if(CONTROL_State == DS_BatteryCharge)
+		if(BatteryVoltage >= BAT_VOLTAGE_THRESHOLD)
 		{
-			if(BatteryVoltage >= BAT_VOLTAGE_THRESHOLD)
-			{
-				CONTROL_SetDeviceState(DS_Ready);
-			}
-			else if(CONTROL_TimeCounter > CONTROL_ChargeTimeout)
-				CONTROL_SwitchToFault(DF_BATTERY);
+			LL_SwitchPsBoard(false);
 		}
-		
-		if(CONTROL_State == DS_Ready || CONTROL_State == DS_InProcess)
+		else if(BatteryVoltage < BAT_VOLTAGE_THRESHOLD)
 		{
-			if(BatteryVoltage >= (BAT_VOLTAGE_THRESHOLD + BAT_VOLTAGE_DELTA))
-				LL_SwitchPsBoard(true);
-			if(BatteryVoltage < BAT_VOLTAGE_THRESHOLD)
-				LL_SwitchPsBoard(false);
+			LL_SwitchPsBoard(true);
 		}
+		else if(CONTROL_TimeCounter > CONTROL_ChargeTimeout)
+			CONTROL_SwitchToFault(DF_BATTERY);
 	}
 }
 //------------------------------------------

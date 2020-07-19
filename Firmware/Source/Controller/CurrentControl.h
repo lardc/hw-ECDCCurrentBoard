@@ -3,8 +3,10 @@
 
 // Include
 #include "stdinc.h"
+#include "Board.h"
 
-uint16_t DAC_CHANNEL_B = 0x8000;
+// Defines
+#define DAC_CHANNEL_B		BIT15
 
 // Functions
 uint16_t CC_ItoDAC(float Current);
