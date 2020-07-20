@@ -24,31 +24,31 @@ void LL_EnableAmp11V(bool State)
 }
 //-----------------------------
 
-void LL_EnableAmp1500MV(bool State)
+void LL_EnableAmp1500mV(bool State)
 {
 	GPIO_SetState(GPIO_ENABLE_1500MV, State);
 }
 //-----------------------------
 
-void LL_EnableAmp250MV(bool State)
+void LL_EnableAmp250mV(bool State)
 {
 	GPIO_SetState(GPIO_ENABLE_250MV, State);
 }
 //-----------------------------
 
-void LL_EnableAmp30MV(bool State)
+void LL_EnableAmp30mV(bool State)
 {
 	GPIO_SetState(GPIO_ENABLE_30MV, State);
 }
 //-----------------------------
 
-void LL_EnableRange20MA(bool State)
+void LL_EnableRange20mA(bool State)
 {
 	GPIO_SetState(GPIO_ENABLE_20MA, State);
 }
 //-----------------------------
 
-void LL_EnableRange200MA(bool State)
+void LL_EnableRange200mA(bool State)
 {
 	GPIO_SetState(GPIO_ENABLE_200MA, State);
 }

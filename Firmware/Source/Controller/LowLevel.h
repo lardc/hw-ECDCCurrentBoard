@@ -10,11 +10,11 @@
 void LL_ToggleLed();
 void LL_ExternalLed(bool State);
 void LL_EnableAmp11V(bool State);
-void LL_EnableAmp1500MV(bool State);
-void LL_EnableAmp250MV(bool State);
-void LL_EnableAmp30MV(bool State);
-void LL_EnableRange20MA(bool State);
-void LL_EnableRange200MA(bool State);
+void LL_EnableAmp1500mV(bool State);
+void LL_EnableAmp250mV(bool State);
+void LL_EnableAmp30mV(bool State);
+void LL_EnableRange20mA(bool State);
+void LL_EnableRange200mA(bool State);
 void LL_EnableRange2A(bool State);
 void LL_EnableRange20A(bool State);
 void LL_EnableRange270A(bool State);

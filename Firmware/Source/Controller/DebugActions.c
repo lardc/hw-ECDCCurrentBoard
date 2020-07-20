@@ -10,8 +10,23 @@
 #include "Controller.h"
 #include "DataTable.h"
 
+// Forward function definitions
+void DBGACT_ImpulseExternalLed();
+void DBGACT_SwitchAmp11V();
+void DBGACT_SwitchAmp1500mV();
+void DBGACT_SwitchAmp250mV();
+void DBGACT_SwitchAmp30mV();
+void DBGACT_SwitchRange20mA();
+void DBGACT_SwitchRange200mA();
+void DBGACT_SwitchRange2A();
+void DBGACT_SwitchRange20A();
+void DBGACT_SwitchRange270A();
+void DBGACT_SwitchBatteryDischarge();
+void DBGACT_SwitchPsBoard();
+void DBGACT_ImpulseSync1();
+void DBGACT_ImpulseSync2();
+
 // Functions
-//
 void DBGACT_ImpulseExternalLed()
 {
 	LL_ExternalLed(true);
@@ -28,43 +43,43 @@ void DBGACT_SwitchAmp11V()
 }
 //-----------------------------
 
-void DBGACT_SwitchAmp1500MV()
+void DBGACT_SwitchAmp1500mV()
 {
-	LL_EnableAmp1500MV(true);
+	LL_EnableAmp1500mV(true);
 	DELAY_US(1000);
-	LL_EnableAmp1500MV(false);
+	LL_EnableAmp1500mV(false);
 }
 //-----------------------------
 
-void DBGACT_SwitchAmp250MV()
+void DBGACT_SwitchAmp250mV()
 {
-	LL_EnableAmp250MV(true);
+	LL_EnableAmp250mV(true);
 	DELAY_US(1000);
-	LL_EnableAmp250MV(false);
+	LL_EnableAmp250mV(false);
 }
 //-----------------------------
 
-void DBGACT_SwitchAmp30MV()
+void DBGACT_SwitchAmp30mV()
 {
-	LL_EnableAmp30MV(true);
+	LL_EnableAmp30mV(true);
 	DELAY_US(1000);
-	LL_EnableAmp30MV(false);
+	LL_EnableAmp30mV(false);
 }
 //-----------------------------
 
-void DBGACT_SwitchRange20MA()
+void DBGACT_SwitchRange20mA()
 {
-	LL_EnableRange20MA(true);
+	LL_EnableRange20mA(true);
 	DELAY_US(1000);
-	LL_EnableRange20MA(false);
+	LL_EnableRange20mA(false);
 }
 //-----------------------------
 
-void DBGACT_SwitchRange200MA()
+void DBGACT_SwitchRange200mA()
 {
-	LL_EnableRange200MA(true);
+	LL_EnableRange200mA(true);
 	DELAY_US(1000);
-	LL_EnableRange200MA(false);
+	LL_EnableRange200mA(false);
 }
 //-----------------------------
 
@@ -142,31 +157,31 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			
 		case ACT_DBG_ENABLE_AMP1500MV:
 			{
-				DBGACT_SwitchAmp1500MV();
+				DBGACT_SwitchAmp1500mV();
 			}
 			break;
 			
 		case ACT_DBG_ENABLE_AMP250MV:
 			{
-				DBGACT_SwitchAmp250MV();
+				DBGACT_SwitchAmp250mV();
 			}
 			break;
 			
 		case ACT_DBG_ENABLE_AMP30MV:
 			{
-				DBGACT_SwitchAmp30MV();
+				DBGACT_SwitchAmp30mV();
 			}
 			break;
 			
 		case ACT_DBG_ENABLE_RNG20MA:
 			{
-				DBGACT_SwitchRange20MA();
+				DBGACT_SwitchRange20mA();
 			}
 			break;
 			
 		case ACT_DBG_ENABLE_RNG200MA:
 			{
-				DBGACT_SwitchRange200MA();
+				DBGACT_SwitchRange200mA();
 			}
 			break;
 			
@@ -238,7 +253,7 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			
 		case ACT_DBG_MEASURE_VD250MV:
 			{
-				DataTable[REG_DBG_DATA] = MEASURE_ReadVoltage250MV();
+				DataTable[REG_DBG_DATA] = MEASURE_ReadVoltage250mV();
 			}
 			break;
 			

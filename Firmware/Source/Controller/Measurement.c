@@ -50,7 +50,7 @@ uint16_t MEASURE_ReadCurrent270A()
 }
 //---------------------
 
-uint16_t MEASURE_ReadVoltage250MV()
+uint16_t MEASURE_ReadVoltage250mV()
 {
 	uint16_t raw, result;
 	

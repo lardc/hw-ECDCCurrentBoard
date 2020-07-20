@@ -7,7 +7,7 @@ void MEASURE_ConvertRawArray(uint16_t* RawArray, uint16_t* OutputArray, uint16_t
 		uint16_t RegistergGain, uint16_t RegisterP0, uint16_t RegisterP1, uint16_t RegisterP2);
 uint16_t MEASURE_ReadCurrent2A();
 uint16_t MEASURE_ReadCurrent270A();
-uint16_t MEASURE_ReadVoltage250MV();
+uint16_t MEASURE_ReadVoltage250mV();
 uint16_t MEASURE_ReadVoltage11V();
 uint16_t MEASURE_GetBatteryVoltage();
 

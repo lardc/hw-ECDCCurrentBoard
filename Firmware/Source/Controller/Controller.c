@@ -85,8 +85,8 @@ void CONTROL_ResetHardware()
 	LL_SwitchPsBoard(false);
 	LL_ForceSync1(false);
 	LL_ForceSync2(false);
-	LL_EnableRange20MA(false);
-	LL_EnableRange200MA(false);
+	LL_EnableRange20mA(false);
+	LL_EnableRange200mA(false);
 	LL_EnableRange2A(false);
 	LL_EnableRange20A(false);
 	LL_EnableRange270A(false);
@@ -97,9 +97,7 @@ void CONTROL_ResetHardware()
 void CONTROL_Idle()
 {
 	DEVPROFILE_ProcessRequests();
-	
 	CONTROL_BatteryChargeMonitorLogic();
-	
 	CONTROL_UpdateWatchDog();
 }
 //------------------------------------------
