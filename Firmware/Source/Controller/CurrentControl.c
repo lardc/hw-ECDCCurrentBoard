@@ -25,12 +25,12 @@ void CC_SetCurrent(float Current)
 		uint16_t Data = CC_ItoDAC(Current) & ~DAC_CHANNEL_B;
 		LL_WriteDACx(Data, GPIO_LDAC1);
 	}
-	else if((Current > I_RANGE_2A) && (Current <= I_RANGE_20A))
+	else if(Current <= I_RANGE_20A)
 	{
 		uint16_t Data = CC_ItoDAC(Current) | DAC_CHANNEL_B;
 		LL_WriteDACx(Data, GPIO_LDAC1);
 	}
-	else if((Current >= I_RANGE_20A) && (Current <= I_RANGE_270A))
+	else
 	{
 		uint16_t Data = CC_ItoDAC(Current) & ~DAC_CHANNEL_B;
 		LL_WriteDACx(Data, GPIO_LDAC2);
@@ -50,21 +50,20 @@ void CC_EnableCurrentChannel(float Current)
 	{
 		LL_EnableRange20MA(TRUE);
 	}
-	else if((Current > I_RANGE_20MA) && (Current <= I_RANGE_200MA))
+	else if(Current <= I_RANGE_200MA)
 	{
 		LL_EnableRange200MA(TRUE);
 	}
-	else if((Current > I_RANGE_200MA) && (Current <= I_RANGE_2A))
+	else if(Current <= I_RANGE_2A)
 	{
 		LL_EnableRange2A(TRUE);
 	}
-	else if((Current > I_RANGE_2A) && (Current <= I_RANGE_20A))
+	else if(Current <= I_RANGE_20A)
 	{
 		LL_EnableRange20A(TRUE);
 	}
-	else if((Current > I_RANGE_20A) && (Current <= I_RANGE_270A))
+	else
 	{
 		LL_EnableRange270A(TRUE);
 	}
 }
-
