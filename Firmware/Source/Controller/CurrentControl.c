@@ -18,23 +18,30 @@ uint16_t CC_ItoDAC(float Current)
 }
 //---------------------
 
-void CC_SetCurrent(float Current)
+void CC_SetCurrentMax2A(float Current)
 {
-	if(Current <= I_RANGE_2A)
-	{
 		uint16_t Data = CC_ItoDAC(Current) & ~DAC_CHANNEL_B;
 		LL_WriteDACx(Data, GPIO_LDAC1);
-	}
-	else if(Current <= I_RANGE_20A)
-	{
+		DELAY_US(15000);
+		LL_WriteDACx((uint16_t)END_CURRENT_PULSE, GPIO_LDAC1);
+}
+//---------------------
+
+void CC_SetCurrentMax20A(float Current)
+{
 		uint16_t Data = CC_ItoDAC(Current) | DAC_CHANNEL_B;
 		LL_WriteDACx(Data, GPIO_LDAC1);
-	}
-	else
-	{
+		DELAY_US(15000);
+		LL_WriteDACx(((uint16_t)END_CURRENT_PULSE | DAC_CHANNEL_B), GPIO_LDAC1);
+}
+//---------------------
+
+void CC_SetCurrentMax270A(float Current)
+{
 		uint16_t Data = CC_ItoDAC(Current) & ~DAC_CHANNEL_B;
 		LL_WriteDACx(Data, GPIO_LDAC2);
-	}
+		DELAY_US(15000);
+		LL_WriteDACx((uint16_t)END_CURRENT_PULSE, GPIO_LDAC2);
 }
 //---------------------
 
