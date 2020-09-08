@@ -176,9 +176,6 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 
 void CONTROL_StartBatteryCharge()
 {
-	LL_DischargeBattery(false);
-	LL_SwitchPsBoard(false);
-	
 	CONTROL_ChargeTimeout = CONTROL_TimeCounter + TIME_BAT_CHARGE;
 	
 	CONTROL_SetDeviceState(DS_InProcess);
@@ -187,15 +184,16 @@ void CONTROL_StartBatteryCharge()
 
 void CONTROL_BatteryChargeMonitorLogic()
 {
-	
-	if(CONTROL_State == DS_Ready || CONTROL_State == DS_InProcess)
+	if((CONTROL_State == DS_InProcess)||(CONTROL_State == DS_Ready))
 	{
+
 		float BatteryVoltage = MEASURE_GetBatteryVoltage();
 		DataTable[REG_ADC_VBAT_MEASURE] = BatteryVoltage;
-		
+
 		if(BatteryVoltage >= BAT_VOLTAGE_THRESHOLD)
 		{
 			LL_SwitchPsBoard(false);
+			CONTROL_SetDeviceState(DS_Ready);
 		}
 		else if(BatteryVoltage < BAT_VOLTAGE_THRESHOLD)
 		{
