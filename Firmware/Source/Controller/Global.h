@@ -35,4 +35,6 @@
 #define I_RANGE_20A				20000	// Диапазон до 20А
 #define I_RANGE_270A			270000	// Диапазон до 270А
 
+#define END_CURRENT_PULSE		0		// Значение задания тока 0
+
 #endif //  __GLOBAL_H
