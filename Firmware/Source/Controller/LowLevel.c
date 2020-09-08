@@ -68,12 +68,13 @@ void LL_EnableRange20A(bool State)
 
 void LL_EnableRange270A(bool State)
 {
-	bool ResState;
-	
-	ResState = !State;
-	
 	GPIO_SetState(GPIO_SET_RLC_270A, State);
-	GPIO_SetState(GPIO_RESET_RLC_270A, ResState);
+}
+//-----------------------------
+
+void LL_DisableRange270A(bool State)
+{
+	GPIO_SetState(GPIO_RESET_RLC_270A, State);
 }
 //-----------------------------
 
