@@ -47,19 +47,13 @@ void CC_SetCurrentMax270A(float Current)
 
 void CC_EnableCurrentChannel(float Current)
 {
-	LL_EnableRange20MA(FALSE);
-	LL_EnableRange200MA(FALSE);
-	LL_EnableRange2A(FALSE);
-	LL_EnableRange20A(FALSE);
-	LL_EnableRange270A(FALSE);
-	
 	if(Current <= I_RANGE_20MA)
 	{
-		LL_EnableRange20MA(TRUE);
+		LL_EnableRange20mA(TRUE);
 	}
 	else if(Current <= I_RANGE_200MA)
 	{
-		LL_EnableRange200MA(TRUE);
+		LL_EnableRange200mA(TRUE);
 	}
 	else if(Current <= I_RANGE_2A)
 	{
