@@ -12,6 +12,8 @@
 #include "Measurement.h"
 #include "SysConfig.h"
 #include "DebugActions.h"
+#include "CurrentControl.h"
+#include "LowLevel.h"
 
 // Types
 //
@@ -218,7 +220,7 @@ void CONTROL_StartPrepare()
 	{
 		LL_EnableAmp250mV(TRUE);
 	}
-	else if(VoltageRange <= I_RANGE_1500MV)
+	else if(VoltageRange <= V_RANGE_1500MV)
 	{
 		LL_EnableAmp1500mV(TRUE);
 	}
