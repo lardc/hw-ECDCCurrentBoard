@@ -150,7 +150,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			{
 				if(CONTROL_State == DS_Ready)
 				{
-					
+					CONTROL_StartPrepare();
 				}
 				else
 					*pUserError = ERR_DEVICE_NOT_READY;
@@ -159,7 +159,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			
 		case ACT_STOP_PROCESS:
 			{
-				if(CONTROL_State == DS_InProcess)
+				if(CONTROL_State == DS_Ready)
 				{
 					CONTROL_ResetToDefaultState();
 				}
@@ -204,6 +204,31 @@ void CONTROL_BatteryChargeMonitorLogic()
 	}
 }
 //------------------------------------------
+
+void CONTROL_StartPrepare()
+{
+	float Current = DataTable[REG_CURRENT_SETPOINT];
+	float VoltageRange = DataTable[REG_VOLTAGE_SETPOINT];
+
+	if(VoltageRange <= V_RANGE_30MV)
+	{
+		LL_EnableAmp30mV(TRUE);
+	}
+	else if(VoltageRange <= V_RANGE_250MV)
+	{
+		LL_EnableAmp250mV(TRUE);
+	}
+	else if(VoltageRange <= I_RANGE_1500MV)
+	{
+		LL_EnableAmp1500mV(TRUE);
+	}
+	else
+	{
+		LL_EnableAmp11V(TRUE);
+	}
+
+	CC_EnableCurrentChannel(Current);
+}
 
 void CONTROL_SwitchToFault(Int16U Reason)
 {
