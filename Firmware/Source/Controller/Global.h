@@ -37,4 +37,11 @@
 
 #define END_CURRENT_PULSE		0		// Значение задания тока 0
 
+//Параметры измерения напряжения
+#define V_RANGE_30MV			30		// Диапазон до 20мА
+#define V_RANGE_250MV			250		// Диапазон до 200мА
+#define I_RANGE_1500MV			1500	// Диапазон до 2А
+#define I_RANGE_11V				11000	// Диапазон до 20А
+
+
 #endif //  __GLOBAL_H
