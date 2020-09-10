@@ -103,6 +103,15 @@ void INITCFG_ConfigTimer7()
 }
 //------------------------------------------------
 
+void Timer15_Config()
+{
+	TIM_Clock_En(TIM_15);
+	TIM_Config(TIM15, SYSCLK, TIMER15_uS);
+	TIM_Interupt(TIM15, 1, true);
+	TIM_MasterMode(TIM15, MMS_UPDATE);
+}
+//-----------------------------------------------
+
 void INITCFG_ConfigWatchDog()
 {
 	IWDG_Config();
