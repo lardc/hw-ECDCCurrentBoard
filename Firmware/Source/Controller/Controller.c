@@ -40,6 +40,7 @@ void CONTROL_ResetHardware();
 void CONTROL_StartBatteryCharge();
 void CONTROL_BatteryChargeMonitorLogic();
 void CONTROL_StartPrepare();
+void CONTROL_StartPulse();
 
 // Functions
 //
@@ -100,6 +101,7 @@ void CONTROL_Idle()
 {
 	DEVPROFILE_ProcessRequests();
 	CONTROL_BatteryChargeMonitorLogic();
+	CONTROL_StartPulse();
 	CONTROL_UpdateWatchDog();
 }
 //------------------------------------------
@@ -230,6 +232,14 @@ void CONTROL_StartPrepare()
 	}
 
 	CC_EnableCurrentChannel(Current);
+}
+
+void CONTROL_StartPulse()
+{
+	if(CONTROL_State == DS_PulseConfigReady)
+		{
+
+		}
 }
 
 void CONTROL_SwitchToFault(Int16U Reason)
