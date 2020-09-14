@@ -27,12 +27,12 @@ volatile DeviceState CONTROL_State = DS_None;
 static Boolean CycleActive = false;
 volatile Int64U CONTROL_TimeCounter = 0;
 volatile Int64U CONTROL_ChargeTimeout = 0;
-volatile Int16U CONTROL_Values_DUTVoltage[VALUES_x_SIZE];
-volatile Int16U CONTROL_Values_DUTCurrent[VALUES_x_SIZE];
+volatile Int16U CONTROL_ValuesDUTVoltage[VALUES_x_SIZE];
+volatile Int16U CONTROL_ValuesDUTCurrent[VALUES_x_SIZE];
 volatile uint16_t CONTROL_DUTCurrentRaw[VALUES_x_SIZE];
 volatile uint16_t CONTROL_DUTVoltageRaw[VALUES_x_SIZE];
-volatile Int16U CONTROL_Values_Counter = 0;
-volatile Int16U CONTROL_Values_DiagEPCounter = 0;
+volatile Int16U CONTROL_ValuesCounter = 0;
+volatile Int16U CONTROL_ValuesDiagEPCounter = 0;
 volatile Int16U PulseCounter = 0;
 volatile Int16U PulseDelayCounter = 0;
 float Vdut, Idut, CurrentAmplitude, CurrentAmplifier, ShuntResistance, VoltageAmplitude, VoltageAmplifier;
@@ -66,8 +66,8 @@ void CONTROL_Init()
 	// Переменные для конфигурации EndPoint
 	Int16U EPIndexes[EP_COUNT] = {EP_DUT_V, EP_DUT_I};
 	Int16U EPSized[EP_COUNT] = {VALUES_x_SIZE, VALUES_x_SIZE};
-	pInt16U EPCounters[EP_COUNT] = {(pInt16U)&CONTROL_Values_Counter, (pInt16U)&CONTROL_Values_Counter};
-	pInt16U EPDatas[EP_COUNT] = {(pInt16U)CONTROL_Values_DUTVoltage, (pInt16U)CONTROL_Values_DUTCurrent};
+	pInt16U EPCounters[EP_COUNT] = {(pInt16U)&CONTROL_ValuesCounter, (pInt16U)&CONTROL_ValuesCounter};
+	pInt16U EPDatas[EP_COUNT] = {(pInt16U)CONTROL_ValuesDUTVoltage, (pInt16U)CONTROL_ValuesDUTCurrent};
 	
 	// Конфигурация сервиса работы Data-table и EPROM
 	EPROMServiceConfig EPROMService = {(FUNC_EPROM_WriteValues)&NFLASH_WriteDT, (FUNC_EPROM_ReadValues)&NFLASH_ReadDT};
@@ -246,11 +246,11 @@ void CONTROL_StartPulse()
 		
 		for(int i = 0; i < VALUES_x_SIZE; i++)
 		{
-			Vdut += CONTROL_Values_DUTVoltage[i];
+			Vdut += CONTROL_ValuesDUTVoltage[i];
 			Vdut = Vdut / VALUES_x_SIZE;
 			DataTable[REG_VDUT_AVERAGE] = Vdut;
 			
-			Idut += CONTROL_Values_DUTCurrent[i];
+			Idut += CONTROL_ValuesDUTCurrent[i];
 			Idut = Idut / VALUES_x_SIZE / ShuntResistance;
 			DataTable[REG_IDUT_AVERAGE] = Idut;
 		}
@@ -284,8 +284,8 @@ void CONTROL_PrepareMeasurement(void)
 {
 	INITCFG_ConfigADCHighSpeed();
 	
-	DMA_ChannelReload(DMA_ADC_DUT_V_CHANNEL, CONTROL_Values_Counter);
-	DMA_ChannelReload(DMA_ADC_DUT_I_CHANNEL, CONTROL_Values_Counter);
+	DMA_ChannelReload(DMA_ADC_DUT_V_CHANNEL, CONTROL_ValuesCounter);
+	DMA_ChannelReload(DMA_ADC_DUT_I_CHANNEL, CONTROL_ValuesCounter);
 	
 	DMA_ChannelEnable(DMA_ADC_DUT_V_CHANNEL, true);
 	DMA_ChannelEnable(DMA_ADC_DUT_I_CHANNEL, true);
@@ -298,20 +298,20 @@ void CONTROL_EnableMeasuremenChannel(float Current, float Voltage)
 {
 	if(Current <= I_RANGE_2A)
 	{
-		MEASURE_ReadCurrent2A(CONTROL_DUTCurrentRaw, CONTROL_Values_DUTCurrent, VALUES_x_SIZE);
+		MEASURE_ReadCurrent2A(CONTROL_DUTCurrentRaw, CONTROL_ValuesDUTCurrent, VALUES_x_SIZE);
 	}
 	else
 	{
-		MEASURE_ReadCurrent270A(CONTROL_DUTCurrentRaw, CONTROL_Values_DUTCurrent, VALUES_x_SIZE);
+		MEASURE_ReadCurrent270A(CONTROL_DUTCurrentRaw, CONTROL_ValuesDUTCurrent, VALUES_x_SIZE);
 	}
 	
 	if(Voltage <= V_RANGE_250MV)
 	{
-		MEASURE_ReadVoltage250mV(CONTROL_DUTVoltageRaw, CONTROL_Values_DUTVoltage, VALUES_x_SIZE);
+		MEASURE_ReadVoltage250mV(CONTROL_DUTVoltageRaw, CONTROL_ValuesDUTVoltage, VALUES_x_SIZE);
 	}
 	else
 	{
-		MEASURE_ReadVoltage11V(CONTROL_DUTVoltageRaw, CONTROL_Values_DUTVoltage, VALUES_x_SIZE);
+		MEASURE_ReadVoltage11V(CONTROL_DUTVoltageRaw, CONTROL_ValuesDUTVoltage, VALUES_x_SIZE);
 	}
 }
 
@@ -321,10 +321,10 @@ void CONTROL_ClearDataArrays(void)
 	
 	for(i = 0; i < VALUES_x_SIZE; ++i)
 	{
-		CONTROL_Values_DUTVoltage[i] = 0;
-		CONTROL_Values_DUTCurrent[i] = 0;
+		CONTROL_ValuesDUTVoltage[i] = 0;
+		CONTROL_ValuesDUTCurrent[i] = 0;
 	}
-	CONTROL_Values_Counter = 0;
+	CONTROL_ValuesCounter = 0;
 }
 //-----------------------------------------------
 
