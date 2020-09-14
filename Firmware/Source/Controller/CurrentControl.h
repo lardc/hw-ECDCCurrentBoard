@@ -13,6 +13,8 @@ uint16_t CC_ItoDAC(float Current);
 void CC_SetCurrentMax2A(float Current);
 void CC_SetCurrentMax20A(float Current);
 void CC_SetCurrentMax270A(float Current);
+void CC_SetCurrentPulse(float Current);
 float CC_EnableCurrentChannel(float Current);
+//---------------------
 
 #endif /* __CURRENTCONTROL_H_ */

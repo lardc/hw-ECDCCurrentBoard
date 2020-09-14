@@ -6,6 +6,7 @@
 #include "Global.h"
 #include "DataTable.h"
 #include "DeviceObjectDictionary.h"
+#include "Delay.h"
 
 // Forward functions
 uint16_t CC_ItoDAC(float Current)
