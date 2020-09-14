@@ -79,9 +79,14 @@
 #define REG_DAC_I_SET_K					24	// Пропорцианальный коэффициент пересчета ЦАП
 #define REG_DAC_I_SET_OFFSET			25	// Смещение при пересчете ЦАП
 
+#define REG_CTRL_P_COEF					26	// Пропорциональный коэффициент регулятора (х1000)
+#define REG_CTRL_I_COEF					27	// Интегральный коэффициент регулятора (х1000)
+
 // Несохраняемы регистры чтения-записи
 #define REG_CURRENT_SETPOINT			128	// Значение задания тока (в А)
 #define REG_VOLTAGE_SETPOINT			129	// Значение задания тока (в мВ)
+#define REG_VDUT_AVERAGE				130	// Значение задания тока (в А)
+#define REG_IDUT_AVERAGE				131	// Значение задания тока (в мВ)
 
 //Регистры отладки
 #define REG_DBG_DATA					140	// Регистор приема передачи тестовых данных
@@ -112,6 +117,14 @@
 
 //  Warning
 #define WARNING_NONE					0
+
+// ENDPOINTS
+//
+#define EP_DUT_V						1		// Оцифрованные данные напряжения DUT (в В)
+#define EP_DUT_I						2		// Оцифрованные данные тока DUT (в мА)
+//
+#define EP_DIAG_DUT_VDUT				4		// Значения напряжения Vdut по пульсам (в В)
+#define EP_DIAG_DUT_IDUT				5		// Значения напряжения Idut по пульсам (в мА)
 
 //  User Errors
 #define ERR_NONE						0
