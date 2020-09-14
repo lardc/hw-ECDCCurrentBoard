@@ -3,12 +3,22 @@
 
 #include "stdinc.h"
 
-void MEASURE_ConvertRawArray(uint16_t* RawArray, uint16_t* OutputArray, uint16_t DataLength, uint16_t RegisterOffSet,
-		uint16_t RegistergGain, uint16_t RegisterP0, uint16_t RegisterP1, uint16_t RegisterP2);
-uint16_t MEASURE_ReadCurrent2A();
-uint16_t MEASURE_ReadCurrent270A();
-uint16_t MEASURE_ReadVoltage250mV();
-uint16_t MEASURE_ReadVoltage11V();
+void MEASURE_ConvertRawArray(volatile uint16_t *InputArray, float *OutputArray, uint16_t ArrayOffset, uint16_t DataLength,
+		  uint16_t RegisterOffset, uint16_t RegisterK, uint16_t RegisterP0, uint16_t RegisterP1, uint16_t RegisterP2);
+
+void MEASURE_ReadCurrent2A(volatile uint16_t *InputArray, float *OutputArray, uint16_t DataLength);
+
+void MEASURE_ReadCurrent270A(volatile uint16_t *InputArray, float *OutputArray, uint16_t DataLength);
+
+void MEASURE_ReadVoltage250mV(volatile uint16_t *InputArray, float *OutputArray, uint16_t DataLength);
+
+void MEASURE_ReadVoltage11V(volatile uint16_t *InputArray, float *OutputArray, uint16_t DataLength);
+
 uint16_t MEASURE_GetBatteryVoltage();
+//------------------------------------------------
+
+
+//------------------------------------------------
+
 
 #endif // __MEASUREMENT_H
