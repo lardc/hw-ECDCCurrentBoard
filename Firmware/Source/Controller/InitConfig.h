@@ -5,6 +5,17 @@
 
 //Functions
 //
+#include "InitConfig.h"
+#include "Board.h"
+#include "SysConfig.h"
+#include "Controller.h"
+#include "LowLevel.h"
+#include "Global.h"
+#include "DataTable.h"
+#include "DeviceObjectDictionary.h"
+
+// Functions
+//
 Boolean INITCFG_ConfigSystemClock();
 void INITCFG_ConfigIO();
 void INITCFG_ConfigCAN();
@@ -14,8 +25,9 @@ void INITCFG_ConfigADC();
 void INITCFG_ConfigADCHighSpeed();
 void INITCFG_DMAConfig();
 void INITCFG_ConfigTimer7();
-void INITCFG_ConfigTimer15();
 void INITCFG_ConfigTimer6();
 void INITCFG_ConfigWatchDog();
+//------------------------------------------------
+
 
 #endif //__INITCONFIG_H

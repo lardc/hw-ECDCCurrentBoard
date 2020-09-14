@@ -1,7 +1,7 @@
 #include "InitConfig.h"
 #include "Board.h"
 #include "SysConfig.h"
-#include "Controller.h""
+#include "Controller.h"
 #include "LowLevel.h"
 #include "Global.h"
 #include "DataTable.h"
@@ -125,7 +125,7 @@ void INITCFG_ConfigADCHighSpeed()
 	ADC_DMAEnable(ADC1, true);
 	ADC_DMAEnable(ADC2, true);
 }
-
+//------------------------------------------------------------------------------
 
 void INITCFG_DMAConfig()
 {
@@ -133,12 +133,12 @@ void INITCFG_DMAConfig()
 	DMA_Clk_Enable(DMA2_ClkEN);
 
 	DMA_Reset(DMA_ADC_DUT_V_CHANNEL);
-	DMAChannelX_DataConfig(DMA_ADC_DUT_V_CHANNEL, (uint32_t)CONTRO_DUTVoltageRaw, (uint32_t)(&ADC1->DR), VALUES_x_SIZE);
+	DMAChannelX_DataConfig(DMA_ADC_DUT_V_CHANNEL, (uint32_t)CONTROL_DUTVoltageRaw, (uint32_t)(&ADC1->DR), VALUES_x_SIZE);
 	DMAChannelX_Config(DMA_ADC_DUT_V_CHANNEL, DMA_MEM2MEM_DIS, DMA_LvlPriority_LOW, DMA_MSIZE_16BIT, DMA_PSIZE_16BIT,
 						DMA_MINC_EN, DMA_PINC_DIS, DMA_CIRCMODE_DIS, DMA_READ_FROM_PERIPH);
 
 	DMA_Reset(DMA_ADC_DUT_I_CHANNEL);
-	DMAChannelX_DataConfig(DMA_ADC_DUT_I_CHANNEL, (uint32_t)CONTRO_DUTCurrentRaw, (uint32_t)(&ADC2->DR), VALUES_x_SIZE);
+	DMAChannelX_DataConfig(DMA_ADC_DUT_I_CHANNEL, (uint32_t)CONTROL_DUTCurrentRaw, (uint32_t)(&ADC2->DR), VALUES_x_SIZE);
 	DMAChannelX_Config(DMA_ADC_DUT_I_CHANNEL, DMA_MEM2MEM_DIS, DMA_LvlPriority_LOW, DMA_MSIZE_16BIT, DMA_PSIZE_16BIT,
 						DMA_MINC_EN, DMA_PINC_DIS, DMA_CIRCMODE_DIS, DMA_READ_FROM_PERIPH);
 }
@@ -152,15 +152,6 @@ void INITCFG_ConfigTimer7()
 	TIM_Start(TIM7);
 }
 //------------------------------------------------
-
-void INITCFG_ConfigTimer15()
-{
-	TIM_Clock_En(TIM_15);
-	TIM_Config(TIM15, SYSCLK, TIMER15_uS);
-	TIM_Interupt(TIM15, 1, true);
-	TIM_MasterMode(TIM15, MMS_UPDATE);
-}
-//-----------------------------------------------
 
 void INITCFG_ConfigTimer6()
 {

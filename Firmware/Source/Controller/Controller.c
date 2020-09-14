@@ -2,7 +2,10 @@
 #include "Controller.h"
 //
 // Includes
+#include "math.h"
 #include "Board.h"
+#include "InitConfig.h"
+#include "stdlib.h"
 #include "Delay.h"
 #include "DataTable.h"
 #include "DeviceProfile.h"
@@ -24,10 +27,10 @@ volatile DeviceState CONTROL_State = DS_None;
 static Boolean CycleActive = false;
 volatile Int64U CONTROL_TimeCounter = 0;
 volatile Int64U CONTROL_ChargeTimeout = 0;
-volatile Int16U CONTROL_Values_DUTVoltage[VALUES_x_SIZE] = {0};
-volatile Int16U CONTROL_Values_DUTCurrent[VALUES_x_SIZE] = {0};
-volatile Int16U CONTROL_DUTCurrentRaw[VALUES_x_SIZE] = {0};
-volatile Int16U CONTROL_DUTVoltageRaw[VALUES_x_SIZE] = {0};
+volatile Int16U CONTROL_Values_DUTVoltage[VALUES_x_SIZE];
+volatile Int16U CONTROL_Values_DUTCurrent[VALUES_x_SIZE];
+volatile uint16_t CONTROL_DUTCurrentRaw[VALUES_x_SIZE];
+volatile uint16_t CONTROL_DUTVoltageRaw[VALUES_x_SIZE];
 volatile Int16U CONTROL_Values_Counter = 0;
 volatile Int16U CONTROL_Values_DiagEPCounter = 0;
 volatile Int16U PulseCounter = 0;
@@ -51,6 +54,10 @@ void CONTROL_BatteryChargeMonitorLogic();
 void CONTROL_StartPrepare();
 void CONTROL_StartPulse();
 void CONTROL_SaveResultToEndpoints();
+void CONTROL_ClearDataArrays();
+void CONTROL_PrepareMeasurement();
+void CONTROL_EnableMeasuremenChannel(float Current, float Voltage);
+
 
 // Functions
 //

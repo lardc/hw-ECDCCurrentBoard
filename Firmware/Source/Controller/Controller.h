@@ -18,8 +18,8 @@ typedef enum __DeviceState
 // Variables
 extern volatile Int64U CONTROL_TimeCounter;
 extern Int64U CONTROL_LEDTimeout;
-extern volatile uint16_t CONTRO_DUTCurrentRaw[];
-extern volatile uint16_t CONTRO_DUTVoltageRaw[];
+extern volatile uint16_t CONTROL_DUTCurrentRaw[];
+extern volatile uint16_t CONTROL_DUTVoltageRaw[];
 
 // Functions
 void CONTROL_Init();
