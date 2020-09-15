@@ -18,11 +18,21 @@
 // ----------------------------------------------
 
 // Timers
+#define TIMER6_uS                		0.5f		// Таймер тактирования АЦП
 #define TIMER7_uS						1000		// в мкс
+#define TIMER15_uS						10000		// в мкс
 // ----------------------------------------------
 
 // CAN
 #define CAN_BAUDRATE					1000000		// Битрейт CAN
 // ----------------------------------------------
+
+// SPI
+#define SPI1_BAUDRATE_BITS				0x5
+#define SPI1_LSB_FIRST					false
+#define SPI2_BAUDRATE_BITS				0x5
+#define SPI2_LSB_FIRST					false
+// ----------------------------------------------
+
 
 #endif // __SYSCONFIG_H

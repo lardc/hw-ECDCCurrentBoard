@@ -18,17 +18,25 @@
 #define ACT_DBG_ENABLE_RNG200MA			16	// Импульсное включение реле шунта канала формирования тока до 200мА
 #define ACT_DBG_ENABLE_RNG2A			17	// Импульсное включение реле шунта канала формирования тока до 2А
 #define ACT_DBG_ENABLE_RNG20A			18	// Импульсное включение реле шунта канала формирования тока до 20А
-#define ACT_DBG_ENABLE_RNG270A			19	// Импульсное включение реле шунта канала формирования тока до 270А
-#define ACT_DBG_ENABLE_DISCHARGE		20	// Импульсное включение реле разряда батареи
-#define ACT_DBG_ENABLE_PSBOARD			21	// Импульсное включение разрешения работы заряда батареи
-#define ACT_DBG_IMPULSE_SYNC1			22	// Импульсное включение первого выхода синхронизации
-#define ACT_DBG_IMPULSE_SYNC2			23	// Импульсное включение второго выхода синхронизации
-#define ACT_DBG_SEND_DATA_TO_DAC		24	// Отправка тестовых данных на ЦАП
-#define ACT_DBG_SEND_DATA_TO_REG		25	// Отправка тестовых данных на внешний сдвиговый регистр
-#define ACT_DBG_MEASURE_ID2A			26	// Измерение тока до 2А
-#define ACT_DBG_MEASURE_ID270A			27	// Измерение тока до 270А
-#define ACT_DBG_MEASURE_VD250MV			28	// Измерение напряжения до 250мВ
-#define ACT_DBG_MEASURE_VD11V			29	// Измерение напряжения до 11В
+#define ACT_DBG_TURNON_RNG270A			19	// Импульсное включение реле шунта канала формирования тока до 270А
+#define ACT_DBG_TURNOFF_RNG270A			20	// Импульсное включение реле шунта канала формирования тока до 270А
+#define ACT_DBG_ENABLE_DISCHARGE		21	// Импульсное включение реле разряда батареи
+#define ACT_DBG_ENABLE_PSBOARD			22	// Импульсное включение разрешения работы заряда батареи
+#define ACT_DBG_IMPULSE_SYNC1			23	// Импульсное включение первого выхода синхронизации
+#define ACT_DBG_IMPULSE_SYNC2			24	// Импульсное включение второго выхода синхронизации
+#define ACT_DBG_SET_CURRENT_MAX_2A		25	// Отправка тестовых данных на ЦАП для формирования тока до 2А
+#define ACT_DBG_SET_CURRENT_MAX_20A		26	// Отправка тестовых данных на ЦАП для формирования тока до 20А
+#define ACT_DBG_SET_CURRENT_MAX_270A	27	// Отправка тестовых данных на ЦАП для формирования тока до 270А
+#define ACT_DBG_SEND_DATA_TO_REG		28	// Отправка тестовых данных на внешний сдвиговый регистр
+#define ACT_DBG_MEASURE_ID2A			29	// Измерение тока до 2А
+#define ACT_DBG_MEASURE_ID270A			30	// Измерение тока до 270А
+#define ACT_DBG_MEASURE_VD250MV			31	// Измерение напряжения до 250мВ
+#define ACT_DBG_MEASURE_VD11V			32	// Измерение напряжения до 11В
+#define ACT_DBG_IMPULSE_20MA			33	// Формирование тока до 20мА без ОС
+#define ACT_DBG_IMPULSE_200MA			34	// Формирование тока до 200мА без ОС
+#define ACT_DBG_IMPULSE_2A				35	// Формирование тока до 2А без ОС
+#define ACT_DBG_IMPULSE_20A				36	// Формирование тока до 20А без ОС
+#define ACT_DBG_IMPULSE_270A			37	// Формирование тока до 270А без ОС
 
 #define ACT_SAVE_TO_ROM					200	// Сохранение пользовательских данных во FLASH процессора
 #define ACT_RESTORE_FROM_ROM			201	// Восстановление данных из FLASH
@@ -71,8 +79,14 @@
 #define REG_DAC_I_SET_K					24	// Пропорцианальный коэффициент пересчета ЦАП
 #define REG_DAC_I_SET_OFFSET			25	// Смещение при пересчете ЦАП
 
+#define REG_CTRL_P_COEF					26	// Пропорциональный коэффициент регулятора (х1000)
+#define REG_CTRL_I_COEF					27	// Интегральный коэффициент регулятора (х1000)
+
 // Несохраняемы регистры чтения-записи
 #define REG_CURRENT_SETPOINT			128	// Значение задания тока (в А)
+#define REG_VOLTAGE_SETPOINT			129	// Значение задания тока (в мВ)
+#define REG_VDUT_AVERAGE				130	// Значение задания тока (в А)
+#define REG_IDUT_AVERAGE				131	// Значение задания тока (в мВ)
 
 //Регистры отладки
 #define REG_DBG_DATA					140	// Регистор приема передачи тестовых данных
@@ -103,6 +117,14 @@
 
 //  Warning
 #define WARNING_NONE					0
+
+// ENDPOINTS
+//
+#define EP_DUT_V						1		// Оцифрованные данные напряжения DUT (в В)
+#define EP_DUT_I						2		// Оцифрованные данные тока DUT (в мА)
+//
+#define EP_DIAG_DUT_VDUT				4		// Значения напряжения Vdut по пульсам (в В)
+#define EP_DIAG_DUT_IDUT				5		// Значения напряжения Idut по пульсам (в мА)
 
 //  User Errors
 #define ERR_NONE						0

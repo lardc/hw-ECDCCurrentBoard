@@ -2,7 +2,10 @@
 #include "Controller.h"
 //
 // Includes
+#include "math.h"
 #include "Board.h"
+#include "InitConfig.h"
+#include "stdlib.h"
 #include "Delay.h"
 #include "DataTable.h"
 #include "DeviceProfile.h"
@@ -12,6 +15,7 @@
 #include "Measurement.h"
 #include "SysConfig.h"
 #include "DebugActions.h"
+#include "CurrentControl.h"
 
 // Types
 //
@@ -21,9 +25,19 @@ typedef void (*FUNC_AsyncDelegate)();
 //
 volatile DeviceState CONTROL_State = DS_None;
 static Boolean CycleActive = false;
-
 volatile Int64U CONTROL_TimeCounter = 0;
-Int64U CONTROL_ChargeTimeout = 0, CONTROL_LEDTimeout = 0;
+volatile Int64U CONTROL_ChargeTimeout = 0;
+volatile Int16U CONTROL_ValuesDUTVoltage[VALUES_x_SIZE];
+volatile Int16U CONTROL_ValuesDUTCurrent[VALUES_x_SIZE];
+volatile uint16_t CONTROL_DUTCurrentRaw[VALUES_x_SIZE];
+volatile uint16_t CONTROL_DUTVoltageRaw[VALUES_x_SIZE];
+volatile Int16U CONTROL_ValuesCounter = 0;
+volatile Int16U CONTROL_ValuesDiagEPCounter = 0;
+volatile Int16U PulseCounter = 0;
+volatile Int16U PulseDelayCounter = 0;
+float Vdut, Idut, CurrentAmplitude = 0, CurrentAmplifier = 0, ShuntResistance = 0, VoltageAmplitude = 0, VoltageAmplifier = 0;
+//
+float Correction, RegulatorError, P_RegKoef, I_RegKoef, Qp, Qi;
 
 // Forward functions
 //
@@ -38,16 +52,22 @@ void CONTROL_ResetHardware();
 void CONTROL_StartBatteryCharge();
 void CONTROL_BatteryChargeMonitorLogic();
 void CONTROL_StartPrepare();
+void CONTROL_StartPulse();
+void CONTROL_SaveResultToEndpoints();
+void CONTROL_ClearDataArrays();
+void CONTROL_PrepareMeasurement();
+void CONTROL_EnableMeasuremenChannel(float Current, float Voltage);
+
 
 // Functions
 //
 void CONTROL_Init()
 {
 	// Переменные для конфигурации EndPoint
-	Int16U EPIndexes[EP_COUNT];
-	Int16U EPSized[EP_COUNT];
-	pInt16U EPCounters[EP_COUNT];
-	pInt16U EPDatas[EP_COUNT];
+	Int16U EPIndexes[EP_COUNT] = {EP_DUT_V, EP_DUT_I};
+	Int16U EPSized[EP_COUNT] = {VALUES_x_SIZE, VALUES_x_SIZE};
+	pInt16U EPCounters[EP_COUNT] = {(pInt16U)&CONTROL_ValuesCounter, (pInt16U)&CONTROL_ValuesCounter};
+	pInt16U EPDatas[EP_COUNT] = {(pInt16U)CONTROL_ValuesDUTVoltage, (pInt16U)CONTROL_ValuesDUTCurrent};
 	
 	// Конфигурация сервиса работы Data-table и EPROM
 	EPROMServiceConfig EPROMService = {(FUNC_EPROM_WriteValues)&NFLASH_WriteDT, (FUNC_EPROM_ReadValues)&NFLASH_ReadDT};
@@ -82,15 +102,18 @@ void CONTROL_ResetToDefaultState()
 void CONTROL_ResetHardware()
 {
 	LL_ExternalLed(false);
-	LL_SwitchPsBoard(false);
-	LL_ForceSync1(false);
-	LL_ForceSync2(false);
+	LL_EnableAmp11V(false);
+	LL_EnableAmp1500mV(false);
+	LL_EnableAmp250mV(false);
+	LL_EnableAmp30mV(false);
 	LL_EnableRange20mA(false);
 	LL_EnableRange200mA(false);
 	LL_EnableRange2A(false);
 	LL_EnableRange20A(false);
-	LL_EnableRange270A(false);
-	LL_DischargeBattery(true);
+	LL_DisableRange270A(false);
+	LL_DischargeBattery(false);
+	LL_SwitchPsBoard(false);
+	LL_WriteOutReg(0);
 }
 //------------------------------------------
 
@@ -98,6 +121,7 @@ void CONTROL_Idle()
 {
 	DEVPROFILE_ProcessRequests();
 	CONTROL_BatteryChargeMonitorLogic();
+	CONTROL_StartPulse();
 	CONTROL_UpdateWatchDog();
 }
 //------------------------------------------
@@ -150,7 +174,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			{
 				if(CONTROL_State == DS_Ready)
 				{
-					
+					CONTROL_StartPrepare();
 				}
 				else
 					*pUserError = ERR_DEVICE_NOT_READY;
@@ -159,7 +183,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			
 		case ACT_STOP_PROCESS:
 			{
-				if(CONTROL_State == DS_InProcess)
+				if(CONTROL_State == DS_Ready)
 				{
 					CONTROL_ResetToDefaultState();
 				}
@@ -176,41 +200,149 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 
 void CONTROL_StartBatteryCharge()
 {
-	LL_DischargeBattery(false);
-	LL_SwitchPsBoard(false);
-	
+	LL_SwitchPsBoard(true);
 	CONTROL_ChargeTimeout = CONTROL_TimeCounter + TIME_BAT_CHARGE;
-	
 	CONTROL_SetDeviceState(DS_InProcess);
 }
 //------------------------------------------
 
 void CONTROL_BatteryChargeMonitorLogic()
 {
+	float BatteryVoltage = MEASURE_GetBatteryVoltage();
+	DataTable[REG_ADC_VBAT_MEASURE] = BatteryVoltage;
 	
-	if(CONTROL_State == DS_Ready || CONTROL_State == DS_InProcess)
+	if((BatteryVoltage >= BAT_VOLTAGE_THRESHOLD) && (CONTROL_State == DS_InProcess))
 	{
-		float BatteryVoltage = MEASURE_GetBatteryVoltage();
-		DataTable[REG_ADC_VBAT_MEASURE] = BatteryVoltage;
-		
+		CONTROL_SetDeviceState(DS_Ready);
+		LL_SwitchPsBoard(false);
+	}
+	else if(CONTROL_ChargeTimeout < CONTROL_TimeCounter)
+	CONTROL_SwitchToFault(DF_BATTERY);
+	
+	if((CONTROL_TimeCounter >= PulseDelayCounter) && (CONTROL_State == DS_InProcess))
+	{
 		if(BatteryVoltage >= BAT_VOLTAGE_THRESHOLD)
 		{
+			CONTROL_SetDeviceState(DS_Ready);
 			LL_SwitchPsBoard(false);
 		}
-		else if(BatteryVoltage < BAT_VOLTAGE_THRESHOLD)
+		else LL_SwitchPsBoard(true);
+	}
+	
+}
+//------------------------------------------
+
+void CONTROL_StartPrepare()
+{
+	CONTROL_ClearDataArrays();
+	CurrentAmplitude = (float)DataTable[REG_CURRENT_SETPOINT];
+	VoltageAmplitude = (float)DataTable[REG_VOLTAGE_SETPOINT];
+	ShuntResistance = CC_EnableCurrentChannel(CurrentAmplitude);
+	CONTROL_PrepareMeasurement();
+	CONTROL_SetDeviceState(DS_PulsePrepareReady);
+}
+//------------------------------------------
+
+void CONTROL_StartPulse()
+{
+	if(CONTROL_State == DS_PulsePrepareReady)
+	{
+		LL_ExternalLed(true);
+		
+		RegulatorError = (PulseCounter == 0) ? 0 : (CurrentAmplitude - Idut);
+
+		Qp = RegulatorError * P_RegKoef;
+		Qi += RegulatorError * I_RegKoef;
+
+		Correction = CurrentAmplitude + Qp + Qi;
+
+		CONTROL_EnableMeasuremenChannel(CurrentAmplitude, VoltageAmplitude);
+		
+		CC_SetCurrentPulse(Correction);
+
+		PulseCounter++;
+
+		for(int i = 0; i < VALUES_x_SIZE; i++)
 		{
-			LL_SwitchPsBoard(true);
+			Vdut += CONTROL_ValuesDUTVoltage[i];
+			Vdut = Vdut / VALUES_x_SIZE;
+			DataTable[REG_VDUT_AVERAGE] = Vdut;
+			
+			Idut += CONTROL_ValuesDUTCurrent[i];
+			Idut = Idut / VALUES_x_SIZE / ShuntResistance;
+			DataTable[REG_IDUT_AVERAGE] = Idut;
 		}
-		else if(CONTROL_TimeCounter > CONTROL_ChargeTimeout)
-			CONTROL_SwitchToFault(DF_BATTERY);
+		
+		ADC_SamplingStop(ADC1);
+		ADC_SamplingStop(ADC2);
+		
+		INITCFG_ConfigADC();
+		
+		LL_ExternalLed(false);
+		
+		PulseDelayCounter = CONTROL_TimeCounter + Pulse2PulsePause;
+		
+		CONTROL_SetDeviceState(DS_InProcess);
 	}
 }
 //------------------------------------------
 
+void CONTROL_PrepareMeasurement(void)
+{
+	INITCFG_ConfigADCHighSpeed();
+	
+	DMA_ChannelReload(DMA_ADC_DUT_V_CHANNEL, CONTROL_ValuesCounter);
+	DMA_ChannelReload(DMA_ADC_DUT_I_CHANNEL, CONTROL_ValuesCounter);
+	
+	DMA_ChannelEnable(DMA_ADC_DUT_V_CHANNEL, true);
+	DMA_ChannelEnable(DMA_ADC_DUT_I_CHANNEL, true);
+}
+
+void CONTROL_EnableMeasuremenChannel(float Current, float Voltage)
+{
+	ADC_SamplingStart(ADC1);
+	ADC_SamplingStart(ADC2);
+
+	if(Current <= I_RANGE_2A)
+	{
+		MEASURE_ReadCurrent2A(CONTROL_DUTCurrentRaw, CONTROL_ValuesDUTCurrent, VALUES_x_SIZE);
+	}
+	else
+	{
+		MEASURE_ReadCurrent270A(CONTROL_DUTCurrentRaw, CONTROL_ValuesDUTCurrent, VALUES_x_SIZE);
+	}
+	
+	if(Voltage <= V_RANGE_250MV)
+	{
+		MEASURE_ReadVoltage250mV(CONTROL_DUTVoltageRaw, CONTROL_ValuesDUTVoltage, VALUES_x_SIZE);
+	}
+	else
+	{
+		MEASURE_ReadVoltage11V(CONTROL_DUTVoltageRaw, CONTROL_ValuesDUTVoltage, VALUES_x_SIZE);
+	}
+}
+
+void CONTROL_ClearDataArrays(void)
+{
+	uint16_t i;
+	
+	for(i = 0; i < VALUES_x_SIZE; ++i)
+	{
+		CONTROL_ValuesDUTVoltage[i] = 0;
+		CONTROL_ValuesDUTCurrent[i] = 0;
+	}
+	CONTROL_ValuesCounter = 0;
+}
+//-----------------------------------------------
+
+void CONTROL_SaveResultToEndpoints()
+{
+	
+}
+//-----------------------------------------------
+
 void CONTROL_SwitchToFault(Int16U Reason)
 {
-	CONTROL_ResetHardware();
-	
 	CONTROL_SetDeviceState(DS_Fault);
 	DataTable[REG_FAULT_REASON] = Reason;
 }
@@ -237,4 +369,3 @@ void CONTROL_UpdateWatchDog()
 		IWDG_Refresh();
 }
 //------------------------------------------
-

@@ -7,32 +7,32 @@
 
 // Constants
 //
-const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {{0, INT16U_MAX, 0},									// 0
+const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {{0, INT16U_MAX, 0},	// 0
 		{GAIN_COEFFICIENT_MIN, GAIN_COEFFICIENT_MAX, GAIN_VOLTAGE_DEF},				// 1
 		{VOLTAGE_ERROR_MIN, VOLTAGE_ERROR_MAX, VOLTAGE_ERROR_DEF},					// 2
 		{CHARGE_TIMEOUT_MIN, CHARGE_TIMEOUT_MAX, CHARGE_TIMEOUT_DEF},				// 3
-		{FAN_OPERATE_MIN, FAN_OPERATE_MAX, FAN_OPERATE_DEF},						// 4
-		{FAN_OPERATE_MIN, FAN_OPERATE_MAX, FAN_OPERATE_DEF},						// 5
-		{0, 0, 0},																	// 6
-		{0, 0, 0},																	// 7
-		{0, 0, 0},																	// 8
-		{0, 0, 0},																	// 9
-		{0, 0, 0},																	// 10
-		{0, 0, 0},																	// 11
-		{0, 0, 0},																	// 12
-		{0, 0, 0},																	// 13
-		{0, 0, 0},																	// 14
-		{0, 0, 0},																	// 15
-		{0, 0, 0},																	// 16
-		{0, 0, 0},																	// 17
-		{0, 0, 0},																	// 18
+		{0, INT16U_MAX, 0},															// 4
+		{0, INT16U_MAX, 0},															// 5
+		{0, INT16U_MAX, 0},															// 6
+		{0, INT16U_MAX, 0},															// 7
+		{0, INT16U_MAX, 0},															// 8
+		{0, INT16U_MAX, 0},															// 9
+		{0, INT16U_MAX, 0},															// 10
+		{0, INT16U_MAX, 0},															// 11
+		{0, INT16U_MAX, 0},															// 12
+		{0, INT16U_MAX, 0},															// 13
+		{0, INT16U_MAX, 0},															// 14
+		{0, INT16U_MAX, 0},															// 15
+		{0, INT16U_MAX, 0},															// 16
+		{0, INT16U_MAX, 0},															// 17
+		{0, INT16U_MAX, 0},															// 18
 		{0, 0, 0},																	// 19
 		{0, 0, 0},																	// 20
 		{0, 0, 0},																	// 21
 		{0, 0, 0},																	// 22
 		{0, 0, 0},																	// 23
-		{0, 0, 0},																	// 24
-		{0, 0, 0},																	// 25
+		{0, INT16U_MAX, 0},															// 24
+		{0, INT16U_MAX, 0},															// 25
 		{0, 0, 0},																	// 26
 		{0, 0, 0},																	// 27
 		{0, 0, 0},																	// 28
@@ -138,7 +138,7 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {{0, INT16U_MAX, 0}
 };
 
 const TableItemConstraint VConstraint[DATA_TABLE_WP_START - DATA_TABLE_WR_START] = {{BAT_VOLTAGE_MIN, BAT_VOLTAGE_MAX,
-BAT_VOLTAGE_DEF},						// 128
+BAT_VOLTAGE_DEF},																	// 128
 		{0, INT16U_MAX, 0},															// 129
 		{0, 0, 0},																	// 130
 		{0, 0, 0},																	// 131
@@ -150,7 +150,7 @@ BAT_VOLTAGE_DEF},						// 128
 		{0, 0, 0},																	// 137
 		{0, 0, 0},																	// 138
 		{0, 0, 0},																	// 139
-		{0, 0, 0},																	// 140
+		{0, INT16U_MAX, 0},															// 140
 		{0, 0, 0},																	// 141
 		{0, 0, 0},																	// 142
 		{0, 0, 0},																	// 143

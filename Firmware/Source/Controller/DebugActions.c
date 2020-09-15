@@ -20,7 +20,8 @@ void DBGACT_SwitchRange20mA();
 void DBGACT_SwitchRange200mA();
 void DBGACT_SwitchRange2A();
 void DBGACT_SwitchRange20A();
-void DBGACT_SwitchRange270A();
+void DBGACT_TurnOnRange270A();
+void DBGACT_TurnOffRange270A();
 void DBGACT_SwitchBatteryDischarge();
 void DBGACT_SwitchPsBoard();
 void DBGACT_ImpulseSync1();
@@ -99,11 +100,27 @@ void DBGACT_SwitchRange20A()
 }
 //-----------------------------
 
-void DBGACT_SwitchRange270A()
+void DBGACT_TurnOnRange270A()
 {
-	LL_EnableRange270A(true);
-	DELAY_US(1000);
 	LL_EnableRange270A(false);
+	LL_DisableRange270A(false);
+	DELAY_US(15000);
+	LL_EnableRange270A(true);
+	DELAY_US(15000);
+	LL_EnableRange270A(false);
+	LL_DisableRange270A(false);
+}
+//-----------------------------
+
+void DBGACT_TurnOffRange270A()
+{
+	LL_EnableRange270A(false);
+	LL_DisableRange270A(false);
+	DELAY_US(15000);
+	LL_DisableRange270A(true);
+	DELAY_US(15000);
+	LL_EnableRange270A(false);
+	LL_DisableRange270A(false);
 }
 //-----------------------------
 
@@ -141,6 +158,9 @@ void DBGACT_ImpulseSync2()
 
 bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 {
+	float Data = DataTable[REG_DBG_DATA];
+	float Current;
+	
 	switch (ActionID)
 	{
 		case ACT_DBG_IMPULSE_LED:
@@ -197,9 +217,15 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			}
 			break;
 			
-		case ACT_DBG_ENABLE_RNG270A:
+		case ACT_DBG_TURNON_RNG270A:
 			{
-				DBGACT_SwitchRange270A();
+				DBGACT_TurnOnRange270A();
+			}
+			break;
+			
+		case ACT_DBG_TURNOFF_RNG270A:
+			{
+				DBGACT_TurnOffRange270A();
 			}
 			break;
 			
@@ -227,9 +253,21 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			}
 			break;
 			
-		case ACT_DBG_SEND_DATA_TO_DAC:
+		case ACT_DBG_SET_CURRENT_MAX_2A:
 			{
-				CC_SetCurrent(DataTable[REG_DBG_DATA]);
+				CC_SetCurrentMax2A(DataTable[REG_DBG_DATA]);
+			}
+			break;
+			
+		case ACT_DBG_SET_CURRENT_MAX_20A:
+			{
+				CC_SetCurrentMax20A(DataTable[REG_DBG_DATA]);
+			}
+			break;
+			
+		case ACT_DBG_SET_CURRENT_MAX_270A:
+			{
+				CC_SetCurrentMax270A(DataTable[REG_DBG_DATA]);
 			}
 			break;
 			
@@ -239,27 +277,56 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			}
 			break;
 			
-		case ACT_DBG_MEASURE_ID2A:
+		case ACT_DBG_IMPULSE_20MA:
 			{
-				DataTable[REG_DBG_DATA] = MEASURE_ReadCurrent2A();
+				LL_EnableRange20mA(true);
+				DELAY_US(15000);
+				CC_SetCurrentMax2A(DataTable[REG_DBG_DATA]);
+				DELAY_US(1000);
+				LL_EnableRange20mA(false);
 			}
 			break;
 			
-		case ACT_DBG_MEASURE_ID270A:
+		case ACT_DBG_IMPULSE_200MA:
 			{
-				DataTable[REG_DBG_DATA] = MEASURE_ReadCurrent270A();
+				LL_EnableRange200mA(true);
+				DELAY_US(15000);
+				CC_SetCurrentMax2A(DataTable[REG_DBG_DATA]);
+				DELAY_US(1000);
+				LL_EnableRange200mA(false);
 			}
 			break;
 			
-		case ACT_DBG_MEASURE_VD250MV:
+		case ACT_DBG_IMPULSE_2A:
 			{
-				DataTable[REG_DBG_DATA] = MEASURE_ReadVoltage250mV();
+				LL_EnableRange2A(true);
+				DELAY_US(15000);
+				Current = CC_ItoDAC(Data);
+				CC_SetCurrentMax2A(DataTable[REG_DBG_DATA]);
+				DELAY_US(1000);
+				LL_EnableRange2A(false);
 			}
 			break;
 			
-		case ACT_DBG_MEASURE_VD11V:
+		case ACT_DBG_IMPULSE_20A:
 			{
-				DataTable[REG_DBG_DATA] = MEASURE_ReadVoltage11V();
+				LL_EnableRange20A(true);
+				DELAY_US(15000);
+				Current = CC_ItoDAC(Data);
+				CC_SetCurrentMax20A(Current);
+				DELAY_US(1000);
+				LL_EnableRange20A(false);
+			}
+			break;
+			
+		case ACT_DBG_IMPULSE_270A:
+			{
+				DBGACT_TurnOnRange270A();
+				DELAY_US(15000);
+				Current = CC_ItoDAC(Data);
+				CC_SetCurrentMax270A(Current);
+				DELAY_US(1000);
+				DBGACT_TurnOffRange270A();
 			}
 			break;
 			
