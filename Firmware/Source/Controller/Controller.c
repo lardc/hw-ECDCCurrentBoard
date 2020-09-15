@@ -35,7 +35,7 @@ volatile Int16U CONTROL_ValuesCounter = 0;
 volatile Int16U CONTROL_ValuesDiagEPCounter = 0;
 volatile Int16U PulseCounter = 0;
 volatile Int16U PulseDelayCounter = 0;
-float Vdut, Idut, CurrentAmplitude, CurrentAmplifier, ShuntResistance, VoltageAmplitude, VoltageAmplifier;
+float Vdut, Idut, CurrentAmplitude = 0, CurrentAmplifier = 0, ShuntResistance = 0, VoltageAmplitude = 0, VoltageAmplifier = 0;
 //
 float Correction, RegulatorError, P_RegKoef, I_RegKoef, Qp, Qi;
 
@@ -217,10 +217,17 @@ void CONTROL_BatteryChargeMonitorLogic()
 		LL_SwitchPsBoard(false);
 	}
 	else if(CONTROL_ChargeTimeout < CONTROL_TimeCounter)
-		CONTROL_SwitchToFault(DF_BATTERY);
+	CONTROL_SwitchToFault(DF_BATTERY);
 	
 	if((CONTROL_TimeCounter >= PulseDelayCounter) && (CONTROL_State == DS_InProcess))
-		CONTROL_SetDeviceState(DS_Ready);
+	{
+		if(BatteryVoltage >= BAT_VOLTAGE_THRESHOLD)
+		{
+			CONTROL_SetDeviceState(DS_Ready);
+			LL_SwitchPsBoard(false);
+		}
+		else LL_SwitchPsBoard(true);
+	}
 	
 }
 //------------------------------------------
@@ -242,8 +249,19 @@ void CONTROL_StartPulse()
 	{
 		LL_ExternalLed(true);
 		
+		RegulatorError = (PulseCounter == 0) ? 0 : (CurrentAmplitude - Idut);
+
+		Qp = RegulatorError * P_RegKoef;
+		Qi += RegulatorError * I_RegKoef;
+
+		Correction = CurrentAmplitude + Qp + Qi;
+
 		CONTROL_EnableMeasuremenChannel(CurrentAmplitude, VoltageAmplitude);
 		
+		CC_SetCurrentPulse(Correction);
+
+		PulseCounter++;
+
 		for(int i = 0; i < VALUES_x_SIZE; i++)
 		{
 			Vdut += CONTROL_ValuesDUTVoltage[i];
@@ -258,20 +276,9 @@ void CONTROL_StartPulse()
 		ADC_SamplingStop(ADC1);
 		ADC_SamplingStop(ADC2);
 		
-		RegulatorError = (PulseCounter == 0) ? 0 : (CurrentAmplitude - Idut);
-		
-		Qp = RegulatorError * P_RegKoef;
-		Qi += RegulatorError * I_RegKoef;
-		
-		Correction = CurrentAmplitude + Qp + Qi;
-		
-		CC_SetCurrentPulse(Correction);
-		
-		PulseCounter++;
+		INITCFG_ConfigADC();
 		
 		LL_ExternalLed(false);
-		
-		INITCFG_ConfigADC();
 		
 		PulseDelayCounter = CONTROL_TimeCounter + Pulse2PulsePause;
 		
@@ -289,13 +296,13 @@ void CONTROL_PrepareMeasurement(void)
 	
 	DMA_ChannelEnable(DMA_ADC_DUT_V_CHANNEL, true);
 	DMA_ChannelEnable(DMA_ADC_DUT_I_CHANNEL, true);
-	
-	ADC_SamplingStart(ADC1);
-	ADC_SamplingStart(ADC2);
 }
 
 void CONTROL_EnableMeasuremenChannel(float Current, float Voltage)
 {
+	ADC_SamplingStart(ADC1);
+	ADC_SamplingStart(ADC2);
+
 	if(Current <= I_RANGE_2A)
 	{
 		MEASURE_ReadCurrent2A(CONTROL_DUTCurrentRaw, CONTROL_ValuesDUTCurrent, VALUES_x_SIZE);
