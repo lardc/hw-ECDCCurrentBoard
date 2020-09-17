@@ -23,6 +23,7 @@ void INITCFG_ConfigUART();
 void INITCFG_ConfigSPI();
 void INITCFG_ConfigADC();
 void INITCFG_ConfigADCHighSpeed();
+void INITCFG_ADCSwitchToBase();
 void INITCFG_DMAConfig();
 void INITCFG_ConfigTimer7();
 void INITCFG_ConfigTimer6();
