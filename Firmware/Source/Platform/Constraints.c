@@ -8,9 +8,9 @@
 // Constants
 //
 const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {{0, INT16U_MAX, 0},	// 0
-		{GAIN_COEFFICIENT_MIN, GAIN_COEFFICIENT_MAX, GAIN_VOLTAGE_DEF},				// 1
-		{VOLTAGE_ERROR_MIN, VOLTAGE_ERROR_MAX, VOLTAGE_ERROR_DEF},					// 2
-		{CHARGE_TIMEOUT_MIN, CHARGE_TIMEOUT_MAX, CHARGE_TIMEOUT_DEF},				// 3
+		{0, INT16U_MAX, 0},															// 1
+		{0, INT16U_MAX, 0},															// 2
+		{0, INT16U_MAX, 0},															// 3
 		{0, INT16U_MAX, 0},															// 4
 		{0, INT16U_MAX, 0},															// 5
 		{0, INT16U_MAX, 0},															// 6
@@ -33,8 +33,8 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {{0, INT16U_MAX, 0}
 		{0, 0, 0},																	// 23
 		{0, INT16U_MAX, 0},															// 24
 		{0, INT16U_MAX, 0},															// 25
-		{0, 0, 0},																	// 26
-		{0, 0, 0},																	// 27
+		{0, INT16U_MAX, 0},															// 26
+		{0, INT16U_MAX, 0},															// 27
 		{0, 0, 0},																	// 28
 		{0, 0, 0},																	// 29
 		{0, 0, 0},																	// 30
@@ -140,9 +140,9 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {{0, INT16U_MAX, 0}
 const TableItemConstraint VConstraint[DATA_TABLE_WP_START - DATA_TABLE_WR_START] = {{BAT_VOLTAGE_MIN, BAT_VOLTAGE_MAX,
 BAT_VOLTAGE_DEF},																	// 128
 		{0, INT16U_MAX, 0},															// 129
-		{0, 0, 0},																	// 130
-		{0, 0, 0},																	// 131
-		{0, 0, 0},																	// 132
+		{0, INT16U_MAX, 0},															// 130
+		{0, INT16U_MAX, 0},															// 131
+		{0, INT16U_MAX, 0},															// 132
 		{0, 0, 0},																	// 133
 		{0, 0, 0},																	// 134
 		{0, 0, 0},																	// 135
