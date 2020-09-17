@@ -24,7 +24,7 @@ void DMA2_Channel1_IRQHandler()
 	{
 		DMA_TransferCompleteReset(DMA2, DMA_IFCR_CTCIF1);
 
-		if(CONTROL_State == DS_PulsePrepareReady)
+		if(CONTROL_SubState == SS_PulsePrepareReady)
 		{
 			ADC_SamplingStop(ADC1);
 			ADC_SamplingStop(ADC2);
@@ -81,6 +81,7 @@ void DMA2_Channel1_IRQHandler()
 					PulseDelayCounter = CONTROL_TimeCounter + Pulse2PulsePause;
 					DataTable[REG_VDUT_AVERAGE] = Vdut;
 					DataTable[REG_IDUT_AVERAGE] = Idut;
+					CONTROL_SetDeviceSubState(SS_None);
 					CONTROL_SetDeviceState(DS_InProcess);
 				}
 			}
@@ -99,6 +100,10 @@ void EXTI9_5_IRQHandler()
 
 			ADC_SamplingStart(ADC1);
 			ADC_SamplingStart(ADC2);
+
+			CONTROL_SetDeviceSubState(SS_PulsePrepareReady);
+
+			LL_ForceSync1(false);
 		}
 	}
 	
