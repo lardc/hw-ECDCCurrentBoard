@@ -102,6 +102,19 @@ void LL_ForceSync2(bool State)
 }
 //-----------------------------
 
+bool LL_GetSync1State()
+{
+	return GPIO_GetState(GPIO_SYNC_OUT1);
+}
+//-----------------------------
+
+bool LL_GetSync2State()
+{
+	return GPIO_GetState(GPIO_SYNC_OUT2);
+}
+//-----------------------------
+
+
 void LL_WriteDACx(uint16_t Data, GPIO_PortPinSetting GPIO_LDACx)
 {
 	GPIO_SetState(GPIO_CS, false);
