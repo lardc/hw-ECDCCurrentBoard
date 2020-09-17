@@ -19,7 +19,7 @@
 //Определения для аналоговых портов
 GPIO_PortPinSettingMacro GPIO_MEASURE_V = {GPIOA, Pin_0};
 GPIO_PortPinSettingMacro GPIO_MEASURE_I = {GPIOA, Pin_4};
-GPIO_PortPinSettingMacro GPIO_MEASURE_VBAT = {GPIOA, Pin_6};
+GPIO_PortPinSettingMacro GPIO_MEASURE_VBAT = {GPIOB, Pin_0};
 
 // Определения для выходных портов
 GPIO_PortPinSettingMacro GPIO_CS = {GPIOA, Pin_1};
@@ -27,7 +27,7 @@ GPIO_PortPinSettingMacro GPIO_LDAC1 = {GPIOA, Pin_2};
 GPIO_PortPinSettingMacro GPIO_LDAC2 = {GPIOA, Pin_3};
 GPIO_PortPinSettingMacro GPIO_ENABLE_11V = {GPIOA, Pin_8};
 GPIO_PortPinSettingMacro GPIO_ENABLE_1500MV = {GPIOA, Pin_15};
-GPIO_PortPinSettingMacro GPIO_SREG_OE = {GPIOB, Pin_0};
+GPIO_PortPinSettingMacro GPIO_SREG_OE = {GPIOA, Pin_6};
 GPIO_PortPinSettingMacro GPIO_SREG_CS = {GPIOB, Pin_1};
 GPIO_PortPinSettingMacro GPIO_ENABLE_200MA = {GPIOB, Pin_2};
 GPIO_PortPinSettingMacro GPIO_ENABLE_250MV = {GPIOB, Pin_3};
