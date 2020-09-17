@@ -6,6 +6,7 @@
 #include "Global.h"
 #include "DataTable.h"
 #include "DeviceObjectDictionary.h"
+#include "Controller.h"
 #include "Delay.h"
 
 // Forward functions
@@ -19,9 +20,24 @@ uint16_t CC_ItoDAC(float Current)
 }
 //---------------------
 
+float CC_CurrentSetup (float Current)
+{
+	Current = DataTable[REG_CURRENT_SETPOINT];
+	if (Current > BLOCK_MAX_CURRENT)
+	{
+		if (DataTable[REG_PROBLEM] == PROBLEM_NONE)
+			DataTable[REG_PROBLEM] = PROBLEM_CURRENT_TO_HIGH;
+
+		return BLOCK_MAX_CURRENT;
+	}
+	else
+		return Current;
+}
+//---------------------
+
 void CC_SetCurrentMax2A(float Current)
 {
-	uint16_t Data = (uint32_t)Current & ~DAC_CHANNEL_B;
+	uint16_t Data = (uint32_t)CC_ItoDAC(Current) & ~DAC_CHANNEL_B;
 	LL_WriteDACx(Data, GPIO_LDAC1);
 	DELAY_US(15000);
 	LL_WriteDACx((uint16_t)END_CURRENT_PULSE, GPIO_LDAC1);
@@ -30,7 +46,7 @@ void CC_SetCurrentMax2A(float Current)
 
 void CC_SetCurrentMax20A(float Current)
 {
-	uint16_t Data = (uint32_t)Current | DAC_CHANNEL_B;
+	uint16_t Data = (uint32_t)CC_ItoDAC(Current) | DAC_CHANNEL_B;
 	LL_WriteDACx(Data, GPIO_LDAC1);
 	DELAY_US(15000);
 	LL_WriteDACx(((uint16_t)END_CURRENT_PULSE | DAC_CHANNEL_B), GPIO_LDAC1);
@@ -39,38 +55,32 @@ void CC_SetCurrentMax20A(float Current)
 
 void CC_SetCurrentMax270A(float Current)
 {
-	uint16_t Data = (uint32_t)Current & ~DAC_CHANNEL_B;
+	uint16_t Data = (uint32_t)CC_ItoDAC(Current) & ~DAC_CHANNEL_B;
 	LL_WriteDACx(Data, GPIO_LDAC2);
 	DELAY_US(15000);
 	LL_WriteDACx((uint16_t)END_CURRENT_PULSE, GPIO_LDAC2);
 }
 //---------------------
 
-void CC_SetCurrentPulse(float Current)
+void CC_SetCurrentPulse(uint16_t OutData, float Current)
 {
 	uint16_t Data;
 	
 	if(Current <= I_RANGE_2A)
 	{
-		Data = (uint32_t)Current & ~DAC_CHANNEL_B;
+		Data = (uint32_t)OutData & ~DAC_CHANNEL_B;
 		LL_WriteDACx(Data, GPIO_LDAC1);
-		DELAY_US(10000);
-		LL_WriteDACx((uint16_t)END_CURRENT_PULSE, GPIO_LDAC1);
 	}
 	
 	else if(Current <= I_RANGE_20A)
 	{
-		Data = (uint32_t)Current | DAC_CHANNEL_B;
+		Data = (uint32_t)OutData | DAC_CHANNEL_B;
 		LL_WriteDACx(Data, GPIO_LDAC1);
-		DELAY_US(10000);
-		LL_WriteDACx(((uint16_t)END_CURRENT_PULSE | DAC_CHANNEL_B), GPIO_LDAC1);
 	}
 	else
 	{
-		Data = (uint32_t)Current & ~DAC_CHANNEL_B;
+		Data = (uint32_t)OutData & ~DAC_CHANNEL_B;
 		LL_WriteDACx(Data, GPIO_LDAC2);
-		DELAY_US(10000);
-		LL_WriteDACx((uint16_t)END_CURRENT_PULSE, GPIO_LDAC2);
 	}
 }
 //---------------------
