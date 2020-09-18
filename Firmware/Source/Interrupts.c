@@ -87,7 +87,7 @@ void DMA2_Channel1_IRQHandler()
 }
 //-----------------------------------------
 
-void EXTI9_5_IRQHandler()
+void EXTI15_10_IRQHandler()
 {
 	if(CONTROL_CheckDeviceSubState(SS_WaitingSync))
 	{
