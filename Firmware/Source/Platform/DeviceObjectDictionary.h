@@ -6,8 +6,9 @@
 #define ACT_DISABLE_POWER				2	// Отключение блока
 #define ACT_START_PROCESS				3	// Страрт процесса формирования импульса
 #define ACT_STOP_PROCESS				4	// Остановка процесса формирования импульса
-#define ACT_FAULT_CLEAR					5	// Очистка fault
-#define ACT_WARNING_CLEAR				6	// Очистка warning
+#define ACT_START_DIAG_PULSE			5	// Начало формирования отвнутреннего синхроимпульса
+#define ACT_FAULT_CLEAR					6	// Очистка fault
+#define ACT_WARNING_CLEAR				7	// Очистка warning
 
 #define ACT_DBG_IMPULSE_LED				10	// Импульсное включение внешней индикации
 #define ACT_DBG_ENABLE_AMP11V			11	// Импульсное включение канала усиления напряжения DUT 11В
@@ -101,8 +102,6 @@
 #define REG_WARNING						195	// Регистр Warning
 #define REG_PROBLEM						196	// Регистр Problem
 #define REG_OP_RESULT					197	// Регистр результата операции
-//
-#define REG_ACTUAL_BAT_VOLTAGE			200	// Текущее напряжение на батарее (в В)
 // -----------------------------
 
 // Operation results
