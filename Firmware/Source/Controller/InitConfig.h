@@ -30,5 +30,4 @@ void INITCFG_ConfigTimer6();
 void INITCFG_ConfigWatchDog();
 //------------------------------------------------
 
-
 #endif //__INITCONFIG_H

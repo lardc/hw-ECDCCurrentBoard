@@ -28,13 +28,13 @@ int main()
 	
 	// Настройка DMA
 	INITCFG_DMAConfig();
-
+	
 	// Настройка таймера АЦП
 	INITCFG_ConfigTimer6();
-
+	
 	// Настройка системного счетчика
 	INITCFG_ConfigTimer7();
-
+	
 	// Настройка сторожевого таймера
 	INITCFG_ConfigWatchDog();
 	

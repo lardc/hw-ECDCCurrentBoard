@@ -41,7 +41,7 @@ void INITCFG_ConfigIO()
 	// Линия синхронизации (входы)
 	GPIO_InitInput(GPIO_SYNC_IN1, NoPull);
 	GPIO_InitInput(GPIO_SYNC_IN2, NoPull);
-
+	
 	// Выходы
 	GPIO_InitPushPullOutput(GPIO_CS);
 	GPIO_InitPushPullOutput(GPIO_LDAC1);
@@ -99,7 +99,7 @@ void INITCFG_ConfigADC()
 {
 	RCC_ADC_Clk_EN(ADC_12_ClkEN);
 	RCC_ADC_Clk_EN(ADC_34_ClkEN);
-
+	
 	ADC_Calibration(ADC1);
 	ADC_TrigConfig(ADC1, ADC12_TIM6_TRGO, RISE);
 	ADC_ChannelSeqReset(ADC1);
@@ -107,7 +107,7 @@ void INITCFG_ConfigADC()
 	ADC_ChannelSeqLen(ADC1, 1);
 	ADC_DMAConfig(ADC1);
 	ADC_Enable(ADC1);
-
+	
 	ADC_Calibration(ADC2);
 	ADC_TrigConfig(ADC2, ADC12_TIM6_TRGO, RISE);
 	ADC_ChannelSeqReset(ADC2);
@@ -115,7 +115,7 @@ void INITCFG_ConfigADC()
 	ADC_ChannelSeqLen(ADC2, 1);
 	ADC_DMAConfig(ADC2);
 	ADC_Enable(ADC2);
-
+	
 	ADC_Calibration(ADC3);
 	ADC_SoftTrigConfig(ADC3);
 	ADC_Enable(ADC3);
@@ -126,18 +126,20 @@ void INITCFG_DMAConfig()
 {
 	DMA_Clk_Enable(DMA1_ClkEN);
 	DMA_Clk_Enable(DMA2_ClkEN);
-
+	
 	DMA_Reset(DMA_ADC_DUT_V_CHANNEL);
-	DMAChannelX_DataConfig(DMA_ADC_DUT_V_CHANNEL, (uint32_t)CONTROL_DUTVoltageRaw, (uint32_t)(&ADC1->DR), VALUES_OUT_SIZE);
+	DMAChannelX_DataConfig(DMA_ADC_DUT_V_CHANNEL, (uint32_t)CONTROL_DUTVoltageRaw, (uint32_t)(&ADC1->DR),
+			VALUES_OUT_SIZE);
 	DMAChannelX_Config(DMA_ADC_DUT_V_CHANNEL, DMA_MEM2MEM_DIS, DMA_LvlPriority_LOW, DMA_MSIZE_16BIT, DMA_PSIZE_16BIT,
-						DMA_MINC_EN, DMA_PINC_DIS, DMA_CIRCMODE_DIS, DMA_READ_FROM_PERIPH);
-
+	DMA_MINC_EN, DMA_PINC_DIS, DMA_CIRCMODE_DIS, DMA_READ_FROM_PERIPH);
+	
 	DMA_Reset(DMA_ADC_DUT_I_CHANNEL);
 	DMA_Interrupt(DMA_ADC_DUT_I_CHANNEL, DMA_TRANSFER_COMPLETE, 0, true);
-	DMAChannelX_DataConfig(DMA_ADC_DUT_I_CHANNEL, (uint32_t)CONTROL_DUTCurrentRaw, (uint32_t)(&ADC2->DR), VALUES_OUT_SIZE);
+	DMAChannelX_DataConfig(DMA_ADC_DUT_I_CHANNEL, (uint32_t)CONTROL_DUTCurrentRaw, (uint32_t)(&ADC2->DR),
+			VALUES_OUT_SIZE);
 	DMAChannelX_Config(DMA_ADC_DUT_I_CHANNEL, DMA_MEM2MEM_DIS, DMA_LvlPriority_LOW, DMA_MSIZE_16BIT, DMA_PSIZE_16BIT,
-						DMA_MINC_EN, DMA_PINC_DIS, DMA_CIRCMODE_DIS, DMA_READ_FROM_PERIPH);
-
+	DMA_MINC_EN, DMA_PINC_DIS, DMA_CIRCMODE_DIS, DMA_READ_FROM_PERIPH);
+	
 }
 //------------------------------------------------
 
