@@ -3,4 +3,6 @@
 
 #include "stdinc.h"
 
+extern volatile uint32_t PulseCounter, Pulse2PulsePause;
+
 #endif // __INTERRUPTS_H

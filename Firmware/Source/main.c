@@ -26,9 +26,6 @@ int main()
 	// Настройка ADC
 	INITCFG_ConfigADC();
 	
-	// Настройка высокоскоростного режима ADC
-	INITCFG_ConfigADCHighSpeed();
-
 	// Настройка DMA
 	INITCFG_DMAConfig();
 

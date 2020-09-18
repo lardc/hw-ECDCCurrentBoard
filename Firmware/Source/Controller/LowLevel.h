@@ -23,6 +23,8 @@ void LL_DischargeBattery(bool State);
 void LL_SwitchPsBoard(bool State);
 void LL_ForceSync1(bool State);
 void LL_ForceSync2(bool State);
+bool LL_GetSync1State();
+bool LL_GetSync2State();
 void LL_WriteDACx(uint16_t Data, GPIO_PortPinSetting GPIO_LDACx);
 void LL_WriteOutReg(uint16_t Data);
 

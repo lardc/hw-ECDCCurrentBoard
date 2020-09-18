@@ -82,11 +82,13 @@
 #define REG_CTRL_P_COEF					26	// Пропорциональный коэффициент регулятора (х1000)
 #define REG_CTRL_I_COEF					27	// Интегральный коэффициент регулятора (х1000)
 
+#define REG_MAX_PULSE_TO_PULSE_PAUSE	28	// Задержка между импульсами на максимальном токе (в мс)
+
 // Несохраняемы регистры чтения-записи
-#define REG_CURRENT_SETPOINT			128	// Значение задания тока (в А)
-#define REG_VOLTAGE_SETPOINT			129	// Значение задания тока (в мВ)
-#define REG_VDUT_AVERAGE				130	// Значение задания тока (в А)
-#define REG_IDUT_AVERAGE				131	// Значение задания тока (в мВ)
+#define REG_CURRENT_SETPOINT			129	// Значение задания тока (в А)
+#define REG_VOLTAGE_SETPOINT			130	// Значение задания тока (в мВ)
+#define REG_VDUT_AVERAGE				131	// Полученное значение напряжения (в мВ)
+#define REG_IDUT_AVERAGE				132	// Полученное значение тока (в А)
 
 //Регистры отладки
 #define REG_DBG_DATA					140	// Регистор приема передачи тестовых данных
@@ -111,9 +113,12 @@
 //  Fault and disable codes
 #define DF_NONE							0
 #define DF_BATTERY						1	// Проблема заряда батареи
+#define DF_OVERCURRENT					2	// Заданный ток выше максимального
+#define DF_ERRORMAX						3	// превышение максимального значения ошибки
 
 // Problem
 #define PROBLEM_NONE					0
+#define PROBLEM_CURRENT_TO_HIGH			1
 
 //  Warning
 #define WARNING_NONE					0
@@ -122,6 +127,8 @@
 //
 #define EP_DUT_V						1		// Оцифрованные данные напряжения DUT (в В)
 #define EP_DUT_I						2		// Оцифрованные данные тока DUT (в мА)
+#define EP_REG_ERROE					3		// Оцифрованные данные ошибки (в тиках)
+#define EP_OUT_DATA						4		// Оцифрованные данные тока DUT (в мА)
 //
 #define EP_DIAG_DUT_VDUT				4		// Значения напряжения Vdut по пульсам (в В)
 #define EP_DIAG_DUT_IDUT				5		// Значения напряжения Idut по пульсам (в мА)
