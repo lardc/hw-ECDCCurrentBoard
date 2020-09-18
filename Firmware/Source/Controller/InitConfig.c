@@ -15,7 +15,7 @@ Boolean INITCFG_ConfigSystemClock()
 }
 //------------------------------------------------
 
-void EI_Config()
+void INITCFG_ConfigExtInt()
 {
 	EXTI_Config(EXTI_PB, EXTI_13, FALL_TRIG, 0);
 	EXTI_EnableInterrupt(EXTI9_5_IRQn, 0, true);
