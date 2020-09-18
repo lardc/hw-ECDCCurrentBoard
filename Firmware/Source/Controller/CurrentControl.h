@@ -10,6 +10,7 @@
 
 // Functions
 uint16_t CC_ItoDAC(float Current);
+float CC_CurrentSetup(float Current);
 void CC_SetCurrentMax2A(float Current);
 void CC_SetCurrentMax20A(float Current);
 void CC_SetCurrentMax270A(float Current);
