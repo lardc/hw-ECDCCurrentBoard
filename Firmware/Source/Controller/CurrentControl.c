@@ -20,14 +20,14 @@ uint16_t CC_ItoDAC(float Current)
 }
 //---------------------
 
-float CC_CurrentSetup (float Current)
+float CC_CurrentSetup(float Current)
 {
 	Current = DataTable[REG_CURRENT_SETPOINT];
-	if (Current > BLOCK_MAX_CURRENT)
+	if(Current > BLOCK_MAX_CURRENT)
 	{
-		if (DataTable[REG_PROBLEM] == PROBLEM_NONE)
+		if(DataTable[REG_PROBLEM] == PROBLEM_NONE)
 			DataTable[REG_PROBLEM] = PROBLEM_CURRENT_TO_HIGH;
-
+		
 		return BLOCK_MAX_CURRENT;
 	}
 	else
