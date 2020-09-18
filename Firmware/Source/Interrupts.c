@@ -9,6 +9,8 @@
 #include "Global.h"
 #include "DataTable.h"
 #include "DeviceObjectDictionary.h"
+#include "CurrentControl.h"
+#include "Logic.h"
 
 // Variables
 //
@@ -23,12 +25,12 @@ void DMA2_Channel1_IRQHandler()
 	if(DMA_IsTransferComplete(DMA2, DMA_ISR_TCIF1))
 	{
 		DMA_TransferCompleteReset(DMA2, DMA_IFCR_CTCIF1);
-
+		
 		if(CONTROL_SubState == SS_PulsePrepareReady)
 		{
 			ADC_SamplingStop(ADC1);
 			ADC_SamplingStop(ADC2);
-
+			
 			MEASURE_MeasuremenChannel(CurrentAmplitude, VoltageAmplitude);
 			
 			for(int i = 0; i < VALUES_OUT_SIZE; i++)
@@ -40,12 +42,7 @@ void DMA2_Channel1_IRQHandler()
 				Idut = Idut / VALUES_OUT_SIZE / ShuntResistance;
 			}
 			
-			CONTROL_AvrVoltageRaw[PulseCounter] = Vdut;
-			CONTROL_AvrCurrentRaw[PulseCounter] = Idut;
-			
 			RegulatorError = (PulseCounter == 0) ? 0 : (PulseDataBuffer[PulseCounter - 1] - Idut);
-			
-			CONTROL_RegulatorErrorRaw[PulseCounter] = RegulatorError;
 			
 			if(((RegulatorError / Idut * 100) < CTRL_FOLLOW_ERR) && (PulseCounter <= PULSE_BUFFER_SIZE))
 			{
@@ -56,10 +53,10 @@ void DMA2_Channel1_IRQHandler()
 				
 				ADC_SamplingStart(ADC1);
 				ADC_SamplingStart(ADC2);
-
+				
 				OutPulse = CC_ItoDAC(Correction);
 				
-				CONTROL_OutDataRaw[PulseCounter] = OutPulse;
+				LOGIC_FillEndPoint(Vdut, Idut, RegulatorError, OutPulse);
 				
 				PulseCounter++;
 				
@@ -69,7 +66,7 @@ void DMA2_Channel1_IRQHandler()
 			{
 				if((RegulatorError / Idut * 100) >= CTRL_FOLLOW_ERR)
 				{
-
+					LL_ExternalLed(false);
 					CC_SetCurrentPulse(END_CURRENT_PULSE, CurrentAmplitude);
 					CONTROL_SwitchToFault(DF_ERRORMAX);
 				}
@@ -81,7 +78,7 @@ void DMA2_Channel1_IRQHandler()
 					PulseDelayCounter = CONTROL_TimeCounter + Pulse2PulsePause;
 					DataTable[REG_VDUT_AVERAGE] = Vdut;
 					DataTable[REG_IDUT_AVERAGE] = Idut;
-					CONTROL_SetDeviceSubState(SS_None);
+					CONTROL_SetDeviceSubState(SS_WaitCharging);
 					CONTROL_SetDeviceState(DS_InProcess);
 				}
 			}
@@ -97,12 +94,12 @@ void EXTI9_5_IRQHandler()
 		if(LL_GetSync1State())
 		{
 			LL_ExternalLed(true);
-
+			
 			ADC_SamplingStart(ADC1);
 			ADC_SamplingStart(ADC2);
-
+			
 			CONTROL_SetDeviceSubState(SS_PulsePrepareReady);
-
+			
 			LL_ForceSync1(false);
 		}
 	}
