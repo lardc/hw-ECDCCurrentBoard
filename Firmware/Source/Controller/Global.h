@@ -10,7 +10,7 @@
 // 
 #define	SCCI_TIMEOUT_TICKS				1000									// Таймаут интерфейса SCCI (в мс)
 #define EP_WRITE_COUNT					0										// Количество массивов для записи
-#define EP_COUNT						2										// Количество массивов для чтения
+#define EP_COUNT						4										// Количество массивов для чтения
 #define ENABLE_LOCKING					FALSE									// Защита NV регистров паролем
 #define EP_VALUE						PULSE_BUFFER_SIZE						// азмер выходного массива EP
 
@@ -20,6 +20,7 @@
 #define PULSE_BUFFER_SIZE				(PULSE_TIME_VALUE / TIMER6_uS)			// Количество точек в буфере формы импульса
 #define SYNC_LINE_HIGHSTATE_TIMEOUT		25										// Таймаут пребывания линии синхронизации в высоком состоянии
 #define BLOCK_MAX_CURRENT				250										// Максимально возможный ток для канала до 250А (в А)
+#define PULSE_LITE_START				10										// Количество шагов перед выходом на полку
 
 // Параметры регулятора
 #define CTRL_FOLLOW_ERR					20										// Максимально допустимая ошибка (в %)
@@ -77,6 +78,6 @@
 #define ADC1_VOLTAGE_CHANNEL			1										// АЦП1 номер канала напряжения DUT
 #define ADC2_CURRENT_CHANNEL			1										// АЦП2 номер канала тока DUT
 
-#define VALUES_OUT_SIZE					4										// Размер массива DMA
+#define VALUES_OUT_SIZE					8										// Размер массива DMA
 
 #endif //  __GLOBAL_H
