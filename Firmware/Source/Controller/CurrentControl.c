@@ -85,38 +85,65 @@ void CC_SetCurrentPulse(uint16_t OutData, float Current)
 }
 //---------------------
 
-float CC_EnableCurrentChannel(float Current)
+void CC_EnableCurrentChannel(float Current, float EnableFb)
+{
+	uint16_t Data;
+	
+	if(Current <= I_RANGE_20MA)
+	{
+		LL_EnableRange20mA(true);
+		Data = (EnableFb == 0) ? I_ANALOG_2A : (I_ANALOG_2A | I_FB_2A);
+		LL_WriteOutReg(Data);
+	}
+	else if(Current <= I_RANGE_200MA)
+	{
+		LL_EnableRange200mA(true);
+		Data = (EnableFb == 0) ? I_ANALOG_2A : (I_ANALOG_2A | I_FB_2A);
+		LL_WriteOutReg(Data);
+	}
+	else if(Current <= I_RANGE_2A)
+	{
+		LL_EnableRange2A(true);
+		Data = (EnableFb == 0) ? I_ANALOG_2A : (I_ANALOG_2A | I_FB_2A);
+		LL_WriteOutReg(I_ANALOG_2A);
+	}
+	else if(Current <= Data)
+	{
+		LL_EnableRange20A(true);
+		Data = (EnableFb == 0) ? I_ANALOG_20A : (I_ANALOG_20A | I_FB_20A);
+		LL_WriteOutReg(I_ANALOG_20A);
+	}
+	else
+	{
+		LL_EnableRange270A(true);
+		Data = (EnableFb == 0) ? I_ANALOG_270A : (I_ANALOG_270A | I_FB_270A);
+		LL_WriteOutReg(Data);
+	}
+}
+//---------------------
+
+float CC_EnableShuntRes(float Current)
 {
 	float ShuntRes;
 	
 	if(Current <= I_RANGE_20MA)
 	{
-		LL_EnableRange20mA(true);
-		LL_WriteOutReg(I_ANALOG_2A);
 		ShuntRes = (float) I_SHUNT_20MA;
 	}
 	else if(Current <= I_RANGE_200MA)
 	{
-		LL_EnableRange200mA(true);
-		LL_WriteOutReg(I_ANALOG_2A);
 		ShuntRes = (float) I_SHUNT_200MA;
 	}
 	else if(Current <= I_RANGE_2A)
 	{
-		LL_EnableRange2A(true);
-		LL_WriteOutReg(I_ANALOG_2A);
 		ShuntRes = (float) I_SHUNT_200MA;
 	}
 	else if(Current <= I_RANGE_20A)
 	{
-		LL_EnableRange20A(true);
-		LL_WriteOutReg(I_ANALOG_20A);
 		ShuntRes = (float) I_SHUNT_20A;
 	}
 	else
 	{
-		LL_EnableRange270A(true);
-		LL_WriteOutReg(I_ANALOG_270A);
 		ShuntRes = (float) I_SHUNT_270A;
 	}
 	
