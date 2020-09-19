@@ -91,6 +91,8 @@
 #define REG_VDUT_AVERAGE				131	// Полученное значение напряжения (в мВ)
 #define REG_IDUT_AVERAGE				132	// Полученное значение тока (в А)
 
+#define REG_EN_CURRENT_FB				133 // Регистр выбора обратной связи по току
+
 //Регистры отладки
 #define REG_DBG_DATA					140	// Регистор приема передачи тестовых данных
 #define REG_DBG_ENABLE_DEVICE			141	// Тестовый регистр выбора ЦАП
