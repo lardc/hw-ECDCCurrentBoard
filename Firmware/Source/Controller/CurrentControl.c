@@ -92,31 +92,31 @@ void CC_EnableCurrentChannel(float Current, float EnableFb)
 	if(Current <= I_RANGE_20MA)
 	{
 		LL_EnableRange20mA(true);
-		Data = (EnableFb == 0) ? I_ANALOG_2A : (I_ANALOG_2A | I_FB_2A);
+		Data = (EnableFb == 1) ? I_ANALOG_2A : (I_ANALOG_2A & I_FB_ENABLE);
 		LL_WriteOutReg(Data);
 	}
 	else if(Current <= I_RANGE_200MA)
 	{
 		LL_EnableRange200mA(true);
-		Data = (EnableFb == 0) ? I_ANALOG_2A : (I_ANALOG_2A | I_FB_2A);
+		Data = (EnableFb == 1) ? I_ANALOG_2A : (I_ANALOG_2A & I_FB_ENABLE);
 		LL_WriteOutReg(Data);
 	}
 	else if(Current <= I_RANGE_2A)
 	{
 		LL_EnableRange2A(true);
-		Data = (EnableFb == 0) ? I_ANALOG_2A : (I_ANALOG_2A | I_FB_2A);
+		Data = (EnableFb == 1) ? I_ANALOG_2A : (I_ANALOG_2A & I_FB_ENABLE);
 		LL_WriteOutReg(I_ANALOG_2A);
 	}
-	else if(Current <= Data)
+	else if(Current <= I_RANGE_20A)
 	{
 		LL_EnableRange20A(true);
-		Data = (EnableFb == 0) ? I_ANALOG_20A : (I_ANALOG_20A | I_FB_20A);
+		Data = (EnableFb == 1) ? I_ANALOG_20A : (I_ANALOG_20A & I_FB_ENABLE);
 		LL_WriteOutReg(I_ANALOG_20A);
 	}
 	else
 	{
 		LL_EnableRange270A(true);
-		Data = (EnableFb == 0) ? I_ANALOG_270A : (I_ANALOG_270A | I_FB_270A);
+		Data = (EnableFb == 0) ? I_ANALOG_270A : (I_ANALOG_270A & I_FB_ENABLE);
 		LL_WriteOutReg(Data);
 	}
 }
