@@ -281,15 +281,13 @@ void CONTROL_StartPrepare()
 {
 	LOGIC_ClearDataArrays();
 	
-	CurrentAmplitude = CC_CurrentSetup((float)DataTable[REG_CURRENT_SETPOINT]);
-	
-	VoltageAmplitude = (float)DataTable[REG_VOLTAGE_SETPOINT];
-	
-	LOGIC_EnableVoltageChannel(VoltageAmplitude);
+	LOGIC_CacheVariables();
 	
 	LOGIC_PulseConfig();
 	
-	LOGIC_CacheVariables();
+	LOGIC_EnableVoltageChannel(VoltageAmplitude);
+
+	CC_EnableCurrentChannel(CurrentAmplitude, (float) DataTable[REG_EN_CURRENT_FB]);
 	
 	CONTROL_SetDeviceState(DS_StartPulse);
 }
