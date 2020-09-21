@@ -30,7 +30,7 @@ void LOGIC_PulseConfig()
 	{
 		if(i < PULSE_LITE_START)
 		{
-			PulseDataBuffer[i] = CurrentAmplitude * ((i + 1) / PULSE_LITE_START);
+			PulseDataBuffer[i] = CurrentAmplitude * ((i) / PULSE_LITE_START);
 		}
 		else
 			PulseDataBuffer[i] = CurrentAmplitude;
@@ -40,10 +40,13 @@ void LOGIC_PulseConfig()
 
 void LOGIC_CacheVariables()
 {
+	CurrentAmplitude = CC_CurrentSetup((float)DataTable[REG_CURRENT_SETPOINT]);
+	VoltageAmplitude = (float)DataTable[REG_VOLTAGE_SETPOINT];
+
 	PropKoef = (float)DataTable[REG_CTRL_P_COEF] / 1000;
 	IntKoef = (float)DataTable[REG_CTRL_I_COEF] / 1000;
 	
-	ShuntResistance = CC_EnableCurrentChannel(CurrentAmplitude);
+	ShuntResistance = CC_EnableShuntRes(CurrentAmplitude);
 	
 	Pulse2PulsePause = (uint32_t)CurrentAmplitude * DataTable[REG_MAX_PULSE_TO_PULSE_PAUSE] / BLOCK_MAX_CURRENT;
 	
@@ -73,10 +76,10 @@ void LOGIC_EnableVoltageChannel(float Voltage)
 }
 //---------------------
 
-void LOGIC_FillEndPoint(float Vdut, float Idut, float Error, uint16_t DataToDAC)
+void LOGIC_FillEndPoint(float Voltage, float Current, float Error, uint16_t DataToDAC)
 {
-	CONTROL_AvrVoltageRaw[PulseCounter] = Vdut;
-	CONTROL_AvrCurrentRaw[PulseCounter] = Idut;
+	CONTROL_AvrVoltageRaw[PulseCounter] = Voltage;
+	CONTROL_AvrCurrentRaw[PulseCounter] = Current;
 	CONTROL_RegulatorErrorRaw[PulseCounter] = Error;
 	CONTROL_OutDataRaw[PulseCounter] = DataToDAC;
 }
