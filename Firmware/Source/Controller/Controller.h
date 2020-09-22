@@ -12,15 +12,15 @@ typedef enum __DeviceState
 	DS_Disabled = 2,
 	DS_Ready = 3,
 	DS_InProcess = 4,
-	DS_StartPulse = 5,
+	DS_PulsePrepareReady = 5,
+	DS_StartPulse = 6
 } DeviceState;
 
 typedef enum __DeviceSubState
 {
 	SS_None = 0,
 	SS_WaitingSync = 1,
-	SS_PulsePrepareReady = 2,
-	SS_WaitCharging = 3
+	SS_WaitCharging = 2
 } DeviceSubState;
 
 // Variables
