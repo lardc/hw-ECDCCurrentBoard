@@ -19,7 +19,7 @@
 #define PULSE_TIME_VALUE				10000									// Длительность импульса тока, мкС
 #define PULSE_BUFFER_SIZE				(PULSE_TIME_VALUE / TIMER6_uS)			// Количество точек в буфере формы импульса
 #define SYNC_LINE_HIGHSTATE_TIMEOUT		25										// Таймаут пребывания линии синхронизации в высоком состоянии
-#define BLOCK_MAX_CURRENT				250										// Максимально возможный ток для канала до 250А (в А)
+#define BLOCK_MAX_CURRENT				27000									// Максимально возможный ток для канала до 250А (мА/10)
 #define PULSE_LITE_START				10										// Количество шагов перед выходом на полку
 
 // Параметры регулятора
@@ -46,11 +46,11 @@
 #define BAT_VOLTAGE_DELTA				5.0f									// Гистерезис поддержания напряжения (в В)
 
 //Параметры формирования тока
-#define I_RANGE_20MA					20										// Диапазон до 20мА
-#define I_RANGE_200MA					200										// Диапазон до 200мА
-#define I_RANGE_2A						2000									// Диапазон до 2А
-#define I_RANGE_20A						20000									// Диапазон до 20А
-#define I_RANGE_270A					270000									// Диапазон до 270А
+#define I_RANGE_20MA					2										// Диапазон до 20мА (мА/10)
+#define I_RANGE_200MA					20										// Диапазон до 200мА (мА/10)
+#define I_RANGE_2A						200										// Диапазон до 2А (мА/10)
+#define I_RANGE_20A						2000									// Диапазон до 20А (мА/10)
+#define I_RANGE_270A					25000									// Диапазон до 250А (мА/10)
 
 #define END_CURRENT_PULSE				0										// Значение задания тока 0
 #define LOCK_ANALOG_CH					0										// Отключение ОС и каналов измерения тока
