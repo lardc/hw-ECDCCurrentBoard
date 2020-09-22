@@ -36,12 +36,12 @@ void DMA2_Channel1_IRQHandler()
 			for(int i = 0; i < VALUES_OUT_SIZE; i++)
 			{
 				Vdut += CONTROL_ValuesDUTVoltage[i];
-				Vdut = Vdut / VALUES_OUT_SIZE;
-				
 				Idut += CONTROL_ValuesDUTCurrent[i];
-				Idut = Idut / VALUES_OUT_SIZE / ShuntResistance;
 			}
 			
+			Vdut = Vdut / VALUES_OUT_SIZE;
+			Idut = Idut / VALUES_OUT_SIZE / ShuntResistance;
+
 			RegulatorError = (PulseCounter == 0) ? 0 : (PulseDataBuffer[PulseCounter - 1] - Idut);
 			
 			if(((RegulatorError / Idut * 100) < CTRL_FOLLOW_ERR) && (PulseCounter <= PULSE_BUFFER_SIZE))
@@ -67,12 +67,14 @@ void DMA2_Channel1_IRQHandler()
 				if((RegulatorError / Idut * 100) >= CTRL_FOLLOW_ERR)
 				{
 					LL_ExternalLed(false);
+					TIM_Stop(TIM6);
 					CC_SetCurrentPulse(END_CURRENT_PULSE, CurrentAmplitude);
 					CONTROL_SwitchToFault(DF_ERRORMAX);
 				}
 				else
 				{
 					LL_ExternalLed(false);
+					TIM_Stop(TIM6);
 					PulseCounter = 0;
 					CC_SetCurrentPulse(END_CURRENT_PULSE, CurrentAmplitude);
 					PulseDelayCounter = CONTROL_TimeCounter + Pulse2PulsePause;
@@ -97,6 +99,7 @@ void EXTI15_10_IRQHandler()
 			
 			ADC_SamplingStart(ADC1);
 			ADC_SamplingStart(ADC2);
+			TIM_Start(TIM6);
 			
 			CONTROL_SetDeviceSubState(SS_PulsePrepareReady);
 			
