@@ -214,7 +214,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			
 		case ACT_START_DIAG_PULSE:
 			{
-				if(CONTROL_State == DS_StartPulse)
+				if(CONTROL_State == DS_PulsePrepareReady)
 				{
 					CONTROL_SetDeviceSubState(SS_WaitingSync);
 					LL_ForceSync1(true);
@@ -289,7 +289,7 @@ void CONTROL_StartPrepare()
 
 	CC_EnableCurrentChannel(CurrentAmplitude, (float) DataTable[REG_EN_CURRENT_FB]);
 	
-	CONTROL_SetDeviceState(DS_StartPulse);
+	CONTROL_SetDeviceState(DS_PulsePrepareReady);
 }
 //------------------------------------------
 
