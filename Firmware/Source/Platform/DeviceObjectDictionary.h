@@ -86,7 +86,7 @@
 #define REG_MAX_PULSE_TO_PULSE_PAUSE	28	// Задержка между импульсами на максимальном токе (в мс)
 
 // Несохраняемы регистры чтения-записи
-#define REG_CURRENT_SETPOINT			129	// Значение задания тока (в А)
+#define REG_CURRENT_SETPOINT			129	// Значение задания тока (в мА/10)
 #define REG_VOLTAGE_SETPOINT			130	// Значение задания тока (в мВ)
 #define REG_VDUT_AVERAGE				131	// Полученное значение напряжения (в мВ)
 #define REG_IDUT_AVERAGE				132	// Полученное значение тока (в А)
