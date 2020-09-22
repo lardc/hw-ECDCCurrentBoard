@@ -26,7 +26,7 @@ void DMA2_Channel1_IRQHandler()
 	{
 		DMA_TransferCompleteReset(DMA2, DMA_IFCR_CTCIF1);
 		
-		if(CONTROL_SubState == SS_PulsePrepareReady)
+		if(CONTROL_State == DS_StartPulse)
 		{
 			ADC_SamplingStop(ADC1);
 			ADC_SamplingStop(ADC2);
@@ -101,7 +101,7 @@ void EXTI15_10_IRQHandler()
 			ADC_SamplingStart(ADC2);
 			TIM_Start(TIM6);
 			
-			CONTROL_SetDeviceSubState(SS_PulsePrepareReady);
+			CONTROL_SetDeviceState(DS_StartPulse);
 			
 			LL_ForceSync1(false);
 		}
