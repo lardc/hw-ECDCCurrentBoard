@@ -130,8 +130,10 @@ void CONTROL_ResetHardware()
 void CONTROL_Idle()
 {
 	DEVPROFILE_ProcessRequests();
+	CONTROL_PowerOn();
+	CONTROL_PowerOff();
+	CONTROL_StartPulseConfig();
 	CONTROL_UpdateWatchDog();
-	CONTROL_BatteryChargeMonitorLogic();
 }
 //------------------------------------------
 
@@ -141,13 +143,10 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 	
 	switch (ActionID)
 	{
-		
 		case ACT_FAULT_CLEAR:
 			{
 				if(CONTROL_State == DS_Fault)
-				{
 					CONTROL_ResetToDefaultState();
-				}
 			}
 			break;
 			
@@ -159,7 +158,8 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			{
 				if(CONTROL_State == DS_None)
 				{
-					CONTROL_StartBatteryCharge();
+					CONTROL_SetDeviceState(DS_InProcess);
+					CONTROL_SetDeviceSubState(SS_PowerOn);
 				}
 				else
 				{
@@ -173,7 +173,8 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			{
 				if(CONTROL_State == DS_Ready || CONTROL_State == DS_InProcess)
 				{
-					CONTROL_ResetToDefaultState();
+					CONTROL_SetDeviceState(DS_None);
+					CONTROL_SetDeviceSubState(SS_PowerOff);
 				}
 				else
 				{
@@ -188,21 +189,8 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			{
 				if(CONTROL_State == DS_Ready)
 				{
-					CONTROL_StartPrepare();
-				}
-				else
-				{
-					DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
-					*pUserError = ERR_OPERATION_BLOCKED;
-				}
-			}
-			break;
-			
-		case ACT_STOP_PROCESS:
-			{
-				if(CONTROL_State == DS_Ready)
-				{
-					CONTROL_ResetToDefaultState();
+					CONTROL_SetDeviceSubState(SS_PulseConfig);
+					LL_ExternalLed(true);
 				}
 				else
 				{
@@ -235,61 +223,94 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 }
 //------------------------------------------
 
-void CONTROL_StartBatteryCharge()
+void CONTROL_PowerOn()
 {
-	LL_SwitchPsBoard(true);
-	CONTROL_ChargeTimeout = CONTROL_TimeCounter + TIME_BAT_CHARGE;
-	CONTROL_SetDeviceState(DS_InProcess);
-}
-//------------------------------------------
-
-void CONTROL_BatteryChargeMonitorLogic()
-{
-	float BatteryVoltage = MEASURE_GetBatteryVoltage();
-	DataTable[REG_ADC_VBAT_MEASURE] = BatteryVoltage;
-	
 	if(CONTROL_State == DS_InProcess)
 	{
-		if(BatteryVoltage >= BAT_VOLTAGE_THRESHOLD)
+		switch (CONTROL_SubState)
 		{
-			CONTROL_SetDeviceState(DS_Ready);
-			LL_SwitchPsBoard(false);
+			case SS_PowerOn:
+				{
+					LL_SwitchPsBoard(true);
+					CONTROL_ChargeTimeout = CONTROL_TimeCounter + TIME_BAT_CHARGE;
+					CONTROL_SetDeviceSubState(SS_WaitCharging);
+				}
+				break;
+
+			case SS_WaitCharging:
+				{
+					float BatteryVoltage = MEASURE_GetBatteryVoltage();
+					DataTable[REG_ADC_VBAT_MEASURE] = BatteryVoltage;
+
+					if(BatteryVoltage >= BAT_VOLTAGE_THRESHOLD)
+					{
+						CONTROL_SetDeviceState(DS_Ready);
+						LL_SwitchPsBoard(false);
+					}
+					else if(CONTROL_ChargeTimeout < CONTROL_TimeCounter)
+						CONTROL_SwitchToFault(DF_BATTERY);
+				}
+				break;
+
+			default:
+				break;
 		}
-		else if(CONTROL_ChargeTimeout < CONTROL_TimeCounter)
-			CONTROL_SwitchToFault(DF_BATTERY);
 	}
-	
-	if((CONTROL_TimeCounter >= PulseDelayCounter) && (CONTROL_State == DS_InProcess)
-			&& (CONTROL_SubState == SS_WaitCharging))
-	{
-		if(BatteryVoltage >= BAT_VOLTAGE_THRESHOLD)
-		{
-			CONTROL_SetDeviceState(DS_Ready);
-			CONTROL_SetDeviceSubState(SS_None);
-			LL_SwitchPsBoard(false);
-		}
-		else
-			LL_SwitchPsBoard(true);
-	}
-	else if(CONTROL_TimeCounter < PulseDelayCounter)
-		CONTROL_SwitchToFault(DF_BATTERY);
-	
 }
 //------------------------------------------
 
-void CONTROL_StartPrepare()
+void CONTROL_PowerOff()
 {
-	LOGIC_ClearDataArrays();
-	
-	LOGIC_CacheVariables();
-	
-	LOGIC_PulseConfig();
-	
-	LOGIC_EnableVoltageChannel(VoltageAmplitude);
+	if(CONTROL_State == DS_None && SUB_State == SS_PowerOff)
+	{
+		CONTROL_ResetToDefaultState();
+		CONTROL_SetDeviceState(DS_None);
+		CONTROL_SetDeviceSubState(SS_None);
+	}
+}
+//------------------------------------------
 
-	CC_EnableCurrentChannel(CurrentAmplitude, (float) DataTable[REG_EN_CURRENT_FB]);
-	
-	CONTROL_SetDeviceState(DS_PulsePrepareReady);
+void CONTROL_StartPulseConfig()
+{
+	if(CONTROL_State == DS_Ready)
+	{
+		switch (CONTROL_SubState)
+		{
+			case SS_PulseConfig:
+				{
+					LOGIC_ClearDataArrays();
+
+					LOGIC_CacheVariables();
+
+					LOGIC_PulseConfig();
+
+					LOGIC_EnableVoltageChannel(VoltageAmplitude);
+
+					CC_EnableCurrentChannel(CurrentAmplitude, (float)DataTable[REG_EN_CURRENT_FB]);
+
+					CONTROL_SetDeviceSubState(SS_WaitingSync);
+				}
+				break;
+
+			case SS_WaitingSync:
+				{
+					EXTI_EnableInterrupt(EXTI15_10_IRQn, 0, true);
+					CONTROL_SetDeviceSubState(SS_StartPulse);
+				}
+				break;
+
+			case SS_AfterPulseWaiting:
+				{
+					CONTROL_SetDeviceState(DS_Ready);
+					CONTROL_SetDeviceSubState(SS_None);
+				}
+				break;
+
+			default:
+				break;
+
+		}
+	}
 }
 //------------------------------------------
 
@@ -319,14 +340,6 @@ bool CONTROL_CheckDeviceSubState(DeviceSubState NewSubState)
 		return true;
 	else
 		return false;
-}
-//------------------------------------------
-
-void CONTROL_DelayMs(uint32_t Delay)
-{
-	uint64_t Counter = (uint64_t)CONTROL_TimeCounter + Delay;
-	while(Counter > CONTROL_TimeCounter)
-		CONTROL_UpdateWatchDog();
 }
 //------------------------------------------
 
