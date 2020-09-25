@@ -6,8 +6,9 @@
 #define ACT_DISABLE_POWER				2	// Отключение блока
 #define ACT_START_PROCESS				3	// Страрт процесса формирования импульса
 #define ACT_STOP_PROCESS				4	// Остановка процесса формирования импульса
-#define ACT_FAULT_CLEAR					5	// Очистка fault
-#define ACT_WARNING_CLEAR				6	// Очистка warning
+#define ACT_START_DIAG_PULSE			5	// Начало формирования отвнутреннего синхроимпульса
+#define ACT_FAULT_CLEAR					6	// Очистка fault
+#define ACT_WARNING_CLEAR				7	// Очистка warning
 
 #define ACT_DBG_IMPULSE_LED				10	// Импульсное включение внешней индикации
 #define ACT_DBG_ENABLE_AMP11V			11	// Импульсное включение канала усиления напряжения DUT 11В
@@ -85,10 +86,12 @@
 #define REG_MAX_PULSE_TO_PULSE_PAUSE	28	// Задержка между импульсами на максимальном токе (в мс)
 
 // Несохраняемы регистры чтения-записи
-#define REG_CURRENT_SETPOINT			129	// Значение задания тока (в А)
+#define REG_CURRENT_SETPOINT			129	// Значение задания тока (в мА/10)
 #define REG_VOLTAGE_SETPOINT			130	// Значение задания тока (в мВ)
 #define REG_VDUT_AVERAGE				131	// Полученное значение напряжения (в мВ)
 #define REG_IDUT_AVERAGE				132	// Полученное значение тока (в А)
+
+#define REG_EN_CURRENT_FB				133 // Регистр выбора обратной связи по току
 
 //Регистры отладки
 #define REG_DBG_DATA					140	// Регистор приема передачи тестовых данных
@@ -101,9 +104,12 @@
 #define REG_WARNING						195	// Регистр Warning
 #define REG_PROBLEM						196	// Регистр Problem
 #define REG_OP_RESULT					197	// Регистр результата операции
-//
-#define REG_ACTUAL_BAT_VOLTAGE			200	// Текущее напряжение на батарее (в В)
 // -----------------------------
+#define REG_FWINFO_SLAVE_NID			256	// Device CAN slave node ID
+#define REG_FWINFO_MASTER_NID			257	// Device CAN master node ID (if presented)
+// 258 - 259
+#define REG_FWINFO_STR_LEN				260	// Length of the information string record
+#define REG_FWINFO_STR_BEGIN			261	// Begining of the information string record
 
 // Operation results
 #define OPRESULT_NONE					0	// No information or not finished

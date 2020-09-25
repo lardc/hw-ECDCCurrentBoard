@@ -10,11 +10,13 @@
 
 // Functions
 uint16_t CC_ItoDAC(float Current);
+float CC_CurrentSetup(float Current);
 void CC_SetCurrentMax2A(float Current);
 void CC_SetCurrentMax20A(float Current);
 void CC_SetCurrentMax270A(float Current);
 void CC_SetCurrentPulse(uint16_t OutData, float Current);
-float CC_EnableCurrentChannel(float Current);
+void CC_EnableCurrentChannel(float Current, float EnableFb);
+float CC_EnableShuntRes (float Current);
 //---------------------
 
 #endif /* __CURRENTCONTROL_H_ */

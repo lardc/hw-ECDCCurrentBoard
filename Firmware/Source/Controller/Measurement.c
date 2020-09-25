@@ -4,9 +4,8 @@
 #include "Global.h"
 #include "ZwADC.h"
 
-void MEASURE_ConvertRawArray(volatile uint16_t *InputArray, float *OutputArray,uint16_t DataLength,
-		uint16_t RegisterOffset, uint16_t RegisterK, uint16_t RegisterP0, uint16_t RegisterP1,
-		uint16_t RegisterP2)
+void MEASURE_ConvertRawArray(volatile uint16_t *InputArray, float *OutputArray, uint16_t DataLength,
+		uint16_t RegisterOffset, uint16_t RegisterK, uint16_t RegisterP0, uint16_t RegisterP1, uint16_t RegisterP2)
 {
 	uint16_t i;
 	float tmp;
@@ -65,20 +64,20 @@ void MEASURE_MeasuremenChannel(float Current, float Voltage)
 {
 	if(Current <= I_RANGE_2A)
 	{
-		MEASURE_ReadCurrent2A(CONTROL_DUTCurrentRaw, CONTROL_ValuesDUTCurrent, VALUES_OUT_SIZE);
+		MEASURE_ReadCurrent2A(CONTROL_DUTCurrentRaw, (float *)CONTROL_ValuesDUTCurrent, VALUES_OUT_SIZE);
 	}
 	else
 	{
-		MEASURE_ReadCurrent270A(CONTROL_DUTCurrentRaw, CONTROL_ValuesDUTCurrent, VALUES_OUT_SIZE);
+		MEASURE_ReadCurrent270A(CONTROL_DUTCurrentRaw, (float *)CONTROL_ValuesDUTCurrent, VALUES_OUT_SIZE);
 	}
-
+	
 	if(Voltage <= V_RANGE_250MV)
 	{
-		MEASURE_ReadVoltage250mV(CONTROL_DUTVoltageRaw, CONTROL_ValuesDUTVoltage, VALUES_OUT_SIZE);
+		MEASURE_ReadVoltage250mV(CONTROL_DUTVoltageRaw, (float *)CONTROL_ValuesDUTVoltage, VALUES_OUT_SIZE);
 	}
 	else
 	{
-		MEASURE_ReadVoltage11V(CONTROL_DUTVoltageRaw, CONTROL_ValuesDUTVoltage, VALUES_OUT_SIZE);
+		MEASURE_ReadVoltage11V(CONTROL_DUTVoltageRaw, (float *)CONTROL_ValuesDUTVoltage, VALUES_OUT_SIZE);
 	}
 }
 //-----------------------------------------------

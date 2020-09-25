@@ -12,13 +12,15 @@ typedef enum __DeviceState
 	DS_Disabled = 2,
 	DS_Ready = 3,
 	DS_InProcess = 4,
+	DS_PulsePrepareReady = 5,
+	DS_StartPulse = 6
 } DeviceState;
 
 typedef enum __DeviceSubState
 {
-	SS_None 			 = 0,
-	SS_WaitingSync 		 = 1,
-	SS_PulsePrepareReady = 2
+	SS_None = 0,
+	SS_WaitingSync = 1,
+	SS_WaitCharging = 2
 } DeviceSubState;
 
 // Variables
@@ -36,12 +38,15 @@ extern volatile Int16U CONTROL_RegulatorErrorRaw[];
 extern volatile Int16U CONTROL_OutDataRaw[];
 extern volatile float PulseDataBuffer[];
 extern volatile Int16U PulseDelayCounter;
-extern volatile float Vdut, Idut, CurrentAmplitude, CurrentAmplifier, ShuntResistance, VoltageAmplitude, VoltageAmplifier;
+extern volatile float Vdut, Idut, CurrentAmplitude, CurrentAmplifier, ShuntResistance, VoltageAmplitude,
+		VoltageAmplifier;
 extern volatile float Correction, RegulatorError, PropKoef, IntKoef, Qp, Qi;
 // Functions
 void CONTROL_Init();
 void CONTROL_Idle();
 void CONTROL_SetDeviceState(DeviceState NewState);
 void CONTROL_SetDeviceSubState(DeviceSubState NewSubState);
+bool CONTROL_CheckDeviceSubState(DeviceSubState NewSubState);
+void CONTROL_SwitchToFault(Int16U Reason);
 
 #endif // __CONTROLLER_H

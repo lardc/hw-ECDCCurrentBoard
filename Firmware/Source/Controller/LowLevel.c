@@ -114,7 +114,6 @@ bool LL_GetSync2State()
 }
 //-----------------------------
 
-
 void LL_WriteDACx(uint16_t Data, GPIO_PortPinSetting GPIO_LDACx)
 {
 	GPIO_SetState(GPIO_CS, false);
