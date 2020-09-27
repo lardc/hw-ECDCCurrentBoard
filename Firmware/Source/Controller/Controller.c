@@ -226,7 +226,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 
 void CONTROL_PowerOn()
 {
-	if(CONTROL_State == DS_InProcess )
+	if(CONTROL_State == DS_InProcess)
 	{
 		switch (CONTROL_SubState)
 		{

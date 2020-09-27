@@ -16,7 +16,7 @@ void CC_SetCurrentMax20A(float Current);
 void CC_SetCurrentMax270A(float Current);
 void CC_SetCurrentPulse(uint16_t OutData, float Current);
 void CC_EnableCurrentChannel(float Current, float EnableFb);
-float CC_EnableShuntRes (float Current);
+float CC_EnableShuntRes(float Current);
 //---------------------
 
 #endif /* __CURRENTCONTROL_H_ */
