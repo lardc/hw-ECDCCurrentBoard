@@ -89,6 +89,12 @@ void CC_EnableCurrentChannel(float Current, float EnableFb)
 {
 	uint16_t Data;
 	
+	LL_EnableRange20mA(false);
+	LL_EnableRange200mA(false);
+	LL_EnableRange2A(false);
+	LL_EnableRange20A(false);
+	LL_DisableRange270A(true);
+	
 	if(Current <= I_RANGE_20MA)
 	{
 		LL_EnableRange20mA(true);
@@ -105,13 +111,13 @@ void CC_EnableCurrentChannel(float Current, float EnableFb)
 	{
 		LL_EnableRange2A(true);
 		Data = (EnableFb == 1) ? I_ANALOG_2A : (I_ANALOG_2A & I_FB_ENABLE);
-		LL_WriteOutReg(I_ANALOG_2A);
+		LL_WriteOutReg(Data);
 	}
 	else if(Current <= I_RANGE_20A)
 	{
 		LL_EnableRange20A(true);
 		Data = (EnableFb == 1) ? I_ANALOG_20A : (I_ANALOG_20A & I_FB_ENABLE);
-		LL_WriteOutReg(I_ANALOG_20A);
+		LL_WriteOutReg(Data);
 	}
 	else
 	{
