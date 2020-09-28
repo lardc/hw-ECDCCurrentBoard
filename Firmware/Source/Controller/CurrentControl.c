@@ -22,7 +22,6 @@ uint16_t CC_ItoDAC(float Current)
 
 float CC_CurrentSetup(float Current)
 {
-	Current = DataTable[REG_CURRENT_SETPOINT];
 	if(Current > BLOCK_MAX_CURRENT)
 	{
 		if(DataTable[REG_PROBLEM] == PROBLEM_NONE)
