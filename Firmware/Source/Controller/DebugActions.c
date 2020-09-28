@@ -104,9 +104,9 @@ void DBGACT_TurnOnRange270A()
 {
 	LL_EnableRange270A(false);
 	LL_DisableRange270A(false);
-	DELAY_US(15000);
+	DELAY_MS(15);
 	LL_EnableRange270A(true);
-	DELAY_US(15000);
+	DELAY_MS(15);
 	LL_EnableRange270A(false);
 	LL_DisableRange270A(false);
 }
@@ -116,9 +116,9 @@ void DBGACT_TurnOffRange270A()
 {
 	LL_EnableRange270A(false);
 	LL_DisableRange270A(false);
-	DELAY_US(15000);
+	DELAY_MS(15);
 	LL_DisableRange270A(true);
-	DELAY_US(15000);
+	DELAY_MS(15);
 	LL_EnableRange270A(false);
 	LL_DisableRange270A(false);
 }
@@ -280,7 +280,7 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 		case ACT_DBG_IMPULSE_20MA:
 			{
 				LL_EnableRange20mA(true);
-				DELAY_US(15000);
+				DELAY_MS(15);
 				CC_SetCurrentMax2A(DataTable[REG_DBG_DATA]);
 				DELAY_US(1000);
 				LL_EnableRange20mA(false);
@@ -290,7 +290,7 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 		case ACT_DBG_IMPULSE_200MA:
 			{
 				LL_EnableRange200mA(true);
-				DELAY_US(15000);
+				DELAY_MS(15);
 				CC_SetCurrentMax2A(DataTable[REG_DBG_DATA]);
 				DELAY_US(1000);
 				LL_EnableRange200mA(false);
@@ -300,7 +300,7 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 		case ACT_DBG_IMPULSE_2A:
 			{
 				LL_EnableRange2A(true);
-				DELAY_US(15000);
+				DELAY_MS(15);
 				Current = CC_ItoDAC(Data);
 				CC_SetCurrentMax2A(DataTable[REG_DBG_DATA]);
 				DELAY_US(1000);
@@ -311,7 +311,7 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 		case ACT_DBG_IMPULSE_20A:
 			{
 				LL_EnableRange20A(true);
-				DELAY_US(15000);
+				DELAY_MS(15);
 				Current = CC_ItoDAC(Data);
 				CC_SetCurrentMax20A(Current);
 				DELAY_US(1000);
@@ -322,7 +322,7 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 		case ACT_DBG_IMPULSE_270A:
 			{
 				DBGACT_TurnOnRange270A();
-				DELAY_US(15000);
+				DELAY_MS(15);
 				Current = CC_ItoDAC(Data);
 				CC_SetCurrentMax270A(Current);
 				DELAY_US(1000);
