@@ -14,8 +14,34 @@
 // Forward functions
 uint16_t CC_ItoDAC(float Current)
 {
-	float K = (float)DataTable[REG_DAC_I_SET_K] / 1000;
-	float Offset = (float)((int16_t)DataTable[REG_DAC_I_SET_OFFSET]);
+	float K;
+	float Offset;
+	
+	if(Current <= I_RANGE_20MA)
+	{
+		K = (float)DataTable[REG_DAC_I20MA_SET_K] / 1000;
+		Offset = (float)((int16_t)DataTable[REG_DAC_I20MA_SET_OFFSET]);
+	}
+	else if(Current <= I_RANGE_200MA)
+	{
+		K = (float)DataTable[REG_DAC_I200MA_SET_K] / 1000;
+		Offset = (float)((int16_t)DataTable[REG_DAC_I200MA_SET_OFFSET]);
+	}
+	else if(Current <= I_RANGE_2A)
+	{
+		K = (float)DataTable[REG_DAC_I2A_SET_K] / 1000;
+		Offset = (float)((int16_t)DataTable[REG_DAC_I2A_SET_OFFSET]);
+	}
+	else if(Current <= I_RANGE_20A)
+	{
+		K = (float)DataTable[REG_DAC_I20A_SET_K] / 1000;
+		Offset = (float)((int16_t)DataTable[REG_DAC_I20A_SET_OFFSET]);
+	}
+	else
+	{
+		K = (float)DataTable[REG_DAC_I270A_SET_K] / 1000;
+		Offset = (float)((int16_t)DataTable[REG_DAC_I270A_SET_OFFSET]);
+	}
 	
 	uint32_t result = Current * K + Offset;
 	return (result > DAC_RESOLUTION) ? DAC_RESOLUTION : result;
