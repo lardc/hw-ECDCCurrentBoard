@@ -87,7 +87,8 @@ void CONTROL_ResetToDefaultState()
 	DataTable[REG_OP_RESULT] = OPRESULT_NONE;
 	DataTable[REG_ADC_VBAT_MEASURE] = 0;
 	DataTable[REG_VDUT_AVERAGE] = 0;
-	DataTable[REG_IDUT_AVERAGE] = 0;
+	DataTable[REG_IDUT_AVERAGE_LOW] = 0;
+	DataTable[REG_IDUT_AVERAGE_HIGH] = 0;
 	
 	DEVPROFILE_ResetScopes(0);
 	DEVPROFILE_ResetEPReadState();
@@ -152,11 +153,8 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 					CONTROL_SetDeviceState(DS_InProcess);
 					CONTROL_SetDeviceSubState(SS_PowerOn);
 				}
-				else
-				{
-					DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
+				else if(CONTROL_State != DS_Ready)
 					*pUserError = ERR_OPERATION_BLOCKED;
-				}
 			}
 			break;
 			
@@ -167,11 +165,8 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 					CONTROL_SetDeviceState(DS_None);
 					CONTROL_SetDeviceSubState(SS_PowerOff);
 				}
-				else
-				{
-					DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
+				else if(CONTROL_State != DS_None)
 					*pUserError = ERR_OPERATION_BLOCKED;
-				}
 				break;
 			}
 			break;
@@ -185,12 +180,21 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 					LL_ExternalLed(true);
 				}
 				else
-				{
-					DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
-					*pUserError = ERR_OPERATION_BLOCKED;
-				}
+					*pUserError = ERR_DEVICE_NOT_READY;
 			}
 			break;
+			
+		case ACT_STOP_PROCESS:
+			{
+				if(CONTROL_State == DS_InProcess)
+				{
+					CONTROL_ResetHardware();
+					CONTROL_SetDeviceState(DS_Ready);
+					CONTROL_SetDeviceSubState(SS_None);
+				}
+				else
+					*pUserError = ERR_OPERATION_BLOCKED;
+			}
 			
 		case ACT_START_DIAG_PULSE:
 			{
@@ -201,10 +205,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 					CONTROL_SetDeviceSubState(SS_PulseConfig);
 				}
 				else
-				{
-					DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
-					*pUserError = ERR_OPERATION_BLOCKED;
-				}
+					*pUserError = ERR_DEVICE_NOT_READY;
 			}
 			break;
 			
