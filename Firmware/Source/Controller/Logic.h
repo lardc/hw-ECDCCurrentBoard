@@ -11,5 +11,4 @@ void LOGIC_CacheVariables();
 void LOGIC_EnableVoltageChannel(float Voltage);
 void LOGIC_FillEndPoint(float Voltage, float Current, float Error, uint16_t DataToDAC);
 
-
 #endif // __LOGIC_H

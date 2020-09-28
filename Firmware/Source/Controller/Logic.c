@@ -14,13 +14,24 @@
 // Forward functions
 void LOGIC_ClearDataArrays()
 {
-	uint16_t i;
+	PulseToPulsePause = 0;
 	
-	for(i = 0; i < VALUES_OUT_SIZE; ++i)
+	Qi = 0;
+	PulseCounter = 0;
+	
+	for(int i = 0; i < VALUES_OUT_SIZE; ++i)
 	{
 		CONTROL_ValuesDUTVoltage[i] = 0;
 		CONTROL_ValuesDUTCurrent[i] = 0;
+		CONTROL_DUTCurrentRaw[i] = 0;
+		CONTROL_DUTVoltageRaw[i] = 0;
 	}
+	
+	for(int i = 0; i < PULSE_BUFFER_SIZE; i++)
+	{
+		PulseDataBuffer[i] = 0;
+	}
+	
 }
 //---------------------
 
@@ -30,7 +41,7 @@ void LOGIC_PulseConfig()
 	{
 		if(i < PULSE_LITE_START)
 		{
-			PulseDataBuffer[i] = CurrentAmplitude * ((i) / PULSE_LITE_START);
+			PulseDataBuffer[i] = CurrentAmplitude * ((float)i / PULSE_LITE_START);
 		}
 		else
 			PulseDataBuffer[i] = CurrentAmplitude;
@@ -40,23 +51,29 @@ void LOGIC_PulseConfig()
 
 void LOGIC_CacheVariables()
 {
-	CurrentAmplitude = CC_CurrentSetup((float)DataTable[REG_CURRENT_SETPOINT]);
+	uint32_t Current;
+	
+	Current = ((uint32_t)(DataTable[REG_CURRENT_SETPOINT_HIGH]) << 16) | DataTable[REG_CURRENT_SETPOINT_LOW];
+	
+	CurrentAmplitude = CC_CurrentSetup((float)Current);
 	VoltageAmplitude = (float)DataTable[REG_VOLTAGE_SETPOINT];
-
+	
 	PropKoef = (float)DataTable[REG_CTRL_P_COEF] / 1000;
 	IntKoef = (float)DataTable[REG_CTRL_I_COEF] / 1000;
 	
 	ShuntResistance = CC_EnableShuntRes(CurrentAmplitude);
 	
-	Pulse2PulsePause = (uint32_t)CurrentAmplitude * DataTable[REG_MAX_PULSE_TO_PULSE_PAUSE] / BLOCK_MAX_CURRENT;
-	
-	Qi = 0;
-	PulseCounter = 0;
+	PulseToPulsePause = (uint32_t)CurrentAmplitude * DataTable[REG_MAX_PULSE_TO_PULSE_PAUSE] / BLOCK_MAX_CURRENT;
 }
 //---------------------
 
 void LOGIC_EnableVoltageChannel(float Voltage)
 {
+	LL_EnableAmp30mV(false);
+	LL_EnableAmp250mV(false);
+	LL_EnableAmp1500mV(false);
+	LL_EnableAmp11V(false);
+	
 	if(Voltage <= V_RANGE_30MV)
 	{
 		LL_EnableAmp30mV(true);
