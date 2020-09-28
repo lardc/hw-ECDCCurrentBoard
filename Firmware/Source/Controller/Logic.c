@@ -3,6 +3,7 @@
 // Includes
 #include "Controller.h"
 #include "CurrentControl.h"
+#include "Measurement.h"
 #include "Board.h"
 #include "LowLevel.h"
 #include "Global.h"
@@ -10,6 +11,12 @@
 #include "DeviceObjectDictionary.h"
 #include "Interrupts.h"
 #include "Delay.h"
+
+// Variables
+//
+volatile float PulseDataBuffer[PULSE_BUFFER_SIZE];
+volatile float CurrentAmplitude = 0, CurrentAmplifier = 0, ShuntResistance = 0, VoltageAmplitude = 0,
+		VoltageAmplifier = 0;
 
 // Forward functions
 void LOGIC_ClearDataArrays()
