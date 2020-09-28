@@ -99,7 +99,7 @@ uint16_t MEASURE_GetBatteryVoltage()
 {
 	float Offset = (float)((int16_t)DataTable[REG_ADC_VBAT_OFFSET]);
 	float K = (float)DataTable[REG_ADC_VBAT_K] / 1000;
-	float result = ((float)ADC_Measure(ADC3, VBAT_ADC3_CH) - Offset) * ADC_REF_VOLTAGE / ADC_RESOLUTION * K;
+	float result = ((float)ADC_Measure(ADC3, VBAT_ADC3_CH) + Offset) * ADC_REF_VOLTAGE / ADC_RESOLUTION * K;
 	
 	return (result > 0) ? result : 0;
 }
