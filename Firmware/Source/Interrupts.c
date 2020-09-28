@@ -14,7 +14,10 @@
 
 // Variables
 //
-volatile uint32_t PulseCounter, Pulse2PulsePause;
+volatile float Correction = 0, PropKoef = 0, IntKoef = 0, Qp = 0, Qi = 0;
+volatile float Vdut = 0, Idut = 0, AverageVdut = 0, AverageIdut = 0;
+volatile uint32_t PulseCounter, PulseToPulsePause;
+
 // Functions
 //
 void DMA2_Channel1_IRQHandler()
@@ -26,12 +29,16 @@ void DMA2_Channel1_IRQHandler()
 	{
 		DMA_TransferCompleteReset(DMA2, DMA_IFCR_CTCIF1);
 		
-		if(CONTROL_State == DS_StartPulse)
+		if(CONTROL_SubState == SS_StartPulse)
 		{
+			Vdut = 0;
+			Idut = 0;
+			
 			ADC_SamplingStop(ADC1);
 			ADC_SamplingStop(ADC2);
 			
-			MEASURE_MeasuremenChannel(CurrentAmplitude, VoltageAmplitude);
+			MEASURE_ReadDutCurrent(CurrentAmplitude);
+			MEASURE_ReadDutVoltage(VoltageAmplitude);
 			
 			for(int i = 0; i < VALUES_OUT_SIZE; i++)
 			{
@@ -40,8 +47,14 @@ void DMA2_Channel1_IRQHandler()
 			}
 			
 			Vdut = Vdut / VALUES_OUT_SIZE;
-			Idut = Idut / VALUES_OUT_SIZE / ShuntResistance;
-
+			Idut = (Idut / VALUES_OUT_SIZE) / ShuntResistance;
+			
+			if(PulseCounter >= (PULSE_BUFFER_SIZE / 2))
+			{
+				AverageVdut += Vdut;
+				AverageIdut += Idut;
+			}
+			
 			RegulatorError = (PulseCounter == 0) ? 0 : (PulseDataBuffer[PulseCounter - 1] - Idut);
 			
 			if(((RegulatorError / Idut * 100) < CTRL_FOLLOW_ERR) && (PulseCounter <= PULSE_BUFFER_SIZE))
@@ -73,14 +86,14 @@ void DMA2_Channel1_IRQHandler()
 				}
 				else
 				{
-					LL_ExternalLed(false);
+					AverageVdut = AverageVdut / (PULSE_BUFFER_SIZE / 2);
+					AverageIdut = AverageIdut / (PULSE_BUFFER_SIZE / 2);
 					TIM_Stop(TIM6);
-					PulseCounter = 0;
 					CC_SetCurrentPulse(END_CURRENT_PULSE, CurrentAmplitude);
-					PulseDelayCounter = CONTROL_TimeCounter + Pulse2PulsePause;
-					DataTable[REG_VDUT_AVERAGE] = Vdut;
-					DataTable[REG_IDUT_AVERAGE] = Idut;
-					CONTROL_SetDeviceSubState(SS_WaitCharging);
+					DataTable[REG_IDUT_AVERAGE_LOW] = (Int16U)((uint32_t)AverageIdut & I_MASK_LOW);
+					DataTable[REG_IDUT_AVERAGE_HIGH] = (Int16U)(((uint32_t)AverageIdut & I_MASK_HIGH) >> 16);
+					DataTable[REG_VDUT_AVERAGE] = (Int16U)AverageVdut;
+					CONTROL_SetDeviceSubState(SS_AfterPulseWaiting);
 					CONTROL_SetDeviceState(DS_InProcess);
 				}
 			}
@@ -91,22 +104,19 @@ void DMA2_Channel1_IRQHandler()
 
 void EXTI15_10_IRQHandler()
 {
-	if(CONTROL_CheckDeviceSubState(SS_WaitingSync))
+	if(CONTROL_CheckDeviceSubState(SS_StartPulse))
 	{
 		if(LL_GetSync1State())
 		{
-			LL_ExternalLed(true);
-			
+			if(CONTROL_State == DS_DiagPulse)
+			{
+				LL_ForceSync1(false);
+			}
 			ADC_SamplingStart(ADC1);
 			ADC_SamplingStart(ADC2);
 			TIM_Start(TIM6);
-			
-			CONTROL_SetDeviceState(DS_StartPulse);
-			
-			LL_ForceSync1(false);
 		}
 	}
-	
 	EXTI_FlagReset(EXTI_13);
 }
 //-----------------------------------------
