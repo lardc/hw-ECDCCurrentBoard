@@ -30,21 +30,13 @@ volatile DeviceSubState CONTROL_SubState = SS_None;
 static Boolean CycleActive = false;
 volatile Int64U CONTROL_TimeCounter = 0;
 volatile Int64U CONTROL_ChargeTimeout = 0;
-volatile Int16U CONTROL_ValuesDUTVoltage[VALUES_OUT_SIZE];
-volatile Int16U CONTROL_ValuesDUTCurrent[VALUES_OUT_SIZE];
-volatile uint16_t CONTROL_DUTCurrentRaw[VALUES_OUT_SIZE];
-volatile uint16_t CONTROL_DUTVoltageRaw[VALUES_OUT_SIZE];
 volatile Int16U CONTROL_AvrVoltageRaw[EP_VALUE];
 volatile Int16U CONTROL_AvrCurrentRaw[EP_VALUE];
 volatile Int16U CONTROL_RegulatorErrorRaw[EP_VALUE];
 volatile Int16U CONTROL_OutDataRaw[EP_VALUE];
-volatile float PulseDataBuffer[PULSE_BUFFER_SIZE];
 volatile Int16U CONTROL_ValuesCounter = 0;
 volatile Int16U CONTROL_ValuesDiagEPCounter = 0;
 volatile Int16U PulseDelayCounter = 0;
-volatile float Vdut, Idut, CurrentAmplitude = 0, CurrentAmplifier = 0, ShuntResistance = 0, VoltageAmplitude = 0,
-		VoltageAmplifier = 0;
-volatile float Correction = 0, PropKoef = 0, IntKoef = 0, Qp = 0, Qi = 0;
 
 // Forward functions
 //
