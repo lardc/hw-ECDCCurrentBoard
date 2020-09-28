@@ -6,9 +6,7 @@
 
 // Variables
 extern volatile float PulseDataBuffer[];
-extern volatile float CurrentAmplitude, CurrentAmplifier, ShuntResistance, VoltageAmplitude,
-		VoltageAmplifier;
-
+extern volatile float CurrentAmplitude, CurrentAmplifier, ShuntResistance, VoltageAmplitude, VoltageAmplifier;
 
 // Functions
 void LOGIC_ClearDataArrays();

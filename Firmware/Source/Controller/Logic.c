@@ -15,8 +15,8 @@
 // Variables
 //
 volatile float PulseDataBuffer[PULSE_BUFFER_SIZE];
-volatile float CurrentAmplitude = 0, CurrentAmplifier = 0, ShuntResistance = 0, VoltageAmplitude = 0,
-		VoltageAmplifier = 0;
+volatile float CurrentAmplitude = 0, CurrentAmplifier = 0, ShuntResistance = 0, VoltageAmplitude = 0, VoltageAmplifier =
+		0;
 
 // Forward functions
 void LOGIC_ClearDataArrays()
@@ -63,7 +63,7 @@ void LOGIC_CacheVariables()
 	Current = ((uint32_t)(DataTable[REG_CURRENT_SETPOINT_HIGH]) << 16) | DataTable[REG_CURRENT_SETPOINT_LOW];
 	
 	CurrentAmplitude = CC_CurrentSetup((float)Current);
-	VoltageAmplitude = (float)DataTable[REG_VOLTAGE_SETPOINT];
+	VoltageAmplitude = (float)DataTable[REG_VOLTAGE_DUT_LIM];
 	
 	PropKoef = (float)DataTable[REG_CTRL_P_COEF] / 1000;
 	IntKoef = (float)DataTable[REG_CTRL_I_COEF] / 1000;
