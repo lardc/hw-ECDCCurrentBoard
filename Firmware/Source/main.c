@@ -16,7 +16,7 @@ int main()
 	
 	// Настройка внешних прерываний
 	INITCFG_ConfigExtInt();
-
+	
 	// Настройка SPI
 	INITCFG_ConfigSPI();
 	
