@@ -4,9 +4,7 @@
 // Команды
 #define ACT_ENABLE_POWER				1	// Переход в состояние ожидания
 #define ACT_DISABLE_POWER				2	// Отключение блока
-#define ACT_START_PROCESS				3	// Страрт процесса формирования импульса
-#define ACT_STOP_PROCESS				4	// Остановка процесса формирования импульса
-#define ACT_START_DIAG_PULSE			5	// Начало формирования отвнутреннего синхроимпульса
+#define ACT_START_DIAG_PULSE			5	// Начало формирования от внутреннего синхроимпульса
 #define ACT_FAULT_CLEAR					6	// Очистка fault
 #define ACT_WARNING_CLEAR				7	// Очистка warning
 
@@ -39,6 +37,9 @@
 #define ACT_DBG_IMPULSE_20A				36	// Формирование тока до 20А без ОС
 #define ACT_DBG_IMPULSE_270A			37	// Формирование тока до 270А без ОС
 
+#define ACT_START_PROCESS				100	// Страрт процесса формирования импульса
+#define ACT_STOP_PROCESS				101	// Остановка процесса формирования импульса
+
 #define ACT_SAVE_TO_ROM					200	// Сохранение пользовательских данных во FLASH процессора
 #define ACT_RESTORE_FROM_ROM			201	// Восстановление данных из FLASH
 #define ACT_RESET_TO_DEFAULT			202	// Сброс DataTable в состояние по умолчанию
@@ -49,53 +50,88 @@
 // Регистры
 // Сохраняемые регистры
 
-#define REG_ADC_VBAT_MEASURE			1	// Хранение напряжения заряда батареи (в В)
 #define REG_ADC_VBAT_OFFSET				2	// Смещение оцифрованного напряжения батареи (в тиках)
 #define REG_ADC_VBAT_K					3	// Коэффициент пересчёта напряжения АЦП (в мВ) в напряжение (в В) x1000
 
-#define REG_ADC_VD250MV_OFFSET			4	// Смещение пересчета до 250мВ (в тиках)
-#define REG_ADC_VD250MV_K				5	// Коэффициент пересчета до 250мВ (в В) x1000
-#define REG_ADC_VD250MV_FINE_P0			6	// Полином точной корректировки до 250мВ P0 (в вольтах)
-#define REG_ADC_VD250MV_FINE_P1			7	// Полином точной корректировки до 250мВ P1 x1000
-#define REG_ADC_VD250MV_FINE_P2			8	// Полином точной корректировки до 250мВ P2 x1e6
+#define REG_ADC_VD30MV_OFFSET			4	// Смещение пересчета до 30мВ (в тиках)
+#define REG_ADC_VD30MV_K				5	// Коэффициент пересчета до 30мВ (в В) x1000
+#define REG_ADC_VD30MV_FINE_P0			6	// Полином точной корректировки до 30мВ P0 (в вольтах)
+#define REG_ADC_VD30MV_FINE_P1			7	// Полином точной корректировки до 30мВ P1 x1000
+#define REG_ADC_VD30MV_FINE_P2			8	// Полином точной корректировки до 30мВ P2 x1e6
 
-#define REG_ADC_VD11V_OFFSET			9	// Смещение пересчета до 11В (в тиках)
-#define REG_ADC_VD11V_K					10	// Коэффициент пересчета до 11В (в В) x1000
-#define REG_ADC_VD11V_FINE_P0			11	// Полином точной корректировки до 11В P0 (в вольтах)
-#define REG_ADC_VD11V_FINE_P1			12	// Полином точной корректировки до 11В P1 x1000
-#define REG_ADC_VD11V_FINE_P2			13	// Полином точной корректировки до 11В P2 x1e6
+#define REG_ADC_VD250MV_OFFSET			9	// Смещение пересчета до 250мВ (в тиках)
+#define REG_ADC_VD250MV_K				10	// Коэффициент пересчета до 250мВ (в В) x1000
+#define REG_ADC_VD250MV_FINE_P0			11	// Полином точной корректировки до 250мВ P0 (в вольтах)
+#define REG_ADC_VD250MV_FINE_P1			12	// Полином точной корректировки до 250мВ P1 x1000
+#define REG_ADC_VD250MV_FINE_P2			13	// Полином точной корректировки до 250мВ P2 x1e6
 
-#define REG_ADC_ID2A_OFFSET				14	// Смещение пересчета до 2А (в В)
-#define REG_ADC_ID2A_K					15	// Коэффициент пересчета до 2А (в тиках)
-#define REG_ADC_ID2A_FINE_P0			16	// Полином точной корректировки до 2А P0 (в вольтах)
-#define REG_ADC_ID2A_FINE_P1			17	// Полином точной корректировки до 2А P1 x1000
-#define REG_ADC_ID2A_FINE_P2			18	// Полином точной корректировки до 2А P2 x1e6
+#define REG_ADC_VD1500MV_OFFSET			14	// Смещение пересчета до 1500мВ (в тиках)
+#define REG_ADC_VD1500MV_K				15	// Коэффициент пересчета до 1500мВ (в В) x1000
+#define REG_ADC_VD1500MV_FINE_P0		16	// Полином точной корректировки до 1500мВ P0 (в вольтах)
+#define REG_ADC_VD1500MV_FINE_P1		17	// Полином точной корректировки до 1500мВ P1 x1000
+#define REG_ADC_VD1500MV_FINE_P2		18	// Полином точной корректировки до 1500мВ P2 x1e6
 
-#define REG_ADC_ID270A_OFFSET			19	// Смещение пересчета до 270А (в В)
-#define REG_ADC_ID270A_K				20	// Коэффициент пересчета до 270А (в тиках)
-#define REG_ADC_ID270A_FINE_P0			21	// Полином точной корректировки до 270А P0 (в вольтах)
-#define REG_ADC_ID270A_FINE_P1			22	// Полином точной корректировки до 270А P1 x1000
-#define REG_ADC_ID270A_FINE_P2			23	// Полином точной корректировки до 270А P2 x1e6
+#define REG_ADC_VD11V_OFFSET			19	// Смещение пересчета до 11В (в тиках)
+#define REG_ADC_VD11V_K					20	// Коэффициент пересчета до 11В (в В) x1000
+#define REG_ADC_VD11V_FINE_P0			21	// Полином точной корректировки до 11В P0 (в вольтах)
+#define REG_ADC_VD11V_FINE_P1			22	// Полином точной корректировки до 11В P1 x1000
+#define REG_ADC_VD11V_FINE_P2			23	// Полином точной корректировки до 11В P2 x1e6
 
-#define REG_DAC_I_SET_K					24	// Пропорцианальный коэффициент пересчета ЦАП
-#define REG_DAC_I_SET_OFFSET			25	// Смещение при пересчете ЦАП
+#define REG_ADC_ID20MA_OFFSET			24	// Смещение пересчета до 2А (в В)
+#define REG_ADC_ID20MA_K				25	// Коэффициент пересчета до 2А (в тиках)
+#define REG_ADC_ID20MA_FINE_P0			26	// Полином точной корректировки до 2А P0 (в вольтах)
+#define REG_ADC_ID20MA_FINE_P1			27	// Полином точной корректировки до 2А P1 x1000
+#define REG_ADC_ID20MA_FINE_P2			28	// Полином точной корректировки до 2А P2 x1e6
 
-#define REG_CTRL_P_COEF					26	// Пропорциональный коэффициент регулятора (х1000)
-#define REG_CTRL_I_COEF					27	// Интегральный коэффициент регулятора (х1000)
+#define REG_ADC_ID200MA_OFFSET			29	// Смещение пересчета до 2А (в В)
+#define REG_ADC_ID200MA_K				30	// Коэффициент пересчета до 2А (в тиках)
+#define REG_ADC_ID200MA_FINE_P0			31	// Полином точной корректировки до 2А P0 (в вольтах)
+#define REG_ADC_ID200MA_FINE_P1			32	// Полином точной корректировки до 2А P1 x1000
+#define REG_ADC_ID200MA_FINE_P2			33	// Полином точной корректировки до 2А P2 x1e6
 
-#define REG_MAX_PULSE_TO_PULSE_PAUSE	28	// Задержка между импульсами на максимальном токе (в мс)
+#define REG_ADC_ID2A_OFFSET				34	// Смещение пересчета до 2А (в В)
+#define REG_ADC_ID2A_K					35	// Коэффициент пересчета до 2А (в тиках)
+#define REG_ADC_ID2A_FINE_P0			36	// Полином точной корректировки до 2А P0 (в вольтах)
+#define REG_ADC_ID2A_FINE_P1			37	// Полином точной корректировки до 2А P1 x1000
+#define REG_ADC_ID2A_FINE_P2			38	// Полином точной корректировки до 2А P2 x1e6
+
+#define REG_ADC_ID20A_OFFSET			39	// Смещение пересчета до 270А (в В)
+#define REG_ADC_ID20A_K					40	// Коэффициент пересчета до 270А (в тиках)
+#define REG_ADC_ID20A_FINE_P0			41	// Полином точной корректировки до 270А P0 (в вольтах)
+#define REG_ADC_ID20A_FINE_P1			42	// Полином точной корректировки до 270А P1 x1000
+#define REG_ADC_ID20A_FINE_P2			43	// Полином точной корректировки до 270А P2 x1e6
+
+#define REG_ADC_ID270A_OFFSET			44	// Смещение пересчета до 270А (в В)
+#define REG_ADC_ID270A_K				45	// Коэффициент пересчета до 270А (в тиках)
+#define REG_ADC_ID270A_FINE_P0			46	// Полином точной корректировки до 270А P0 (в вольтах)
+#define REG_ADC_ID270A_FINE_P1			47	// Полином точной корректировки до 270А P1 x1000
+#define REG_ADC_ID270A_FINE_P2			48	// Полином точной корректировки до 270А P2 x1e6
+
+#define REG_DAC_I20MA_SET_OFFSET		49	// Смещение при пересчете ЦАП
+#define REG_DAC_I20MA_SET_K				50	// Пропорцианальный коэффициент пересчета ЦАП
+#define REG_DAC_I200MA_SET_OFFSET		51	// Смещение при пересчете ЦАП
+#define REG_DAC_I200MA_SET_K			52	// Пропорцианальный коэффициент пересчета ЦАП
+#define REG_DAC_I2A_SET_OFFSET			53	// Смещение при пересчете ЦАП
+#define REG_DAC_I2A_SET_K				54	// Пропорцианальный коэффициент пересчета ЦАП
+#define REG_DAC_I20A_SET_OFFSET			55	// Смещение при пересчете ЦАП
+#define REG_DAC_I20A_SET_K				56	// Пропорцианальный коэффициент пересчета ЦАП
+#define REG_DAC_I270A_SET_OFFSET		57	// Смещение при пересчете ЦАП
+#define REG_DAC_I270A_SET_K				58	// Пропорцианальный коэффициент пересчета ЦАП
+
+#define REG_CTRL_P_COEF					59	// Пропорциональный коэффициент регулятора (х1000)
+#define REG_CTRL_I_COEF					60	// Интегральный коэффициент регулятора (х1000)
+
+#define REG_MAX_PULSE_TO_PULSE_PAUSE	61	// Задержка между импульсами на максимальном токе (в мс)
 
 // Несохраняемы регистры чтения-записи
-#define REG_CURRENT_SETPOINT			129	// Значение задания тока (в мА/10)
-#define REG_VOLTAGE_SETPOINT			130	// Значение задания тока (в мВ)
-#define REG_VDUT_AVERAGE				131	// Полученное значение напряжения (в мВ)
-#define REG_IDUT_AVERAGE				132	// Полученное значение тока (в А)
+#define REG_CURRENT_SETPOINT_LOW		128	// Значение задания тока (в мА)
+#define REG_CURRENT_SETPOINT_HIGH		129	// Значение задания тока (в мА)
+#define REG_VOLTAGE_DUT_LIM				130	// Предельное значение падения напряжения (в мВ)
 
-#define REG_EN_CURRENT_FB				133 // Регистр выбора обратной связи по току
+#define REG_EN_CURRENT_FB				131 // Регистр выбора обратной связи по току
 
 //Регистры отладки
 #define REG_DBG_DATA					140	// Регистор приема передачи тестовых данных
-#define REG_DBG_ENABLE_DEVICE			141	// Тестовый регистр выбора ЦАП
 
 // Регистры только чтение
 #define REG_DEV_STATE					192	// Регистр состояния
@@ -104,6 +140,11 @@
 #define REG_WARNING						195	// Регистр Warning
 #define REG_PROBLEM						196	// Регистр Problem
 #define REG_OP_RESULT					197	// Регистр результата операции
+
+#define REG_IDUT_AVERAGE_LOW			250	// Полученное значение тока (в мА)
+#define REG_IDUT_AVERAGE_HIGH			251	// Полученное значение тока (в мА)
+#define REG_VDUT_AVERAGE				252	// Полученное значение напряжения (в мВ)
+#define REG_ADC_VBAT_MEASURE			253	// Хранение напряжения заряда батареи (в мВ)
 // -----------------------------
 #define REG_FWINFO_SLAVE_NID			256	// Device CAN slave node ID
 #define REG_FWINFO_MASTER_NID			257	// Device CAN master node ID (if presented)
@@ -141,9 +182,9 @@
 
 //  User Errors
 #define ERR_NONE						0
-#define ERR_CONFIGURATION_LOCKED		1	//  Устройство защищено от записи
-#define ERR_OPERATION_BLOCKED			2	//  Операция не может быть выполнена в текущем состоянии устройства
-#define ERR_DEVICE_NOT_READY			3	//  Устройство не готово для смены состояния
-#define ERR_WRONG_PWD					4	//  Неправильный ключ
+#define ERR_CONFIGURATION_LOCKED		1		//  Устройство защищено от записи
+#define ERR_OPERATION_BLOCKED			2		//  Операция не может быть выполнена в текущем состоянии устройства
+#define ERR_DEVICE_NOT_READY			3		//  Устройство не готово для смены состояния
+#define ERR_WRONG_PWD					4		//  Неправильный ключ
 
 #endif //  __DEV_OBJ_DIC_H

@@ -7,26 +7,222 @@
 #include "Global.h"
 
 //Definitions
-#define BAT_VOLTAGE_MIN			400		// в В
-#define BAT_VOLTAGE_MAX			1500	// в В
-#define BAT_VOLTAGE_DEF			500		// в В
+#define VBAT_OFFSET_MIN				0		//
+#define VBAT_OFFSET_MAX				65535	//
+#define VBAT_OFFSET_DEF				65375	//
+#define VBAT_K_MIN					1		//
+#define VBAT_K_MAX					50000	//
+#define VBAT_K_DEF					1000	//
 
-#define GAIN_COEFFICIENT_MIN	1
-#define GAIN_COEFFICIENT_MAX	10000
+#define VD30MV_OFFSET_MIN			0		//
+#define VD30MV_OFFSET_MAX			65535	//
+#define VD30MV_OFFSET_DEF			65000	//
+#define VD30MV_K_MIN				1		//
+#define VD30MV_K_MAX				50000	//
+#define VD30MV_K_DEF				1000	//
+#define VD30MV_P0_MIN				0		//
+#define VD30MV_P0_MAX				65535	//
+#define VD30MV_P0_DEF				65000	//
+#define VD30MV_P1_MIN				1		//
+#define VD30MV_P1_MAX				60000	//
+#define VD30MV_P1_DEF				1000	//
+#define VD30MV_P2_MIN				1		//
+#define VD30MV_P2_MAX				60000	//
+#define VD30MV_P2_DEF				1000	//
 
-#define GAIN_VOLTAGE_DEF		1000
+#define VD250MV_OFFSET_MIN			0		//
+#define VD250MV_OFFSET_MAX			65535	//
+#define VD250MV_OFFSET_DEF			65000	//
+#define VD250MV_K_MIN				1		//
+#define VD250MV_K_MAX				50000	//
+#define VD250MV_K_DEF				1000	//
+#define VD250MV_P0_MIN				0		//
+#define VD250MV_P0_MAX				65535	//
+#define VD250MV_P0_DEF				65000	//
+#define VD250MV_P1_MIN				1		//
+#define VD250MV_P1_MAX				60000	//
+#define VD250MV_P1_DEF				1000	//
+#define VD250MV_P2_MIN				1		//
+#define VD250MV_P2_MAX				60000	//
+#define VD250MV_P2_DEF				1000	//
 
-#define VOLTAGE_ERROR_MIN		1		// в В
-#define VOLTAGE_ERROR_MAX		20		// в В
-#define VOLTAGE_ERROR_DEF		5		// в В
+#define VD1500MV_OFFSET_MIN			0		//
+#define VD1500MV_OFFSET_MAX			65535	//
+#define VD1500MV_OFFSET_DEF			65000	//
+#define VD1500MV_K_MIN				1		//
+#define VD1500MV_K_MAX				50000	//
+#define VD1500MV_K_DEF				1000	//
+#define VD1500MV_P0_MIN				0		//
+#define VD1500MV_P0_MAX				65535	//
+#define VD1500MV_P0_DEF				65000	//
+#define VD1500MV_P1_MIN				1		//
+#define VD1500MV_P1_MAX				60000	//
+#define VD1500MV_P1_DEF				1000	//
+#define VD1500MV_P2_MIN				1		//
+#define VD1500MV_P2_MAX				60000	//
+#define VD1500MV_P2_DEF				1000	//
 
-#define CHARGE_TIMEOUT_MIN		1000	// в мс
-#define CHARGE_TIMEOUT_MAX		60000	// в мс
-#define CHARGE_TIMEOUT_DEF		10000	// в мс
+#define VD11V_OFFSET_MIN			0		//
+#define VD11V_OFFSET_MAX			65535	//
+#define VD11V_OFFSET_DEF			65000	//
+#define VD11V_K_MIN					1		//
+#define VD11V_K_MAX					50000	//
+#define VD11V_K_DEF					1000	//
+#define VD11V_P0_MIN				0		//
+#define VD11V_P0_MAX				65535	//
+#define VD11V_P0_DEF				65000	//
+#define VD11V_P1_MIN				1		//
+#define VD11V_P1_MAX				60000	//
+#define VD11V_P1_DEF				1000	//
+#define VD11V_P2_MIN				1		//
+#define VD11V_P2_MAX				60000	//
+#define VD11V_P2_DEF				1000	//
 
-#define FAN_OPERATE_MIN			10		// в сек
-#define FAN_OPERATE_MAX			300		// в сек
-#define FAN_OPERATE_DEF			60		// в сек
+#define ID20MA_OFFSET_MIN			0		//
+#define ID20MA_OFFSET_MAX			65535	//
+#define ID20MA_OFFSET_DEF			65000	//
+#define ID20MA_K_MIN				1		//
+#define ID20MA_K_MAX				50000	//
+#define ID20MA_K_DEF				1000	//
+#define ID20MA_P0_MIN				0		//
+#define ID20MA_P0_MAX				65535	//
+#define ID20MA_P0_DEF				65000	//
+#define ID20MA_P1_MIN				1		//
+#define ID20MA_P1_MAX				60000	//
+#define ID20MA_P1_DEF				1000	//
+#define ID20MA_P2_MIN				1		//
+#define ID20MA_P2_MAX				60000	//
+#define ID20MA_P2_DEF				1000	//
+
+#define ID200MA_OFFSET_MIN			0		//
+#define ID200MA_OFFSET_MAX			65535	//
+#define ID200MA_OFFSET_DEF			65000	//
+#define ID200MA_K_MIN				1		//
+#define ID200MA_K_MAX				50000	//
+#define ID200MA_K_DEF				1000	//
+#define ID200MA_P0_MIN				0		//
+#define ID200MA_P0_MAX				65535	//
+#define ID200MA_P0_DEF				65000	//
+#define ID200MA_P1_MIN				1		//
+#define ID200MA_P1_MAX				60000	//
+#define ID200MA_P1_DEF				1000	//
+#define ID200MA_P2_MIN				1		//
+#define ID200MA_P2_MAX				60000	//
+#define ID200MA_P2_DEF				1000	//
+
+#define ID2A_OFFSET_MIN				0		//
+#define ID2A_OFFSET_MAX				65535	//
+#define ID2A_OFFSET_DEF				65000	//
+#define ID2A_K_MIN					1		//
+#define ID2A_K_MAX					50000	//
+#define ID2A_K_DEF					1000	//
+#define ID2A_P0_MIN					0		//
+#define ID2A_P0_MAX					65535	//
+#define ID2A_P0_DEF					65000	//
+#define ID2A_P1_MIN					1		//
+#define ID2A_P1_MAX					60000	//
+#define ID2A_P1_DEF					1000	//
+#define ID2A_P2_MIN					1		//
+#define ID2A_P2_MAX					60000	//
+#define ID2A_P2_DEF					1000	//
+
+#define ID20A_OFFSET_MIN			0		//
+#define ID20A_OFFSET_MAX			65535	//
+#define ID20A_OFFSET_DEF			65000	//
+#define ID20A_K_MIN					1		//
+#define ID20A_K_MAX					50000	//
+#define ID20A_K_DEF					1000	//
+#define ID20A_P0_MIN				0		//
+#define ID20A_P0_MAX				65535	//
+#define ID20A_P0_DEF				65000	//
+#define ID20A_P1_MIN				1		//
+#define ID20A_P1_MAX				60000	//
+#define ID20A_P1_DEF				1000	//
+#define ID20A_P2_MIN				1		//
+#define ID20A_P2_MAX				60000	//
+#define ID20A_P2_DEF				1000	//
+
+#define ID270A_OFFSET_MIN			0		//
+#define ID270A_OFFSET_MAX			65535	//
+#define ID270A_OFFSET_DEF			65000	//
+#define ID270A_K_MIN				1		//
+#define ID270A_K_MAX				50000	//
+#define ID270A_K_DEF				1000	//
+#define ID270A_P0_MIN				0		//
+#define ID270A_P0_MAX				65535	//
+#define ID270A_P0_DEF				65000	//
+#define ID270A_P1_MIN				1		//
+#define ID270A_P1_MAX				60000	//
+#define ID270A_P1_DEF				1000	//
+#define ID270A_P2_MIN				1		//
+#define ID270A_P2_MAX				60000	//
+#define ID270A_P2_DEF				1000	//
+
+#define DAC_I20MA_OFFSET_MIN		0		//
+#define DAC_I20MAT_OFFSET_MAX		65535	//
+#define DAC_I20MA_OFFSET_DEF		65000	//
+#define DAC_I20MA_K_MIN				1		//
+#define DAC_I20MA_K_MAX				50000	//
+#define DAC_I20MA_K_DEF				1000	//
+
+#define DAC_I200MA_OFFSET_MIN		0		//
+#define DAC_I200MA_OFFSET_MAX		65535	//
+#define DAC_I200MA_OFFSET_DEF		65000	//
+#define DAC_I200MA_K_MIN			1		//
+#define DAC_I200MA_K_MAX			50000	//
+#define DAC_I200MA_K_DEF			1000	//
+
+#define DAC_I2A_OFFSET_MIN			0		//
+#define DAC_I2A_OFFSET_MAX			65535	//
+#define DAC_I2A_OFFSET_DEF			65000	//
+#define DAC_I2A_K_MIN				1		//
+#define DAC_I2A_K_MAX				50000	//
+#define DAC_I2A_K_DEF				1000	//
+
+#define DAC_I20A_OFFSET_MIN			0		//
+#define DAC_I20A_OFFSET_MAX			65535	//
+#define DAC_I20A_OFFSET_DEF			65000	//
+#define DAC_I20A_K_MIN				1		//
+#define DAC_I20A_K_MAX				50000	//
+#define DAC_I20A_K_DEF				1000	//
+
+#define DAC_I270A_OFFSET_MIN		0		//
+#define DAC_I270A_OFFSET_MAX		65535	//
+#define DAC_I270A_OFFSET_DEF		65000	//
+#define DAC_I270A_K_MIN				1		//
+#define DAC_I270A_K_MAX				50000	//
+#define DAC_I270A_K_DEF				1000	//
+
+#define CTRL_P_COEF_MIN				1		//
+#define CTRL_P_COEF_MAX				50000	//
+#define CTRL_P_COEF_DEF				1000	//
+
+#define CTRL_I_COEF_MIN				1		//
+#define CTRL_I_COEF_MAX				50000	//
+#define CTRL_I_COEF_DEF				1000	//
+
+#define PULSE_PAUSE_MIN				0		//
+#define PULSE_PAUSE_MAX				65535		//
+#define PULSE_PAUSE_DEF				10000		//
+
+#define CURRENT_SETPOINT_LOW_MIN	0		//
+#define CURRENT_SETPOINT_LOW_MAX	65535		//
+#define CURRENT_SETPOINT_LOW_DEF	65535		//
+#define CURRENT_SETPOINT_HIGH_MIN	0		//
+#define CURRENT_SETPOINT_HIGH_MAX	65535		//
+#define CURRENT_SETPOINT_HIGH_DEF	3		//
+
+#define VOLTAGE_DUT_LIM_MIN			0		//
+#define VOLTAGE_DUT_LIM_MAX			20000		//
+#define VOLTAGE_DUT_LIM_DEF			11000		//
+
+#define EN_CURRENT_FB_MIN			0		//
+#define EN_CURRENT_FB_MAX			1		//
+#define EN_CURRENT_FB_DEF			0		//
+
+#define DBG_DATA_MIN				0		//
+#define DBG_DATA_MAX				65535		//
+#define DBG_DATA_DEF				65535		//
 
 // Types
 typedef struct __TableItemConstraint

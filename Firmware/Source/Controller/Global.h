@@ -17,10 +17,11 @@
 // Параметры импульса тока
 #define PULSE_DELAY						10000									// Время паузы между импульсами тока, мС
 #define PULSE_TIME_VALUE				10000									// Длительность импульса тока, мкС
-#define PULSE_BUFFER_SIZE				(PULSE_TIME_VALUE / TIMER6_uS)			// Количество точек в буфере формы импульса
+#define PULSE_BUFFER_SIZE				(PULSE_TIME_VALUE / PULSE_DIVIDER)		// Количество точек в буфере формы импульса
 #define SYNC_LINE_HIGHSTATE_TIMEOUT		25										// Таймаут пребывания линии синхронизации в высоком состоянии
-#define BLOCK_MAX_CURRENT				27000									// Максимально возможный ток для канала до 250А (мА/10)
+#define BLOCK_MAX_CURRENT				270000									// Максимально возможный ток для канала до 250А (мА/10)
 #define PULSE_LITE_START				10										// Количество шагов перед выходом на полку
+#define PULSE_DIVIDER					((VALUES_OUT_SIZE * TIMER6_uS) + TIME_REG_STEP)	// Делитель массива импульса, мс
 
 // Параметры регулятора
 #define CTRL_FOLLOW_ERR					20										// Максимально допустимая ошибка (в %)
@@ -29,6 +30,7 @@
 #define TIME_LED_BLINK					500										// Мигание светодиодом (в мс)
 #define TIME_EXT_LED_BLINK				500										// Время загорания внешнего светодиода (в мс)
 #define TIME_BAT_CHARGE					5000									// Время заряда батареи  (в мс)
+#define TIME_REG_STEP					60										// Время работы такта регулятора (в мс)
 
 // Параметры АЦП
 #define V_ADC1_CH						1										// Номер канала АЦП V_DUT
@@ -46,11 +48,11 @@
 #define BAT_VOLTAGE_DELTA				5.0f									// Гистерезис поддержания напряжения (в В)
 
 //Параметры формирования тока
-#define I_RANGE_20MA					2										// Диапазон до 20мА (мА/10)
-#define I_RANGE_200MA					20										// Диапазон до 200мА (мА/10)
-#define I_RANGE_2A						200										// Диапазон до 2А (мА/10)
-#define I_RANGE_20A						2000									// Диапазон до 20А (мА/10)
-#define I_RANGE_270A					25000									// Диапазон до 250А (мА/10)
+#define I_RANGE_20MA					20										// Диапазон до 20мА (мА)
+#define I_RANGE_200MA					200										// Диапазон до 200мА (мА)
+#define I_RANGE_2A						2000									// Диапазон до 2А (мА)
+#define I_RANGE_20A						20000									// Диапазон до 20А (мА)
+#define I_RANGE_270A					250000									// Диапазон до 250А (мА)
 
 #define END_CURRENT_PULSE				0										// Значение задания тока 0
 #define LOCK_ANALOG_CH					0										// Отключение ОС и каналов измерения тока
@@ -60,6 +62,8 @@
 #define I_ANALOG_270A					0x0009									// Маска выбора включения ОС и измерения канала до 270А
 
 #define I_FB_ENABLE						0x0007									// Маска разрешения включения обратной связи
+#define I_MASK_LOW						0x0000FFFF								// Маска младших разрядов тока
+#define I_MASK_HIGH						0xFFFF0000								// Маска старших разрядов тока
 
 #define I_SHUNT_20MA					100000									// Шунт 100000 мОм до 20мА
 #define I_SHUNT_200MA					10000									// Шунт 10000 мОм до 200мА
@@ -80,6 +84,6 @@
 #define ADC1_VOLTAGE_CHANNEL			1										// АЦП1 номер канала напряжения DUT
 #define ADC2_CURRENT_CHANNEL			1										// АЦП2 номер канала тока DUT
 
-#define VALUES_OUT_SIZE					8										// Размер массива DMA
+#define VALUES_OUT_SIZE					6										// Размер массива DMA
 
 #endif //  __GLOBAL_H
