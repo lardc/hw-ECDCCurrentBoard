@@ -1,4 +1,4 @@
-#include "Measurement.h"
+﻿#include "Measurement.h"
 #include "DataTable.h"
 #include "DeviceObjectDictionary.h"
 #include "Global.h"

@@ -1,4 +1,4 @@
-// Header
+﻿// Header
 #include "Logic.h"
 // Includes
 #include "Controller.h"

@@ -1,4 +1,4 @@
-#ifndef __CURRENTCONTROL_H_
+﻿#ifndef __CURRENTCONTROL_H_
 #define __CURRENTCONTROL_H_
 
 // Include

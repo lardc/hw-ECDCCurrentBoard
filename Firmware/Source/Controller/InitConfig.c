@@ -1,4 +1,4 @@
-#include "InitConfig.h"
+п»ї#include "InitConfig.h"
 #include "Board.h"
 #include "SysConfig.h"
 #include "Controller.h"
@@ -26,25 +26,25 @@ void INITCFG_ConfigExtInt()
 
 void INITCFG_ConfigIO()
 {
-	// Включение тактирования портов
+	// Р’РєР»СЋС‡РµРЅРёРµ С‚Р°РєС‚РёСЂРѕРІР°РЅРёСЏ РїРѕСЂС‚РѕРІ
 	RCC_GPIO_Clk_EN(PORTA);
 	RCC_GPIO_Clk_EN(PORTB);
 	RCC_GPIO_Clk_EN(PORTC);
 	
-	// Аналаговые входы
+	// РђРЅР°Р»Р°РіРѕРІС‹Рµ РІС…РѕРґС‹
 	GPIO_InitAnalog(GPIO_MEASURE_V);
 	GPIO_InitAnalog(GPIO_MEASURE_I);
 	GPIO_InitAnalog(GPIO_MEASURE_VBAT);
 	
-	// Линия синхронизации (выходы)
+	// Р›РёРЅРёСЏ СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё (РІС‹С…РѕРґС‹)
 	GPIO_InitPushPullOutput(GPIO_SYNC_OUT2);
 	GPIO_InitPushPullOutput(GPIO_SYNC_OUT1);
 	
-	// Линия синхронизации (входы)
+	// Р›РёРЅРёСЏ СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё (РІС…РѕРґС‹)
 	GPIO_InitInput(GPIO_SYNC_IN1, NoPull);
 	GPIO_InitInput(GPIO_SYNC_IN2, NoPull);
 	
-	// Выходы
+	// Р’С‹С…РѕРґС‹
 	GPIO_InitPushPullOutput(GPIO_CS);
 	GPIO_InitPushPullOutput(GPIO_LDAC1);
 	GPIO_InitPushPullOutput(GPIO_LDAC2);
@@ -65,7 +65,7 @@ void INITCFG_ConfigIO()
 	GPIO_InitPushPullOutput(GPIO_LED);
 	GPIO_InitPushPullOutput(GPIO_LED_EXT);
 	
-	// Альтернативные функции
+	// РђР»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹Рµ С„СѓРЅРєС†РёРё
 	GPIO_InitAltFunction(GPIO_ALT_CAN_RX, AltFn_9);
 	GPIO_InitAltFunction(GPIO_ALT_CAN_TX, AltFn_9);
 	GPIO_InitAltFunction(GPIO_ALT_UART_RX, AltFn_7);

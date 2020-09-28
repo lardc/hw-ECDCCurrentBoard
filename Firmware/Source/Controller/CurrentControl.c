@@ -1,4 +1,4 @@
-// Header
+﻿// Header
 #include "CurrentControl.h"
 // Includes
 #include "Board.h"

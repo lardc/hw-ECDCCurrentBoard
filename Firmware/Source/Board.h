@@ -1,4 +1,4 @@
-#ifndef __BOARD_H
+п»ї#ifndef __BOARD_H
 #define __BOARD_H
 
 #include "stm32f30x.h"
@@ -16,12 +16,12 @@
 #include "ZwNFLASH.h"
 #include "ZwSPI.h"
 
-//Определения для аналоговых портов
+//РћРїСЂРµРґРµР»РµРЅРёСЏ РґР»СЏ Р°РЅР°Р»РѕРіРѕРІС‹С… РїРѕСЂС‚РѕРІ
 GPIO_PortPinSettingMacro GPIO_MEASURE_V = {GPIOA, Pin_0};
 GPIO_PortPinSettingMacro GPIO_MEASURE_I = {GPIOA, Pin_4};
 GPIO_PortPinSettingMacro GPIO_MEASURE_VBAT = {GPIOB, Pin_0};
 
-// Определения для выходных портов
+// РћРїСЂРµРґРµР»РµРЅРёСЏ РґР»СЏ РІС‹С…РѕРґРЅС‹С… РїРѕСЂС‚РѕРІ
 GPIO_PortPinSettingMacro GPIO_CS = {GPIOA, Pin_1};
 GPIO_PortPinSettingMacro GPIO_LDAC1 = {GPIOA, Pin_2};
 GPIO_PortPinSettingMacro GPIO_LDAC2 = {GPIOA, Pin_3};
@@ -42,7 +42,7 @@ GPIO_PortPinSettingMacro GPIO_ENABLE_20MA = {GPIOB, Pin_14};
 GPIO_PortPinSettingMacro GPIO_LED = {GPIOC, Pin_13};
 GPIO_PortPinSettingMacro GPIO_LED_EXT = {GPIOC, Pin_14};
 
-// Определения для портов альтернативных функций
+// РћРїСЂРµРґРµР»РµРЅРёСЏ РґР»СЏ РїРѕСЂС‚РѕРІ Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹С… С„СѓРЅРєС†РёР№
 GPIO_PortPinSettingMacro GPIO_ALT_CAN_RX = {GPIOA, Pin_11};
 GPIO_PortPinSettingMacro GPIO_ALT_CAN_TX = {GPIOA, Pin_12};
 GPIO_PortPinSettingMacro GPIO_ALT_UART_RX = {GPIOA, Pin_10};
@@ -50,7 +50,7 @@ GPIO_PortPinSettingMacro GPIO_ALT_UART_TX = {GPIOA, Pin_9};
 GPIO_PortPinSettingMacro GPIO_ALT_SPI1_CLK = {GPIOA, Pin_5};
 GPIO_PortPinSettingMacro GPIO_ALT_SPI1_MOSI = {GPIOA, Pin_7};
 
-// Линия синхронизации
+// Р›РёРЅРёСЏ СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё
 GPIO_PortPinSettingMacro GPIO_SYNC_OUT2 = {GPIOB, Pin_11};
 GPIO_PortPinSettingMacro GPIO_SYNC_OUT1 = {GPIOB, Pin_12};
 GPIO_PortPinSettingMacro GPIO_SYNC_IN1 = {GPIOB, Pin_13};
