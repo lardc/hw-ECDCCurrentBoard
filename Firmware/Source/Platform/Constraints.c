@@ -69,11 +69,11 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {{0, 0, 0},			// 0
 		{CTRL_P_COEF_MIN, CTRL_P_COEF_MAX, CTRL_P_COEF_DEF},						// 59
 		{CTRL_I_COEF_MIN, CTRL_I_COEF_MAX, CTRL_I_COEF_DEF},						// 60
 		{PULSE_PAUSE_MIN, PULSE_PAUSE_MAX, PULSE_PAUSE_DEF},						// 61
-		{0, 0, 0},																	// 62
-		{0, 0, 0},																	// 63
-		{0, 0, 0},																	// 64
-		{0, 0, 0},																	// 65
-		{0, 0, 0},																	// 66
+		{VD10MV_OFFSET_MIN, VD10MV_OFFSET_MAX, VD10MV_OFFSET_DEF},					// 62
+		{VD10MV_K_MIN, VD10MV_K_MAX, VD10MV_K_DEF},									// 63
+		{VD10MV_P0_MIN, VD10MV_P0_MAX, VD10MV_P0_DEF},								// 64
+		{VD10MV_P1_MIN, VD10MV_P1_MAX, VD10MV_P1_DEF},								// 65
+		{VD10MV_P2_MIN, VD10MV_P2_MAX, VD10MV_P2_DEF},								// 66
 		{0, 0, 0},																	// 67
 		{0, 0, 0},																	// 68
 		{0, 0, 0},																	// 69
@@ -138,12 +138,11 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {{0, 0, 0},			// 0
 };
 
 const TableItemConstraint VConstraint[DATA_TABLE_WP_START - DATA_TABLE_WR_START] = {{CURRENT_SETPOINT_LOW_MIN,
-CURRENT_SETPOINT_LOW_MAX,
-CURRENT_SETPOINT_LOW_DEF},																				// 128
-		{CURRENT_SETPOINT_HIGH_MIN, CURRENT_SETPOINT_HIGH_MAX, CURRENT_SETPOINT_HIGH_DEF},						// 129
-		{VOLTAGE_DUT_LIM_MIN, VOLTAGE_DUT_LIM_MAX, VOLTAGE_DUT_LIM_DEF},										// 130
-		{EN_CURRENT_FB_MIN, EN_CURRENT_FB_MAX, EN_CURRENT_FB_DEF},												// 131
-		{0, 0, 0},																	// 132
+CURRENT_SETPOINT_LOW_MAX, CURRENT_SETPOINT_LOW_DEF},															// 128
+		{CURRENT_SETPOINT_HIGH_MIN, CURRENT_SETPOINT_HIGH_MAX, CURRENT_SETPOINT_HIGH_DEF},				// 129
+		{VOLTAGE_DUT_LIM_LOW_MIN, VOLTAGE_DUT_LIM_LOW_MAX, VOLTAGE_DUT_LIM_LOW_DEF},					// 130
+		{VOLTAGE_DUT_LIM_HIGH_MIN, VOLTAGE_DUT_LIM_HIGH_MAX, VOLTAGE_DUT_LIM_HIGH_DEF},					// 131
+		{EN_CURRENT_FB_MIN, EN_CURRENT_FB_MAX, EN_CURRENT_FB_DEF},										// 132
 		{0, 0, 0},																	// 133
 		{0, 0, 0},																	// 134
 		{0, 0, 0},																	// 135
