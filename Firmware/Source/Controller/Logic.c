@@ -11,12 +11,16 @@
 #include "DeviceObjectDictionary.h"
 #include "Interrupts.h"
 #include "Delay.h"
+#include "math.h"
 
 // Variables
 //
 volatile float PulseDataBuffer[PULSE_BUFFER_SIZE];
-volatile float CurrentAmplitude = 0, CurrentAmplifier = 0, ShuntResistance = 0, VoltageAmplitude = 0, VoltageAmplifier =
-		0;
+volatile float CurrentAmplitude = 0, CurrentAmplifier = 0, ShuntResistance = 0,
+		VoltageAmplitude = 0, VoltageAmplifier = 0;
+static uint16_t FollowingErrorCounter, FollowingErrorCounterMax;
+static float FollowingErrorThreshold;
+static bool EnableFollowingError;
 
 // Forward functions
 void LOGIC_ClearDataArrays()
@@ -31,6 +35,7 @@ void LOGIC_ClearDataArrays()
 	
 	Qi = 0;
 	PulseCounter = 0;
+	FollowingErrorCounter = 0;
 	
 	CONTROL_ValuesCounter = 0;
 
@@ -80,6 +85,29 @@ void LOGIC_CacheVariables()
 	ShuntResistance = CC_EnableShuntRes(CurrentAmplitude);
 	
 	PulseToPulsePause = ((CurrentAmplitude / BLOCK_MAX_CURRENT) * ((float)DataTable[REG_MAX_PULSE_TO_PULSE_PAUSE]) + 1000);
+
+	EnableFollowingError = DataTable[REG_ENABLE_FOLLOWING_ERROR];
+	FollowingErrorThreshold = (float)DataTable[REG_FE_THRESHOLD] / 100;
+	FollowingErrorCounterMax = DataTable[REG_FE_COUNTER_MAX];
+}
+//---------------------
+
+bool LOGIC_IsFollowingError(float RelativeError)
+{
+	bool result = false;
+
+	if(EnableFollowingError)
+	{
+		if(fabsf(RelativeError) > FollowingErrorThreshold)
+			++FollowingErrorCounter;
+		else
+			FollowingErrorCounter = 0;
+
+		if(FollowingErrorCounter >= FollowingErrorCounterMax)
+			result = true;
+	}
+
+	return result;
 }
 //---------------------
 

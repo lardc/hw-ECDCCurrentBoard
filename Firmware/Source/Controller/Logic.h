@@ -15,5 +15,6 @@ void LOGIC_CacheVariables();
 void LOGIC_EnableVoltageChannel(float Voltage);
 void LOGIC_OffAllRelay();
 void LOGIC_FillEndPoint(float Voltage, float Current, float Error, float DataToDAC);
+bool LOGIC_IsFollowingError(float RelativeError);
 
 #endif // __LOGIC_H
