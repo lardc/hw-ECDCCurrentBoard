@@ -6,12 +6,12 @@
 
 // Variables
 //
-volatile Int16U CONTROL_ValuesDUTVoltage[VALUES_OUT_SIZE];
-volatile Int16U CONTROL_ValuesDUTCurrent[VALUES_OUT_SIZE];
+volatile float CONTROL_ValuesDUTVoltage[VALUES_OUT_SIZE];
+volatile float CONTROL_ValuesDUTCurrent[VALUES_OUT_SIZE];
 volatile uint16_t CONTROL_DUTCurrentRaw[VALUES_OUT_SIZE];
 volatile uint16_t CONTROL_DUTVoltageRaw[VALUES_OUT_SIZE];
 
-void MEASURE_ConvertRawArray(volatile uint16_t *InputArray, volatile Int16U* OutputArray, uint16_t DataLength,
+void MEASURE_ConvertRawArray(volatile uint16_t *InputArray, volatile float* OutputArray, uint16_t DataLength,
 		uint16_t RegisterOffset, uint16_t RegisterK, uint16_t RegisterP0, uint16_t RegisterP1, uint16_t RegisterP2)
 {
 	uint16_t i;
@@ -19,14 +19,13 @@ void MEASURE_ConvertRawArray(volatile uint16_t *InputArray, volatile Int16U* Out
 	
 	float Offset = (float)((int16_t)DataTable[RegisterOffset]);
 	float K = (float)DataTable[RegisterK] / 1000;
-	//
 	float P0 = (float)((int16_t)DataTable[RegisterP0]);
 	float P1 = (float)DataTable[RegisterP1] / 1000;
 	float P2 = (float)((int16_t)DataTable[RegisterP2]) / 1e6;
 	
 	for(i = 0; i < DataLength; ++i)
 	{
-		tmp = ((float)InputArray[i] + Offset) * ADC_REF_VOLTAGE / ADC_RESOLUTION * K;
+		tmp = ((float)InputArray[i] * (ADC_REF_VOLTAGE / ADC_RESOLUTION) + Offset)  * K;
 		tmp = tmp * tmp * P2 + tmp * P1 + P0;
 		OutputArray[i] = (tmp > 0) ? tmp : 0;
 	}
@@ -68,7 +67,13 @@ void MEASURE_ReadDutCurrent(float Current)
 
 void MEASURE_ReadDutVoltage(float Voltage)
 {
-	if(Voltage <= V_RANGE_30MV)
+	if(Voltage <= V_RANGE_10MV)
+	{
+		MEASURE_ConvertRawArray(&CONTROL_DUTVoltageRaw[0], &CONTROL_ValuesDUTVoltage[0], VALUES_OUT_SIZE,
+		REG_ADC_VD10MV_OFFSET, REG_ADC_VD10MV_K, REG_ADC_VD10MV_FINE_P0, REG_ADC_VD10MV_FINE_P1,
+		REG_ADC_VD10MV_FINE_P2);
+	}
+	else if(Voltage <= V_RANGE_30MV)
 	{
 		MEASURE_ConvertRawArray(&CONTROL_DUTVoltageRaw[0], &CONTROL_ValuesDUTVoltage[0], VALUES_OUT_SIZE,
 		REG_ADC_VD30MV_OFFSET, REG_ADC_VD30MV_K, REG_ADC_VD30MV_FINE_P0, REG_ADC_VD30MV_FINE_P1,
@@ -99,7 +104,7 @@ uint16_t MEASURE_GetBatteryVoltage()
 {
 	float Offset = (float)((int16_t)DataTable[REG_ADC_VBAT_OFFSET]);
 	float K = (float)DataTable[REG_ADC_VBAT_K] / 1000;
-	float result = ((float)ADC_Measure(ADC3, VBAT_ADC3_CH) + Offset) * ADC_REF_VOLTAGE / ADC_RESOLUTION * K;
+	float result = (((float)ADC_Measure(ADC3, VBAT_ADC3_CH)) * ((ADC_REF_VOLTAGE / 1000)/ ADC_RESOLUTION) + Offset) * K;
 	
 	return (result > 0) ? result : 0;
 }
