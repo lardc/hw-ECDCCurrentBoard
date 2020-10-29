@@ -349,15 +349,6 @@ void CONTROL_SetDeviceSubState(DeviceSubState NewSubState)
 }
 //------------------------------------------
 
-bool CONTROL_CheckDeviceSubState(DeviceSubState NewSubState)
-{
-	if(CONTROL_SubState == NewSubState)
-		return true;
-	else
-		return false;
-}
-//------------------------------------------
-
 void CONTROL_UpdateWatchDog()
 {
 	if(BOOT_LOADER_VARIABLE != BOOT_LOADER_REQUEST)

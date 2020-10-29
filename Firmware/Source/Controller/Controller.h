@@ -46,7 +46,6 @@ void CONTROL_Init();
 void CONTROL_Idle();
 void CONTROL_SetDeviceState(DeviceState NewState);
 void CONTROL_SetDeviceSubState(DeviceSubState NewSubState);
-bool CONTROL_CheckDeviceSubState(DeviceSubState NewSubState);
 void CONTROL_SwitchToFault(Int16U Reason);
 
 #endif // __CONTROLLER_H
