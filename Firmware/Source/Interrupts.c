@@ -30,7 +30,7 @@ void DMA2_Channel1_IRQHandler()
 	{
 		DMA_TransferCompleteReset(DMA2, DMA_IFCR_CTCIF1);
 		
-		if(CONTROL_SubState == SS_StartPulse)
+		if(CONTROL_SubState == SS_StartReg)
 		{
 			Vdut = 0;
 			Idut = 0;
@@ -52,7 +52,15 @@ void DMA2_Channel1_IRQHandler()
 			
 			RegulatorError = (PulseCounter == 0) ? 0 : (PulseDataBuffer[PulseCounter - 1] - Idut);
 			
-			if(((RegulatorError / Idut * 100) < CTRL_FOLLOW_ERR) && (PulseCounter <= PULSE_BUFFER_SIZE))
+			if(LOGIC_IsFollowingError(RegulatorError / Idut * 100))
+			{
+				LL_ExternalLed(false);
+				TIM_Stop(TIM6);
+				CC_SetCurrentPulse(END_CURRENT_PULSE, CurrentAmplitude);
+				CONTROL_SetDeviceSubState(SS_AfterPulseWaiting);
+				CONTROL_SetDeviceState(DS_InProcess);
+			}
+			else if(PulseCounter <= PULSE_BUFFER_SIZE)
 			{
 				Qp = RegulatorError * PropKoef;
 				Qi += RegulatorError * IntKoef;
@@ -74,16 +82,7 @@ void DMA2_Channel1_IRQHandler()
 
 				CC_SetCurrentPulse(Correction, CurrentAmplitude);
 			}
-			/*
-			else if((RegulatorError / Idut * 100) >= CTRL_FOLLOW_ERR)
-			{
-				LL_ExternalLed(false);
-				TIM_Stop(TIM6);
-				CC_SetCurrentPulse(END_CURRENT_PULSE, CurrentAmplitude);
-				CONTROL_SwitchToFault(DF_ERRORMAX);
-			}
-			*/
-			else if(PulseCounter > PULSE_BUFFER_SIZE)
+			else
 			{
 				TIM_Stop(TIM6);
 				CC_SetCurrentPulse(END_CURRENT_PULSE, CurrentAmplitude);
@@ -101,7 +100,7 @@ void DMA2_Channel1_IRQHandler()
 
 void EXTI15_10_IRQHandler()
 {
-	if(CONTROL_CheckDeviceSubState(SS_StartPulse))
+	if(CONTROL_SubState == SS_StartPulse)
 	{
 		if(LL_GetSync1State())
 		{
@@ -109,6 +108,7 @@ void EXTI15_10_IRQHandler()
 			ADC_SamplingStart(ADC2);
 			TIM_Start(TIM6);
 			LL_ForceSync1(false);
+			CONTROL_SetDeviceSubState(SS_StartReg);
 		}
 	}
 	EXTI_FlagReset(EXTI_13);
