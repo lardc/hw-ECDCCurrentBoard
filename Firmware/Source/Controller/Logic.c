@@ -129,7 +129,7 @@ void LOGIC_FillEndPoint(float Voltage, float Current, float Error, float DataToD
 
 	CONTROL_AvrVoltageRaw[CONTROL_ValuesCounter] = (Int16U)(Voltage / 1000);
 	CONTROL_AvrCurrentRaw[CONTROL_ValuesCounter] = (Int16U)(Current / 1000);
-	CONTROL_RegulatorErrorRaw[CONTROL_ValuesCounter] = (Int16U)(Error);
+	CONTROL_RegulatorErrorRaw[CONTROL_ValuesCounter] = (Int16S)(Error);
 	CONTROL_OutDataRaw[CONTROL_ValuesCounter] = (Int16U)(DataToDAC / 1000);
 }
 //---------------------
