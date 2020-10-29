@@ -25,9 +25,6 @@ static bool EnableFollowingError;
 // Forward functions
 void LOGIC_ClearDataArrays()
 {
-	DEVPROFILE_ResetScopes(0);
-	DEVPROFILE_ResetEPReadState();
-	
 	AverageVdut = 0;
 	AverageIdut = 0;
 

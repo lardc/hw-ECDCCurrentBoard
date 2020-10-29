@@ -51,6 +51,7 @@ void CONTROL_PowerOff();
 void CONTROL_StartPulseConfig();
 void CONTROL_ClearDataArrays();
 void CONTROL_PrepareMeasurement();
+void CONTROL_ResetRegistersOutputs();
 
 // Functions
 //
@@ -78,7 +79,7 @@ void CONTROL_Init()
 }
 //------------------------------------------
 
-void CONTROL_ResetToDefaultState()
+void CONTROL_ResetRegistersOutputs()
 {
 	DataTable[REG_FAULT_REASON] = DF_NONE;
 	DataTable[REG_DISABLE_REASON] = DF_NONE;
@@ -90,9 +91,15 @@ void CONTROL_ResetToDefaultState()
 	DataTable[REG_VDUT_AVERAGE_HIGH] = 0;
 	DataTable[REG_IDUT_AVERAGE_LOW] = 0;
 	DataTable[REG_IDUT_AVERAGE_HIGH] = 0;
-	
+
 	DEVPROFILE_ResetScopes(0);
 	DEVPROFILE_ResetEPReadState();
+}
+//------------------------------------------
+
+void CONTROL_ResetToDefaultState()
+{
+	CONTROL_ResetRegistersOutputs();
 	
 	CONTROL_ResetHardware();
 	CONTROL_SetDeviceSubState(SS_None);
@@ -172,6 +179,8 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			{
 				if(CONTROL_State == DS_Ready)
 				{
+					CONTROL_ResetRegistersOutputs();
+
 					LL_ExternalLed(true);
 					CONTROL_SetDeviceState(DS_InProcess);
 					CONTROL_SetDeviceSubState(SS_PulseConfig);
