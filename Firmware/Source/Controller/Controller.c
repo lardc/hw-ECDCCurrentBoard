@@ -315,6 +315,7 @@ void CONTROL_StartPulseConfig()
 					
 					if(BatteryVoltage >= BAT_VOLTAGE_THRESHOLD)
 					{
+						DataTable[REG_OP_RESULT] = OPRESULT_OK;
 						CONTROL_SetDeviceState(DS_Ready);
 						CONTROL_SetDeviceSubState(SS_None);
 						LL_SwitchPsBoard(true);
