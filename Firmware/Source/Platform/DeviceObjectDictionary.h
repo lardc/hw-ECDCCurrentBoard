@@ -146,6 +146,7 @@
 #define REG_WARNING						195	// Регистр Warning
 #define REG_PROBLEM						196	// Регистр Problem
 #define REG_OP_RESULT					197	// Регистр результата операции
+#define REG_SUB_STATE					198	// Регистр вспомогательного состояния
 
 #define REG_IDUT_AVERAGE_LOW			250	// Полученное значение тока младшие разряды (в мкА)
 #define REG_IDUT_AVERAGE_HIGH			251	// Полученное значение тока старшие разряды (в мкА)

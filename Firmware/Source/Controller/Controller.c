@@ -351,6 +351,7 @@ void CONTROL_SetDeviceState(DeviceState NewState)
 
 void CONTROL_SetDeviceSubState(DeviceSubState NewSubState)
 {
+	DataTable[REG_SUB_STATE] = NewSubState;
 	CONTROL_SubState = NewSubState;
 }
 //------------------------------------------
