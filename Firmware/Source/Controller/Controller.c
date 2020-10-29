@@ -274,14 +274,7 @@ void CONTROL_StartPulseConfig()
 					
 					CC_SetCurrentPulse(END_CURRENT_PULSE, CurrentAmplitude);
 					
-					if(CONTROL_State == DS_InProcess)
-					{
-						CONTROL_SetDeviceSubState(SS_StartPulse);
-					}
-					else
-					{
-						CONTROL_SetDeviceSubState(SS_WaitingSync);
-					}
+					CONTROL_SetDeviceSubState(SS_WaitingSync);
 				}
 				break;
 				
