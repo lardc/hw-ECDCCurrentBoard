@@ -53,6 +53,12 @@
 #define REG_ADC_VBAT_OFFSET				2	// Смещение оцифрованного напряжения батареи (в тиках)
 #define REG_ADC_VBAT_K					3	// Коэффициент пересчёта напряжения АЦП (в мВ) в напряжение (в В) x1000
 
+#define REG_ADC_VD10MV_OFFSET			62	// Смещение пересчета до 10мВ (в тиках)
+#define REG_ADC_VD10MV_K				63	// Коэффициент пересчета до 10мВ (в В) x1000
+#define REG_ADC_VD10MV_FINE_P0			64	// Полином точной корректировки до 10мВ P0 (в вольтах)
+#define REG_ADC_VD10MV_FINE_P1			65	// Полином точной корректировки до 10мВ P1 x1000
+#define REG_ADC_VD10MV_FINE_P2			66	// Полином точной корректировки до 10мВ P2 x1e6
+
 #define REG_ADC_VD30MV_OFFSET			4	// Смещение пересчета до 30мВ (в тиках)
 #define REG_ADC_VD30MV_K				5	// Коэффициент пересчета до 30мВ (в В) x1000
 #define REG_ADC_VD30MV_FINE_P0			6	// Полином точной корректировки до 30мВ P0 (в вольтах)
@@ -77,17 +83,17 @@
 #define REG_ADC_VD11V_FINE_P1			22	// Полином точной корректировки до 11В P1 x1000
 #define REG_ADC_VD11V_FINE_P2			23	// Полином точной корректировки до 11В P2 x1e6
 
-#define REG_ADC_ID20MA_OFFSET			24	// Смещение пересчета до 2А (в В)
-#define REG_ADC_ID20MA_K				25	// Коэффициент пересчета до 2А (в тиках)
+#define REG_ADC_ID20MA_OFFSET			24	// Смещение пересчета до 20мА (в В)
+#define REG_ADC_ID20MA_K				25	// Коэффициент пересчета до 20мА (в тиках)
 #define REG_ADC_ID20MA_FINE_P0			26	// Полином точной корректировки до 2А P0 (в вольтах)
 #define REG_ADC_ID20MA_FINE_P1			27	// Полином точной корректировки до 2А P1 x1000
 #define REG_ADC_ID20MA_FINE_P2			28	// Полином точной корректировки до 2А P2 x1e6
 
-#define REG_ADC_ID200MA_OFFSET			29	// Смещение пересчета до 2А (в В)
-#define REG_ADC_ID200MA_K				30	// Коэффициент пересчета до 2А (в тиках)
-#define REG_ADC_ID200MA_FINE_P0			31	// Полином точной корректировки до 2А P0 (в вольтах)
-#define REG_ADC_ID200MA_FINE_P1			32	// Полином точной корректировки до 2А P1 x1000
-#define REG_ADC_ID200MA_FINE_P2			33	// Полином точной корректировки до 2А P2 x1e6
+#define REG_ADC_ID200MA_OFFSET			29	// Смещение пересчета до 200мА (в В)
+#define REG_ADC_ID200MA_K				30	// Коэффициент пересчета до 200мА (в тиках)
+#define REG_ADC_ID200MA_FINE_P0			31	// Полином точной корректировки до 200мА P0 (в вольтах)
+#define REG_ADC_ID200MA_FINE_P1			32	// Полином точной корректировки до 200мА P1 x1000
+#define REG_ADC_ID200MA_FINE_P2			33	// Полином точной корректировки до 200мА P2 x1e6
 
 #define REG_ADC_ID2A_OFFSET				34	// Смещение пересчета до 2А (в В)
 #define REG_ADC_ID2A_K					35	// Коэффициент пересчета до 2А (в тиках)
@@ -95,11 +101,11 @@
 #define REG_ADC_ID2A_FINE_P1			37	// Полином точной корректировки до 2А P1 x1000
 #define REG_ADC_ID2A_FINE_P2			38	// Полином точной корректировки до 2А P2 x1e6
 
-#define REG_ADC_ID20A_OFFSET			39	// Смещение пересчета до 270А (в В)
-#define REG_ADC_ID20A_K					40	// Коэффициент пересчета до 270А (в тиках)
-#define REG_ADC_ID20A_FINE_P0			41	// Полином точной корректировки до 270А P0 (в вольтах)
-#define REG_ADC_ID20A_FINE_P1			42	// Полином точной корректировки до 270А P1 x1000
-#define REG_ADC_ID20A_FINE_P2			43	// Полином точной корректировки до 270А P2 x1e6
+#define REG_ADC_ID20A_OFFSET			39	// Смещение пересчета до 20А (в В)
+#define REG_ADC_ID20A_K					40	// Коэффициент пересчета до 20А (в тиках)
+#define REG_ADC_ID20A_FINE_P0			41	// Полином точной корректировки до 20А P0 (в вольтах)
+#define REG_ADC_ID20A_FINE_P1			42	// Полином точной корректировки до 20А P1 x1000
+#define REG_ADC_ID20A_FINE_P2			43	// Полином точной корректировки до 20А P2 x1e6
 
 #define REG_ADC_ID270A_OFFSET			44	// Смещение пересчета до 270А (в В)
 #define REG_ADC_ID270A_K				45	// Коэффициент пересчета до 270А (в тиках)
@@ -124,11 +130,12 @@
 #define REG_MAX_PULSE_TO_PULSE_PAUSE	61	// Задержка между импульсами на максимальном токе (в мс)
 
 // Несохраняемы регистры чтения-записи
-#define REG_CURRENT_SETPOINT_LOW		128	// Значение задания тока (в мА)
-#define REG_CURRENT_SETPOINT_HIGH		129	// Значение задания тока (в мА)
-#define REG_VOLTAGE_DUT_LIM				130	// Предельное значение падения напряжения (в мВ)
+#define REG_CURRENT_SETPOINT_LOW		128	// Значение задания тока младшие разряды (в мкА)
+#define REG_CURRENT_SETPOINT_HIGH		129	// Значение задания тока старшие разряды(в мкА)
+#define REG_VOLTAGE_DUT_LIM_LOW			130	// Предельное значение падения напряжения младшие разряды (в мкВ)
+#define REG_VOLTAGE_DUT_LIM_HIGH		131	// Предельное значение падения напряжения старшие разряды (в мкВ)
 
-#define REG_EN_CURRENT_FB				131 // Регистр выбора обратной связи по току
+#define REG_EN_CURRENT_FB				132 // Регистр выбора обратной связи по току
 
 //Регистры отладки
 #define REG_DBG_DATA					140	// Регистор приема передачи тестовых данных
@@ -141,10 +148,11 @@
 #define REG_PROBLEM						196	// Регистр Problem
 #define REG_OP_RESULT					197	// Регистр результата операции
 
-#define REG_IDUT_AVERAGE_LOW			250	// Полученное значение тока (в мА)
-#define REG_IDUT_AVERAGE_HIGH			251	// Полученное значение тока (в мА)
-#define REG_VDUT_AVERAGE				252	// Полученное значение напряжения (в мВ)
-#define REG_ADC_VBAT_MEASURE			253	// Хранение напряжения заряда батареи (в мВ)
+#define REG_IDUT_AVERAGE_LOW			250	// Полученное значение тока младшие разряды (в мкА)
+#define REG_IDUT_AVERAGE_HIGH			251	// Полученное значение тока старшие разряды (в мкА)
+#define REG_VDUT_AVERAGE_LOW			252	// Полученное значение напряжения младшие разряды (в мкВ)
+#define REG_VDUT_AVERAGE_HIGH			253	// Полученное значение напряжения старшие разряды (в мкВ)
+#define REG_ADC_VBAT_MEASURE			254	// Хранение напряжения заряда батареи (в мВ)
 // -----------------------------
 #define REG_FWINFO_SLAVE_NID			256	// Device CAN slave node ID
 #define REG_FWINFO_MASTER_NID			257	// Device CAN master node ID (if presented)
@@ -160,8 +168,9 @@
 //  Fault and disable codes
 #define DF_NONE							0
 #define DF_BATTERY						1	// Проблема заряда батареи
-#define DF_OVERCURRENT					2	// Заданный ток выше максимального
-#define DF_ERRORMAX						3	// превышение максимального значения ошибки
+#define DF_BATTERY_AFTER_PULSE			2	// Проблема заряда батареи
+#define DF_OVERCURRENT					3	// Заданный ток выше максимального
+#define DF_ERRORMAX						4	// превышение максимального значения ошибки
 
 // Problem
 #define PROBLEM_NONE					0
@@ -173,13 +182,10 @@
 // ENDPOINTS
 //
 #define EP_DUT_V						1		// Оцифрованные данные напряжения DUT (в В)
-#define EP_DUT_I						2		// Оцифрованные данные тока DUT (в мА)
-#define EP_REG_ERROE					3		// Оцифрованные данные ошибки (в тиках)
+#define EP_DUT_I						2		// Оцифрованные данные напряжения DUT (в В)
+#define EP_REG_ERROE					3		// Оцифрованные данные тока DUT (в мА)
 #define EP_OUT_DATA						4		// Оцифрованные данные тока DUT (в мА)
 //
-#define EP_DIAG_DUT_VDUT				4		// Значения напряжения Vdut по пульсам (в В)
-#define EP_DIAG_DUT_IDUT				5		// Значения напряжения Idut по пульсам (в мА)
-
 //  User Errors
 #define ERR_NONE						0
 #define ERR_CONFIGURATION_LOCKED		1		//  Устройство защищено от записи
