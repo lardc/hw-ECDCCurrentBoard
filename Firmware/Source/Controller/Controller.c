@@ -86,7 +86,8 @@ void CONTROL_ResetToDefaultState()
 	DataTable[REG_PROBLEM] = PROBLEM_NONE;
 	DataTable[REG_OP_RESULT] = OPRESULT_NONE;
 	DataTable[REG_ADC_VBAT_MEASURE] = 0;
-	DataTable[REG_VDUT_AVERAGE] = 0;
+	DataTable[REG_VDUT_AVERAGE_LOW] = 0;
+	DataTable[REG_VDUT_AVERAGE_HIGH] = 0;
 	DataTable[REG_IDUT_AVERAGE_LOW] = 0;
 	DataTable[REG_IDUT_AVERAGE_HIGH] = 0;
 	
@@ -101,18 +102,14 @@ void CONTROL_ResetToDefaultState()
 
 void CONTROL_ResetHardware()
 {
+	LOGIC_OffAllRelay();
 	LL_ExternalLed(false);
 	LL_EnableAmp11V(false);
 	LL_EnableAmp1500mV(false);
 	LL_EnableAmp250mV(false);
 	LL_EnableAmp30mV(false);
-	LL_EnableRange20mA(false);
-	LL_EnableRange200mA(false);
-	LL_EnableRange2A(false);
-	LL_EnableRange20A(false);
-	LL_DisableRange270A(false);
 	LL_DischargeBattery(false);
-	LL_SwitchPsBoard(false);
+	LL_SwitchPsBoard(true);
 	LL_ForceSync1(false);
 	LL_ForceSync1(false);
 	LL_WriteOutReg(0);
@@ -175,6 +172,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			{
 				if(CONTROL_State == DS_Ready)
 				{
+					LL_ExternalLed(true);
 					CONTROL_SetDeviceState(DS_InProcess);
 					CONTROL_SetDeviceSubState(SS_PulseConfig);
 					LL_ExternalLed(true);
@@ -225,7 +223,9 @@ void CONTROL_PowerOn()
 		{
 			case SS_PowerOn:
 				{
-					LL_SwitchPsBoard(true);
+					LL_DischargeBattery(true);
+					DELAY_MS(12);
+					LL_SwitchPsBoard(false);
 					CONTROL_ChargeTimeout = CONTROL_TimeCounter + TIME_BAT_CHARGE;
 					CONTROL_SetDeviceState(DS_InProcess);
 					CONTROL_SetDeviceSubState(SS_WaitCharging);
@@ -241,7 +241,7 @@ void CONTROL_PowerOn()
 					{
 						CONTROL_SetDeviceState(DS_Ready);
 						CONTROL_SetDeviceSubState(SS_None);
-						LL_SwitchPsBoard(false);
+						LL_SwitchPsBoard(true);
 					}
 					else if(CONTROL_ChargeTimeout < CONTROL_TimeCounter)
 						CONTROL_SwitchToFault(DF_BATTERY);
@@ -274,6 +274,8 @@ void CONTROL_StartPulseConfig()
 		{
 			case SS_PulseConfig:
 				{
+					LOGIC_OffAllRelay();
+					
 					LOGIC_ClearDataArrays();
 					
 					LOGIC_CacheVariables();
@@ -283,6 +285,8 @@ void CONTROL_StartPulseConfig()
 					LOGIC_EnableVoltageChannel(VoltageAmplitude);
 					
 					CC_EnableCurrentChannel(CurrentAmplitude, (float)DataTable[REG_EN_CURRENT_FB]);
+					
+					CC_SetCurrentPulse(END_CURRENT_PULSE, CurrentAmplitude);
 					
 					if(CONTROL_State == DS_InProcess)
 					{
@@ -298,6 +302,7 @@ void CONTROL_StartPulseConfig()
 			case SS_WaitingSync:
 				{
 					CONTROL_SetDeviceSubState(SS_StartPulse);
+					LL_ExternalLed(true);
 					LL_ForceSync1(true);
 				}
 				break;
@@ -305,10 +310,20 @@ void CONTROL_StartPulseConfig()
 			case SS_AfterPulseWaiting:
 				{
 					LL_ExternalLed(false);
+					LL_WriteOutReg(0);
 					
-					LL_SwitchPsBoard(true);
-					CONTROL_ChargeTimeout = CONTROL_TimeCounter + PulseToPulsePause;
+					LOGIC_OffAllRelay();
 					
+					LL_SwitchPsBoard(false);
+					
+					CONTROL_ChargeTimeout = CONTROL_TimeCounter + (Int16U)PulseToPulsePause;
+					
+					CONTROL_SetDeviceSubState(SS_ChargingAfterPulse);
+				}
+				break;
+
+			case SS_ChargingAfterPulse:
+				{
 					float BatteryVoltage = MEASURE_GetBatteryVoltage();
 					DataTable[REG_ADC_VBAT_MEASURE] = BatteryVoltage;
 					
@@ -316,10 +331,10 @@ void CONTROL_StartPulseConfig()
 					{
 						CONTROL_SetDeviceState(DS_Ready);
 						CONTROL_SetDeviceSubState(SS_None);
-						LL_SwitchPsBoard(false);
+						LL_SwitchPsBoard(true);
 					}
 					else if(CONTROL_ChargeTimeout < CONTROL_TimeCounter)
-						CONTROL_SwitchToFault(DF_BATTERY);
+						CONTROL_SwitchToFault(DF_BATTERY_AFTER_PULSE);
 				}
 				break;
 				
@@ -333,7 +348,9 @@ void CONTROL_StartPulseConfig()
 
 void CONTROL_SwitchToFault(Int16U Reason)
 {
+	CONTROL_ResetHardware();
 	CONTROL_SetDeviceState(DS_Fault);
+	CONTROL_SetDeviceSubState(SS_None);
 	DataTable[REG_FAULT_REASON] = Reason;
 }
 //------------------------------------------
