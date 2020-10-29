@@ -125,11 +125,11 @@ void LOGIC_OffAllRelay()
 
 void LOGIC_FillEndPoint(float Voltage, float Current, float Error, float DataToDAC)
 {
-	CONTROL_ValuesCounter = PULSE_BUFFER_SIZE;
+	CONTROL_ValuesCounter = PulseCounter;
 
-	CONTROL_AvrVoltageRaw[PulseCounter] = (Int16U)(Voltage / 1000);
-	CONTROL_AvrCurrentRaw[PulseCounter] = (Int16U)(Current / 1000);
-	CONTROL_RegulatorErrorRaw[PulseCounter] = (Int16U)(Error);
-	CONTROL_OutDataRaw[PulseCounter] = (Int16U)(DataToDAC / 1000);
+	CONTROL_AvrVoltageRaw[CONTROL_ValuesCounter] = (Int16U)(Voltage / 1000);
+	CONTROL_AvrCurrentRaw[CONTROL_ValuesCounter] = (Int16U)(Current / 1000);
+	CONTROL_RegulatorErrorRaw[CONTROL_ValuesCounter] = (Int16U)(Error);
+	CONTROL_OutDataRaw[CONTROL_ValuesCounter] = (Int16U)(DataToDAC / 1000);
 }
 //---------------------
