@@ -4,9 +4,8 @@
 // Команды
 #define ACT_ENABLE_POWER				1	// Переход в состояние ожидания
 #define ACT_DISABLE_POWER				2	// Отключение блока
-#define ACT_START_DIAG_PULSE			5	// Начало формирования от внутреннего синхроимпульса
-#define ACT_FAULT_CLEAR					6	// Очистка fault
-#define ACT_WARNING_CLEAR				7	// Очистка warning
+#define ACT_FAULT_CLEAR					3	// Очистка fault
+#define ACT_WARNING_CLEAR				4	// Очистка warning
 
 #define ACT_DBG_IMPULSE_LED				10	// Импульсное включение внешней индикации
 #define ACT_DBG_ENABLE_AMP11V			11	// Импульсное включение канала усиления напряжения DUT 11В

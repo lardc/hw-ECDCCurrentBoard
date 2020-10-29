@@ -175,7 +175,6 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 					LL_ExternalLed(true);
 					CONTROL_SetDeviceState(DS_InProcess);
 					CONTROL_SetDeviceSubState(SS_PulseConfig);
-					LL_ExternalLed(true);
 				}
 				else
 					*pUserError = ERR_DEVICE_NOT_READY;
@@ -193,19 +192,6 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 				else
 					*pUserError = ERR_OPERATION_BLOCKED;
 			}
-			
-		case ACT_START_DIAG_PULSE:
-			{
-				if(CONTROL_State == DS_Ready)
-				{
-					LL_ExternalLed(true);
-					CONTROL_SetDeviceState(DS_DiagPulse);
-					CONTROL_SetDeviceSubState(SS_PulseConfig);
-				}
-				else
-					*pUserError = ERR_DEVICE_NOT_READY;
-			}
-			break;
 			
 		default:
 			return DBGACT_HandleDiagnosticAction(ActionID, pUserError);
@@ -268,7 +254,7 @@ void CONTROL_PowerOff()
 
 void CONTROL_StartPulseConfig()
 {
-	if((CONTROL_State == DS_InProcess) || (CONTROL_State == DS_DiagPulse))
+	if(CONTROL_State == DS_InProcess)
 	{
 		switch (CONTROL_SubState)
 		{

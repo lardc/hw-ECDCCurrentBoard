@@ -108,10 +108,7 @@ void EXTI15_10_IRQHandler()
 			ADC_SamplingStart(ADC1);
 			ADC_SamplingStart(ADC2);
 			TIM_Start(TIM6);
-			if(CONTROL_State == DS_DiagPulse)
-			{
-				LL_ForceSync1(false);
-			}
+			LL_ForceSync1(false);
 		}
 	}
 	EXTI_FlagReset(EXTI_13);
