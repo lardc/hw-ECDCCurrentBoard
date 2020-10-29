@@ -12,7 +12,7 @@ typedef enum __DeviceState
 	DS_Disabled = 2,
 	DS_Ready = 3,
 	DS_InProcess = 4,
-	DS_DiagPulse = 5,
+	DS_DiagPulse = 5
 } DeviceState;
 
 typedef enum __DeviceSubState
@@ -26,7 +26,8 @@ typedef enum __DeviceSubState
 	SS_WaitingSync = 6,
 	SS_StartPulse = 7,
 	SS_StartReg = 8,
-	SS_AfterPulseWaiting = 9
+	SS_AfterPulseWaiting = 9,
+	SS_ChargingAfterPulse = 10
 } DeviceSubState;
 
 // Variables
@@ -38,6 +39,7 @@ extern volatile Int16U CONTROL_AvrVoltageRaw[];
 extern volatile Int16U CONTROL_AvrCurrentRaw[];
 extern volatile Int16U CONTROL_RegulatorErrorRaw[];
 extern volatile Int16U CONTROL_OutDataRaw[];
+extern volatile Int16U CONTROL_ValuesCounter;
 extern volatile Int16U PulseDelayCounter;
 
 // Functions
