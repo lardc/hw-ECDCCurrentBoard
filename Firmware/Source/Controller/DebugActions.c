@@ -159,7 +159,6 @@ void DBGACT_ImpulseSync2()
 bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 {
 	float Data = DataTable[REG_DBG_DATA];
-	float Current;
 	
 	switch (ActionID)
 	{
@@ -255,25 +254,25 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			
 		case ACT_DBG_SET_CURRENT_MAX_2A:
 			{
-				CC_SetCurrentMax2A(DataTable[REG_DBG_DATA]);
+				CC_SetCurrentMax2A(Data);
 			}
 			break;
 			
 		case ACT_DBG_SET_CURRENT_MAX_20A:
 			{
-				CC_SetCurrentMax20A(DataTable[REG_DBG_DATA]);
+				CC_SetCurrentMax20A(Data);
 			}
 			break;
 			
 		case ACT_DBG_SET_CURRENT_MAX_270A:
 			{
-				CC_SetCurrentMax270A(DataTable[REG_DBG_DATA]);
+				CC_SetCurrentMax270A(Data);
 			}
 			break;
 			
 		case ACT_DBG_SEND_DATA_TO_REG:
 			{
-				LL_WriteOutReg(DataTable[REG_DBG_DATA]);
+				LL_WriteOutReg(Data);
 			}
 			break;
 			
@@ -281,7 +280,7 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			{
 				LL_EnableRange20mA(true);
 				DELAY_MS(15);
-				CC_SetCurrentMax2A(DataTable[REG_DBG_DATA]);
+				CC_SetCurrentMax2A(Data);
 				DELAY_US(1000);
 				LL_EnableRange20mA(false);
 			}
@@ -291,7 +290,7 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			{
 				LL_EnableRange200mA(true);
 				DELAY_MS(15);
-				CC_SetCurrentMax2A(DataTable[REG_DBG_DATA]);
+				CC_SetCurrentMax2A(Data);
 				DELAY_US(1000);
 				LL_EnableRange200mA(false);
 			}
@@ -301,8 +300,7 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			{
 				LL_EnableRange2A(true);
 				DELAY_MS(15);
-				Current = CC_ItoDAC(Data);
-				CC_SetCurrentMax2A(DataTable[REG_DBG_DATA]);
+				CC_SetCurrentMax2A(Data);
 				DELAY_US(1000);
 				LL_EnableRange2A(false);
 			}
@@ -312,8 +310,7 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			{
 				LL_EnableRange20A(true);
 				DELAY_MS(15);
-				Current = CC_ItoDAC(Data);
-				CC_SetCurrentMax20A(Current);
+				CC_SetCurrentMax20A(Data);
 				DELAY_US(1000);
 				LL_EnableRange20A(false);
 			}
@@ -323,8 +320,7 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			{
 				DBGACT_TurnOnRange270A();
 				DELAY_MS(15);
-				Current = CC_ItoDAC(Data);
-				CC_SetCurrentMax270A(Current);
+				CC_SetCurrentMax270A(Data);
 				DELAY_US(1000);
 				DBGACT_TurnOffRange270A();
 			}
