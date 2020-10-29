@@ -243,6 +243,14 @@
 #define DBG_DATA_MAX				65535		//
 #define DBG_DATA_DEF				65535		//
 
+#define FE_THRESHOLD_MIN			1
+#define FE_THRESHOLD_MAX			30
+#define FE_THRESHOLD_DEF			10
+
+#define FE_COUNTER_MIN				1
+#define FE_COUNTER_MAX				50
+#define FE_COUNTER_DEF				10
+
 // Types
 typedef struct __TableItemConstraint
 {

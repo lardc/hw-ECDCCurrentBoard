@@ -128,6 +128,10 @@
 
 #define REG_MAX_PULSE_TO_PULSE_PAUSE	61	// Задержка между импульсами на максимальном токе (в мс)
 
+#define REG_ENABLE_FOLLOWING_ERROR		70	// Разрешение мониторинга FollowingError
+#define REG_FE_THRESHOLD				71	// Уровень ошибки срабатывания FollowingError (в %)
+#define REG_FE_COUNTER_MAX				72	// Счётчик условия срабатывания FollowingError
+
 // Несохраняемы регистры чтения-записи
 #define REG_CURRENT_SETPOINT_LOW		128	// Значение задания тока младшие разряды (в мкА)
 #define REG_CURRENT_SETPOINT_HIGH		129	// Значение задания тока старшие разряды(в мкА)
