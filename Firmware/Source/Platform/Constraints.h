@@ -7,6 +7,9 @@
 #include "Global.h"
 
 //Definitions
+#define NO							0
+#define YES							1
+
 #define VBAT_OFFSET_MIN				0		//
 #define VBAT_OFFSET_MAX				65535	//
 #define VBAT_OFFSET_DEF				65375	//
