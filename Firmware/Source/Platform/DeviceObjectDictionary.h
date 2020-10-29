@@ -178,10 +178,11 @@
 
 // Problem
 #define PROBLEM_NONE					0
+#define PROBLEM_FOLLOWING_ERROR			1	// Ошибка регулятора FollowingError
 
 //  Warning
 #define WARNING_NONE					0
-#define WARNING_CURRENT_TO_HIGH			1
+#define WARNING_CURRENT_TO_HIGH			1	// Попытка задать уставку тока больше допустимой
 
 // ENDPOINTS
 //

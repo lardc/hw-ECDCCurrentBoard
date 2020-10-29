@@ -18,7 +18,8 @@
 volatile float PulseDataBuffer[PULSE_BUFFER_SIZE];
 volatile float CurrentAmplitude = 0, CurrentAmplifier = 0, ShuntResistance = 0,
 		VoltageAmplitude = 0, VoltageAmplifier = 0;
-static uint16_t FollowingErrorCounter, FollowingErrorCounterMax;
+
+static uint16_t Problem, FollowingErrorCounter, FollowingErrorCounterMax;
 static float FollowingErrorThreshold;
 static bool EnableFollowingError;
 
@@ -32,7 +33,9 @@ void LOGIC_ClearDataArrays()
 	
 	Qi = 0;
 	PulseCounter = 0;
+
 	FollowingErrorCounter = 0;
+	Problem = PROBLEM_NONE;
 	
 	CONTROL_ValuesCounter = 0;
 
@@ -101,10 +104,19 @@ bool LOGIC_IsFollowingError(float RelativeError)
 			FollowingErrorCounter = 0;
 
 		if(FollowingErrorCounter >= FollowingErrorCounterMax)
+		{
+			Problem = PROBLEM_FOLLOWING_ERROR;
 			result = true;
+		}
 	}
 
 	return result;
+}
+//---------------------
+
+uint16_t LOGIC_GetProblem()
+{
+	return Problem;
 }
 //---------------------
 
