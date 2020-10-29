@@ -21,11 +21,19 @@ volatile float CurrentAmplitude = 0, CurrentAmplifier = 0, ShuntResistance = 0, 
 // Forward functions
 void LOGIC_ClearDataArrays()
 {
+	DEVPROFILE_ResetScopes(0);
+	DEVPROFILE_ResetEPReadState();
+	
+	AverageVdut = 0;
+	AverageIdut = 0;
+
 	PulseToPulsePause = 0;
 	
 	Qi = 0;
 	PulseCounter = 0;
 	
+	CONTROL_ValuesCounter = 0;
+
 	for(int i = 0; i < VALUES_OUT_SIZE; ++i)
 	{
 		CONTROL_ValuesDUTVoltage[i] = 0;
@@ -63,14 +71,15 @@ void LOGIC_CacheVariables()
 	Current = ((uint32_t)(DataTable[REG_CURRENT_SETPOINT_HIGH]) << 16) | DataTable[REG_CURRENT_SETPOINT_LOW];
 	
 	CurrentAmplitude = CC_CurrentSetup((float)Current);
-	VoltageAmplitude = (float)DataTable[REG_VOLTAGE_DUT_LIM];
+	VoltageAmplitude = (float)((uint32_t)(DataTable[REG_VOLTAGE_DUT_LIM_HIGH] << 16)
+			| DataTable[REG_VOLTAGE_DUT_LIM_LOW]);
 	
 	PropKoef = (float)DataTable[REG_CTRL_P_COEF] / 1000;
 	IntKoef = (float)DataTable[REG_CTRL_I_COEF] / 1000;
 	
 	ShuntResistance = CC_EnableShuntRes(CurrentAmplitude);
 	
-	PulseToPulsePause = (uint32_t)CurrentAmplitude * DataTable[REG_MAX_PULSE_TO_PULSE_PAUSE] / BLOCK_MAX_CURRENT;
+	PulseToPulsePause = ((CurrentAmplitude / BLOCK_MAX_CURRENT) * ((float)DataTable[REG_MAX_PULSE_TO_PULSE_PAUSE]) + 1000);
 }
 //---------------------
 
@@ -99,12 +108,28 @@ void LOGIC_EnableVoltageChannel(float Voltage)
 	}
 }
 //---------------------
-
-void LOGIC_FillEndPoint(float Voltage, float Current, float Error, uint16_t DataToDAC)
+void LOGIC_OffAllRelay()
 {
-	CONTROL_AvrVoltageRaw[PulseCounter] = Voltage;
-	CONTROL_AvrCurrentRaw[PulseCounter] = Current;
-	CONTROL_RegulatorErrorRaw[PulseCounter] = Error;
-	CONTROL_OutDataRaw[PulseCounter] = DataToDAC;
+	LL_EnableRange20mA(false);
+	LL_EnableRange200mA(false);
+	LL_EnableRange2A(false);
+	LL_EnableRange20A(false);
+	LL_EnableRange270A(false);
+	LL_DisableRange270A(false);
+	DELAY_MS(10);
+	LL_DisableRange270A(true);
+	DELAY_MS(10);
+	LL_EnableRange270A(false);
+	LL_DisableRange270A(false);
+}
+
+void LOGIC_FillEndPoint(float Voltage, float Current, float Error, float DataToDAC)
+{
+	CONTROL_ValuesCounter = PULSE_BUFFER_SIZE;
+
+	CONTROL_AvrVoltageRaw[PulseCounter] = (Int16U)(Voltage / 1000);
+	CONTROL_AvrCurrentRaw[PulseCounter] = (Int16U)(Current / 1000);
+	CONTROL_RegulatorErrorRaw[PulseCounter] = (Int16U)(Error);
+	CONTROL_OutDataRaw[PulseCounter] = (Int16U)(DataToDAC / 1000);
 }
 //---------------------

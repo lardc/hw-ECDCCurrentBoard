@@ -13,6 +13,7 @@ void LOGIC_ClearDataArrays();
 void LOGIC_PulseConfig();
 void LOGIC_CacheVariables();
 void LOGIC_EnableVoltageChannel(float Voltage);
-void LOGIC_FillEndPoint(float Voltage, float Current, float Error, uint16_t DataToDAC);
+void LOGIC_OffAllRelay();
+void LOGIC_FillEndPoint(float Voltage, float Current, float Error, float DataToDAC);
 
 #endif // __LOGIC_H
