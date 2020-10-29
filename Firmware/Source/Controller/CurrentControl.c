@@ -26,8 +26,8 @@ float CC_CurrentSetup(float Current)
 {
 	if(Current > BLOCK_MAX_CURRENT)
 	{
-		if(DataTable[REG_PROBLEM] == PROBLEM_NONE)
-			DataTable[REG_PROBLEM] = PROBLEM_CURRENT_TO_HIGH;
+		if(DataTable[REG_WARNING] == WARNING_NONE)
+			DataTable[REG_WARNING] = WARNING_CURRENT_TO_HIGH;
 		
 		return BLOCK_MAX_CURRENT;
 	}

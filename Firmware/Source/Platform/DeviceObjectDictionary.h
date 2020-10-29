@@ -178,10 +178,10 @@
 
 // Problem
 #define PROBLEM_NONE					0
-#define PROBLEM_CURRENT_TO_HIGH			1
 
 //  Warning
 #define WARNING_NONE					0
+#define WARNING_CURRENT_TO_HIGH			1
 
 // ENDPOINTS
 //
