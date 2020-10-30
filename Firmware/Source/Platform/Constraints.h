@@ -251,7 +251,7 @@
 #define FE_THRESHOLD_DEF			10
 
 #define FE_COUNTER_MIN				1
-#define FE_COUNTER_MAX				50
+#define FE_COUNTER_MAX				100
 #define FE_COUNTER_DEF				10
 
 // Types
