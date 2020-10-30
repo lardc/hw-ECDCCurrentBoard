@@ -35,7 +35,6 @@ volatile Int16U CONTROL_AvrCurrentRaw[EP_VALUE];
 volatile Int16U CONTROL_RegulatorErrorRaw[EP_VALUE];
 volatile Int16U CONTROL_OutDataRaw[EP_VALUE];
 volatile Int16U CONTROL_ValuesCounter = 0;
-volatile Int16U CONTROL_ValuesDiagEPCounter = 0;
 volatile Int16U PulseDelayCounter = 0;
 
 // Forward functions
@@ -44,6 +43,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError);
 void CONTROL_SetDeviceState(DeviceState NewState);
 void CONTROL_Init();
 void CONTROL_UpdateWatchDog();
+void CONTROL_UpdateIdleBatteryInfo();
 void CONTROL_ResetToDefaultState();
 void CONTROL_ResetHardware();
 void CONTROL_PowerOn();
@@ -126,10 +126,12 @@ void CONTROL_ResetHardware()
 void CONTROL_Idle()
 {
 	DEVPROFILE_ProcessRequests();
+
 	CONTROL_PowerOn();
 	CONTROL_PowerOff();
 	CONTROL_StartPulseConfig();
 	CONTROL_UpdateWatchDog();
+	CONTROL_UpdateIdleBatteryInfo();
 }
 //------------------------------------------
 
@@ -340,6 +342,13 @@ void CONTROL_StartPulseConfig()
 				
 		}
 	}
+}
+//------------------------------------------
+
+void CONTROL_UpdateIdleBatteryInfo()
+{
+	if(CONTROL_State != DS_InProcess)
+		DataTable[REG_ADC_VBAT_MEASURE] = MEASURE_GetBatteryVoltage();
 }
 //------------------------------------------
 
