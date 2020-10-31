@@ -17,15 +17,18 @@ typedef enum __DeviceState
 typedef enum __DeviceSubState
 {
 	SS_None = 0,
+
 	SS_PowerOn = 1,
-	SS_PowerOff = 2,
-	SS_WaitCharging = 3,
-	SS_DiagPulse = 4,
-	SS_PulseConfig = 5,
-	SS_WaitingSync = 6,
-	SS_StartPulse = 7,
-	SS_StartReg = 8,
-	SS_PulseToPulseWaiting = 9,
+	SS_WaitCharging = 2,
+
+	SS_PowerOff = 3,
+
+	SS_PulseConfig = 4,
+	SS_PulseToPulsePause = 5,
+	SS_WaitBatteryVoltage = 6,
+	SS_WaitSync = 7,
+	SS_StartPulse = 8,
+	SS_StartRegulator = 9,
 	SS_AfterPulse = 10,
 	SS_AfterPulseSwitchDelay = 11
 } DeviceSubState;

@@ -30,7 +30,7 @@ void DMA2_Channel1_IRQHandler()
 	{
 		DMA_TransferCompleteReset(DMA2, DMA_IFCR_CTCIF1);
 		
-		if(CONTROL_SubState == SS_StartReg)
+		if(CONTROL_SubState == SS_StartRegulator)
 		{
 			Vdut = 0;
 			Idut = 0;
@@ -57,7 +57,7 @@ void DMA2_Channel1_IRQHandler()
 				LL_ExternalLed(false);
 				TIM_Stop(TIM6);
 				CC_SetCurrentPulse(END_CURRENT_PULSE, CurrentAmplitude);
-				CONTROL_SetDeviceSubState(SS_AfterPulseWaiting);
+				CONTROL_SetDeviceSubState(SS_AfterPulse);
 				CONTROL_SetDeviceState(DS_InProcess);
 			}
 			else if(PulseCounter <= PULSE_BUFFER_SIZE)
@@ -108,7 +108,7 @@ void EXTI15_10_IRQHandler()
 			ADC_SamplingStart(ADC2);
 			TIM_Start(TIM6);
 			LL_ForceSync1(false);
-			CONTROL_SetDeviceSubState(SS_StartReg);
+			CONTROL_SetDeviceSubState(SS_StartRegulator);
 		}
 	}
 	EXTI_FlagReset(EXTI_13);

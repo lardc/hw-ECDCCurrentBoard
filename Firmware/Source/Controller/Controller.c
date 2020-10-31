@@ -35,6 +35,7 @@ volatile Int16U CONTROL_RegulatorErrorRaw[EP_VALUE];
 volatile Int16U CONTROL_OutDataRaw[EP_VALUE];
 volatile Int16U CONTROL_ValuesCounter = 0;
 volatile Int16U PulseDelayCounter = 0;
+static Int16U CONTROL_BatteryVoltage;
 
 // Forward functions
 //
@@ -42,7 +43,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError);
 void CONTROL_SetDeviceState(DeviceState NewState);
 void CONTROL_Init();
 void CONTROL_UpdateWatchDog();
-void CONTROL_UpdateIdleBatteryInfo();
+void CONTROL_KeepBatteryCharge();
 void CONTROL_ResetToDefaultState();
 void CONTROL_ResetHardware();
 void CONTROL_PowerOn();
@@ -128,9 +129,10 @@ void CONTROL_Idle()
 
 	CONTROL_PowerOn();
 	CONTROL_PowerOff();
+	CONTROL_KeepBatteryCharge();
+
 	CONTROL_StartPulseConfig();
 	CONTROL_UpdateWatchDog();
-	CONTROL_UpdateIdleBatteryInfo();
 }
 //------------------------------------------
 
@@ -223,7 +225,6 @@ void CONTROL_PowerOn()
 				{
 					LL_DischargeBattery(true);
 					DELAY_MS(12);
-					LL_SwitchPsBoard(false);
 					Timeout = CONTROL_TimeCounter + TIME_BAT_CHARGE;
 					CONTROL_SetDeviceState(DS_InProcess);
 					CONTROL_SetDeviceSubState(SS_WaitCharging);
@@ -232,14 +233,10 @@ void CONTROL_PowerOn()
 				
 			case SS_WaitCharging:
 				{
-					float BatteryVoltage = MEASURE_GetBatteryVoltage();
-					DataTable[REG_ADC_VBAT_MEASURE] = BatteryVoltage;
-					
-					if(BatteryVoltage >= BAT_VOLTAGE_THRESHOLD)
+					if(CONTROL_BatteryVoltage >= (BAT_VOLTAGE_THRESHOLD - BAT_VOLTAGE_DELTA))
 					{
 						CONTROL_SetDeviceState(DS_Ready);
 						CONTROL_SetDeviceSubState(SS_None);
-						LL_SwitchPsBoard(true);
 					}
 					else if(Timeout < CONTROL_TimeCounter)
 						CONTROL_SwitchToFault(DF_BATTERY);
@@ -288,18 +285,33 @@ void CONTROL_StartPulseConfig()
 					
 					CC_SetCurrentPulse(END_CURRENT_PULSE, CurrentAmplitude);
 					
-					CONTROL_SetDeviceSubState(SS_PulseToPulseWaiting);
+					CONTROL_SetDeviceSubState(SS_PulseToPulsePause);
 				}
 				break;
 				
-			case SS_PulseToPulseWaiting:
+			case SS_PulseToPulsePause:
 				{
 					if(CONTROL_TimeCounter > NextPulseTime)
-						CONTROL_SetDeviceSubState(SS_WaitingSync);
+					{
+						Timeout = CONTROL_TimeCounter + TIME_BAT_CHARGE;
+						CONTROL_SetDeviceSubState(SS_WaitBatteryVoltage);
+					}
 				}
 				break;
 
-			case SS_WaitingSync:
+			case SS_WaitBatteryVoltage:
+				{
+					if(CONTROL_BatteryVoltage > (BAT_VOLTAGE_THRESHOLD - BAT_VOLTAGE_DELTA))
+					{
+						LL_SwitchPsBoard(true);
+						CONTROL_SetDeviceSubState(SS_WaitSync);
+					}
+					else if(CONTROL_TimeCounter > Timeout)
+						CONTROL_SwitchToFault(DF_BATTERY);
+				}
+				break;
+
+			case SS_WaitSync:
 				{
 					CONTROL_SetDeviceSubState(SS_StartPulse);
 					LL_ExternalLed(true);
@@ -340,16 +352,31 @@ void CONTROL_StartPulseConfig()
 				
 			default:
 				break;
-				
 		}
 	}
 }
 //------------------------------------------
 
-void CONTROL_UpdateIdleBatteryInfo()
+void CONTROL_KeepBatteryCharge()
 {
-	if(CONTROL_State != DS_InProcess)
-		DataTable[REG_ADC_VBAT_MEASURE] = MEASURE_GetBatteryVoltage();
+	// Условие оцифровки напряжения батареи и управления зарядом
+	if(CONTROL_State != DS_InProcess ||
+			(CONTROL_State == DS_InProcess && CONTROL_SubState == SS_WaitBatteryVoltage))
+	{
+		CONTROL_BatteryVoltage = MEASURE_GetBatteryVoltage();
+		DataTable[REG_ADC_VBAT_MEASURE] = CONTROL_BatteryVoltage;
+
+		// Управление зарядом батареи
+		if(CONTROL_State == DS_Ready ||
+				(CONTROL_State == DS_InProcess &&
+						(CONTROL_SubState == SS_WaitBatteryVoltage || CONTROL_SubState == SS_WaitCharging)))
+		{
+			if(CONTROL_BatteryVoltage >= (BAT_VOLTAGE_THRESHOLD + BAT_VOLTAGE_DELTA))
+				LL_SwitchPsBoard(true);
+			else if(CONTROL_BatteryVoltage < (BAT_VOLTAGE_THRESHOLD - BAT_VOLTAGE_DELTA))
+				LL_SwitchPsBoard(false);
+		}
+	}
 }
 //------------------------------------------
 

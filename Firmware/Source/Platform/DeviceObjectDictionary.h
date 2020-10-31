@@ -172,9 +172,6 @@
 //  Fault and disable codes
 #define DF_NONE							0
 #define DF_BATTERY						1	// Проблема заряда батареи
-#define DF_BATTERY_AFTER_PULSE			2	// Проблема заряда батареи
-#define DF_OVERCURRENT					3	// Заданный ток выше максимального
-#define DF_ERRORMAX						4	// превышение максимального значения ошибки
 
 // Problem
 #define PROBLEM_NONE					0
