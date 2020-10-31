@@ -29,6 +29,7 @@
 #define TIME_EXT_LED_BLINK				500										// Время загорания внешнего светодиода (в мс)
 #define TIME_BAT_CHARGE					22000									// Время заряда батареи  (в мс)
 #define TIME_REG_STEP					50										// Время работы такта регулятора (в мс)
+#define TIME_TRANSIENT_DELAY			50										// Время на раскоммутацию (в мс)
 
 // Параметры АЦП
 #define V_ADC1_CH						1										// Номер канала АЦП V_DUT

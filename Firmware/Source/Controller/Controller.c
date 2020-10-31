@@ -29,7 +29,6 @@ volatile DeviceState CONTROL_State = DS_None;
 volatile DeviceSubState CONTROL_SubState = SS_None;
 static Boolean CycleActive = false;
 volatile Int64U CONTROL_TimeCounter = 0;
-volatile Int64U CONTROL_ChargeTimeout = 0;
 volatile Int16U CONTROL_AvrVoltageRaw[EP_VALUE];
 volatile Int16U CONTROL_AvrCurrentRaw[EP_VALUE];
 volatile Int16U CONTROL_RegulatorErrorRaw[EP_VALUE];
@@ -214,6 +213,8 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 
 void CONTROL_PowerOn()
 {
+	static Int64U Timeout = 0;
+
 	if(CONTROL_State == DS_InProcess)
 	{
 		switch (CONTROL_SubState)
@@ -223,7 +224,7 @@ void CONTROL_PowerOn()
 					LL_DischargeBattery(true);
 					DELAY_MS(12);
 					LL_SwitchPsBoard(false);
-					CONTROL_ChargeTimeout = CONTROL_TimeCounter + TIME_BAT_CHARGE;
+					Timeout = CONTROL_TimeCounter + TIME_BAT_CHARGE;
 					CONTROL_SetDeviceState(DS_InProcess);
 					CONTROL_SetDeviceSubState(SS_WaitCharging);
 				}
@@ -240,7 +241,7 @@ void CONTROL_PowerOn()
 						CONTROL_SetDeviceSubState(SS_None);
 						LL_SwitchPsBoard(true);
 					}
-					else if(CONTROL_ChargeTimeout < CONTROL_TimeCounter)
+					else if(Timeout < CONTROL_TimeCounter)
 						CONTROL_SwitchToFault(DF_BATTERY);
 				}
 				break;
@@ -265,13 +266,15 @@ void CONTROL_PowerOff()
 
 void CONTROL_StartPulseConfig()
 {
+	static Int64U NextPulseTime = 0, Timeout = 0;
+
 	if(CONTROL_State == DS_InProcess)
 	{
 		switch (CONTROL_SubState)
 		{
 			case SS_PulseConfig:
 				{
-					LOGIC_OffAllRelay();
+					LL_SwitchPsBoard(true);
 					
 					LOGIC_ClearDataArrays();
 					
@@ -285,39 +288,40 @@ void CONTROL_StartPulseConfig()
 					
 					CC_SetCurrentPulse(END_CURRENT_PULSE, CurrentAmplitude);
 					
-					CONTROL_SetDeviceSubState(SS_WaitingSync);
+					CONTROL_SetDeviceSubState(SS_PulseToPulseWaiting);
 				}
 				break;
 				
+			case SS_PulseToPulseWaiting:
+				{
+					if(CONTROL_TimeCounter > NextPulseTime)
+						CONTROL_SetDeviceSubState(SS_WaitingSync);
+				}
+				break;
+
 			case SS_WaitingSync:
 				{
 					CONTROL_SetDeviceSubState(SS_StartPulse);
 					LL_ExternalLed(true);
 					LL_ForceSync1(true);
+					NextPulseTime = CONTROL_TimeCounter + (Int16U)PulseToPulsePause;
 				}
 				break;
 				
-			case SS_AfterPulseWaiting:
+			case SS_AfterPulse:
 				{
 					LL_ExternalLed(false);
 					LL_WriteOutReg(0);
-					
 					LOGIC_OffAllRelay();
 					
-					LL_SwitchPsBoard(false);
-					
-					CONTROL_ChargeTimeout = CONTROL_TimeCounter + (Int16U)PulseToPulsePause;
-					
-					CONTROL_SetDeviceSubState(SS_ChargingAfterPulse);
+					Timeout = CONTROL_TimeCounter + TIME_TRANSIENT_DELAY;
+					CONTROL_SetDeviceSubState(SS_AfterPulseSwitchDelay);
 				}
 				break;
 
-			case SS_ChargingAfterPulse:
+			case SS_AfterPulseSwitchDelay:
 				{
-					float BatteryVoltage = MEASURE_GetBatteryVoltage();
-					DataTable[REG_ADC_VBAT_MEASURE] = BatteryVoltage;
-					
-					if(BatteryVoltage >= BAT_VOLTAGE_THRESHOLD)
+					if(CONTROL_TimeCounter > Timeout)
 					{
 						uint16_t Problem = LOGIC_GetProblem();
 						if(Problem == PROBLEM_NONE)
@@ -330,10 +334,7 @@ void CONTROL_StartPulseConfig()
 
 						CONTROL_SetDeviceState(DS_Ready);
 						CONTROL_SetDeviceSubState(SS_None);
-						LL_SwitchPsBoard(true);
 					}
-					else if(CONTROL_ChargeTimeout < CONTROL_TimeCounter)
-						CONTROL_SwitchToFault(DF_BATTERY_AFTER_PULSE);
 				}
 				break;
 				

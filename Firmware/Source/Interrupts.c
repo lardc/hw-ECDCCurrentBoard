@@ -90,7 +90,7 @@ void DMA2_Channel1_IRQHandler()
 				DataTable[REG_IDUT_AVERAGE_HIGH] = (Int16U)(((uint32_t)AverageIdut & IV_MASK_HIGH) >> 16);
 				DataTable[REG_VDUT_AVERAGE_LOW] = (Int16U)((uint32_t)AverageVdut & IV_MASK_LOW);
 				DataTable[REG_VDUT_AVERAGE_HIGH] = (Int16U)(((uint32_t)AverageVdut & IV_MASK_HIGH) >> 16);
-				CONTROL_SetDeviceSubState(SS_AfterPulseWaiting);
+				CONTROL_SetDeviceSubState(SS_AfterPulse);
 				CONTROL_SetDeviceState(DS_InProcess);
 			}
 		}
