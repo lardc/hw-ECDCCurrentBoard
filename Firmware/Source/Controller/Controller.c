@@ -304,10 +304,18 @@ void CONTROL_StartPulseConfig()
 					if(CONTROL_BatteryVoltage > (BAT_VOLTAGE_THRESHOLD - BAT_VOLTAGE_DELTA))
 					{
 						LL_SwitchPsBoard(true);
-						CONTROL_SetDeviceSubState(SS_WaitSync);
+						Timeout = CONTROL_TimeCounter + TIME_TRANSIENT_DELAY;
+						CONTROL_SetDeviceSubState(SS_PreWaitSync);
 					}
 					else if(CONTROL_TimeCounter > Timeout)
 						CONTROL_SwitchToFault(DF_BATTERY);
+				}
+				break;
+
+			case SS_PreWaitSync:
+				{
+					if(CONTROL_TimeCounter > Timeout)
+						CONTROL_SetDeviceSubState(SS_WaitSync);
 				}
 				break;
 
@@ -359,22 +367,27 @@ void CONTROL_StartPulseConfig()
 
 void CONTROL_KeepBatteryCharge()
 {
+	bool ActiveCharging = (CONTROL_State == DS_InProcess &&
+			(CONTROL_SubState == SS_WaitBatteryVoltage || CONTROL_SubState == SS_WaitCharging));
+
 	// Условие оцифровки напряжения батареи и управления зарядом
-	if(CONTROL_State != DS_InProcess ||
-			(CONTROL_State == DS_InProcess && CONTROL_SubState == SS_WaitBatteryVoltage))
+	if(CONTROL_State != DS_InProcess || ActiveCharging)
 	{
 		CONTROL_BatteryVoltage = MEASURE_GetBatteryVoltage();
 		DataTable[REG_ADC_VBAT_MEASURE] = CONTROL_BatteryVoltage;
 
 		// Управление зарядом батареи
-		if(CONTROL_State == DS_Ready ||
-				(CONTROL_State == DS_InProcess &&
-						(CONTROL_SubState == SS_WaitBatteryVoltage || CONTROL_SubState == SS_WaitCharging)))
+		if(CONTROL_State == DS_Ready || ActiveCharging)
 		{
 			if(CONTROL_BatteryVoltage >= (BAT_VOLTAGE_THRESHOLD + BAT_VOLTAGE_DELTA))
+			{
 				LL_SwitchPsBoard(true);
-			else if(CONTROL_BatteryVoltage < (BAT_VOLTAGE_THRESHOLD - BAT_VOLTAGE_DELTA))
+			}
+			else if(CONTROL_BatteryVoltage < (BAT_VOLTAGE_THRESHOLD -
+					((CONTROL_SubState == SS_WaitBatteryVoltage) ? BAT_VOLTAGE_NEG_DELTA_ACTIVE : BAT_VOLTAGE_NEG_DELTA_PASSIVE)))
+			{
 				LL_SwitchPsBoard(false);
+			}
 		}
 	}
 }

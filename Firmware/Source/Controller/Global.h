@@ -29,7 +29,7 @@
 #define TIME_EXT_LED_BLINK				500										// Время загорания внешнего светодиода (в мс)
 #define TIME_BAT_CHARGE					22000									// Время заряда батареи  (в мс)
 #define TIME_REG_STEP					50										// Время работы такта регулятора (в мс)
-#define TIME_TRANSIENT_DELAY			50										// Время на раскоммутацию (в мс)
+#define TIME_TRANSIENT_DELAY			100										// Время на раскоммутацию (в мс)
 
 // Параметры АЦП
 #define V_ADC1_CH						1										// Номер канала АЦП V_DUT
@@ -45,6 +45,8 @@
 // Параметры батареи
 #define BAT_VOLTAGE_THRESHOLD			40000									// Пороговое напряжение батареи (в мВ)
 #define BAT_VOLTAGE_DELTA				500										// Гистерезис поддержания напряжения (в мВ)
+#define BAT_VOLTAGE_NEG_DELTA_PASSIVE	3000									// Гистерезис в минус пассивного поддержания напряжения (в мВ)
+#define BAT_VOLTAGE_NEG_DELTA_ACTIVE	500										// Гистерезис в минус активного поддержания напряжения (в мВ)
 
 //Параметры формирования тока
 #define I_RANGE_20MA					20000									// Диапазон до 20мА (мкА)
