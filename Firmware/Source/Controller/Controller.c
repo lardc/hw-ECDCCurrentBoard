@@ -201,8 +201,6 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 					CONTROL_SetDeviceState(DS_Ready);
 					CONTROL_SetDeviceSubState(SS_None);
 				}
-				else
-					*pUserError = ERR_OPERATION_BLOCKED;
 			}
 			
 		default:
