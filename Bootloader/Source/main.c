@@ -5,6 +5,7 @@
 #include "Interrupts.h"
 #include "SysConfig.h"
 #include "BoardConfig.h"
+#include "BCCIxParams.h"
 
 // Forward functions
 //
@@ -52,7 +53,7 @@ void IO_Config()
 {
 	// Включение тактирования портов
 	RCC_GPIO_Clk_EN(PORTA);
-	RCC_GPIO_Clk_EN(PORTB);
+	RCC_GPIO_Clk_EN(PORTC);
 	
 	//Выходы
 	GPIO_Config(LED_BLINK_PORT, LED_BLINK_PIN, Output, PushPull, HighSpeed, NoPull);
@@ -78,7 +79,7 @@ void CAN_Config()
 	RCC_CAN_Clk_EN(CAN_1_ClkEN);
 	NCAN_Init(SYSCLK, CAN_BAUDRATE, FALSE);
 	NCAN_FIFOInterrupt(TRUE);
-	NCAN_FilterInit(0, 0, 0); // Фильтр 0 пропускает все сообщения
+	NCAN_FilterInit(0, CAN_SLAVE_FILTER_ID, CAN_SLAVE_NID_MASK);
 }
 //--------------------------------------------
 
