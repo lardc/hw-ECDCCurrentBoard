@@ -202,6 +202,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 					CONTROL_SetDeviceSubState(SS_None);
 				}
 			}
+			break;
 			
 		default:
 			return DBGACT_HandleDiagnosticAction(ActionID, pUserError);
