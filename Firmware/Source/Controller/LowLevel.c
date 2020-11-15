@@ -3,6 +3,7 @@
 // Include
 #include "Board.h"
 #include "Delay.h"
+#include "Global.h"
 
 // Functions
 //
@@ -75,6 +76,19 @@ void LL_EnableRange270A(bool State)
 void LL_DisableRange270A(bool State)
 {
 	GPIO_SetState(GPIO_RESET_RLC_270A, State);
+}
+//-----------------------------
+
+void LL_SwitchOutBus(bool State)
+{
+	if (State)
+	{
+		LL_WriteOutReg(BUS_OUT_ON);
+	}
+	else
+	{
+		LL_WriteOutReg(BUS_OUT_OFF);
+	}
 }
 //-----------------------------
 

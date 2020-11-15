@@ -19,6 +19,7 @@ void LL_EnableRange2A(bool State);
 void LL_EnableRange20A(bool State);
 void LL_EnableRange270A(bool State);
 void LL_DisableRange270A(bool State);
+void LL_SwitchOutBus(bool State);
 void LL_DischargeBattery(bool State);
 void LL_SwitchPsBoard(bool State);
 void LL_ForceSync1(bool State);
