@@ -18,23 +18,25 @@
 #define ACT_DBG_ENABLE_RNG20A			18	// Импульсное включение реле шунта канала формирования тока до 20А
 #define ACT_DBG_TURNON_RNG270A			19	// Импульсное включение реле шунта канала формирования тока до 270А
 #define ACT_DBG_TURNOFF_RNG270A			20	// Импульсное включение реле шунта канала формирования тока до 270А
-#define ACT_DBG_ENABLE_DISCHARGE		21	// Импульсное включение реле разряда батареи
-#define ACT_DBG_ENABLE_PSBOARD			22	// Импульсное включение разрешения работы заряда батареи
-#define ACT_DBG_IMPULSE_SYNC1			23	// Импульсное включение первого выхода синхронизации
-#define ACT_DBG_IMPULSE_SYNC2			24	// Импульсное включение второго выхода синхронизации
-#define ACT_DBG_SET_CURRENT_MAX_2A		25	// Отправка тестовых данных на ЦАП для формирования тока до 2А
-#define ACT_DBG_SET_CURRENT_MAX_20A		26	// Отправка тестовых данных на ЦАП для формирования тока до 20А
-#define ACT_DBG_SET_CURRENT_MAX_270A	27	// Отправка тестовых данных на ЦАП для формирования тока до 270А
-#define ACT_DBG_SEND_DATA_TO_REG		28	// Отправка тестовых данных на внешний сдвиговый регистр
-#define ACT_DBG_MEASURE_ID2A			29	// Измерение тока до 2А
-#define ACT_DBG_MEASURE_ID270A			30	// Измерение тока до 270А
-#define ACT_DBG_MEASURE_VD250MV			31	// Измерение напряжения до 250мВ
-#define ACT_DBG_MEASURE_VD11V			32	// Измерение напряжения до 11В
-#define ACT_DBG_IMPULSE_20MA			33	// Формирование тока до 20мА без ОС
-#define ACT_DBG_IMPULSE_200MA			34	// Формирование тока до 200мА без ОС
-#define ACT_DBG_IMPULSE_2A				35	// Формирование тока до 2А без ОС
-#define ACT_DBG_IMPULSE_20A				36	// Формирование тока до 20А без ОС
-#define ACT_DBG_IMPULSE_270A			37	// Формирование тока до 270А без ОС
+#define ACT_DBG_TURNON_OUT_BUS			21	// Импульсное включение реле шунта канала формирования тока до 270А
+#define ACT_DBG_TURNOFF_OUT_BUS			22	// Импульсное включение реле шунта канала формирования тока до 270А
+#define ACT_DBG_ENABLE_DISCHARGE		23	// Импульсное включение реле разряда батареи
+#define ACT_DBG_ENABLE_PSBOARD			24	// Импульсное включение разрешения работы заряда батареи
+#define ACT_DBG_IMPULSE_SYNC1			25	// Импульсное включение первого выхода синхронизации
+#define ACT_DBG_IMPULSE_SYNC2			26	// Импульсное включение второго выхода синхронизации
+#define ACT_DBG_SET_CURRENT_MAX_2A		27	// Отправка тестовых данных на ЦАП для формирования тока до 2А
+#define ACT_DBG_SET_CURRENT_MAX_20A		28	// Отправка тестовых данных на ЦАП для формирования тока до 20А
+#define ACT_DBG_SET_CURRENT_MAX_270A	29	// Отправка тестовых данных на ЦАП для формирования тока до 270А
+#define ACT_DBG_SEND_DATA_TO_REG		30	// Отправка тестовых данных на внешний сдвиговый регистр
+#define ACT_DBG_MEASURE_ID2A			31	// Измерение тока до 2А
+#define ACT_DBG_MEASURE_ID270A			32	// Измерение тока до 270А
+#define ACT_DBG_MEASURE_VD250MV			33	// Измерение напряжения до 250мВ
+#define ACT_DBG_MEASURE_VD11V			34	// Измерение напряжения до 11В
+#define ACT_DBG_IMPULSE_20MA			35	// Формирование тока до 20мА без ОС
+#define ACT_DBG_IMPULSE_200MA			36	// Формирование тока до 200мА без ОС
+#define ACT_DBG_IMPULSE_2A				37	// Формирование тока до 2А без ОС
+#define ACT_DBG_IMPULSE_20A				39	// Формирование тока до 20А без ОС
+#define ACT_DBG_IMPULSE_270A			40	// Формирование тока до 270А без ОС
 
 #define ACT_START_PROCESS				100	// Страрт процесса формирования импульса
 #define ACT_STOP_PROCESS				101	// Остановка процесса формирования импульса
