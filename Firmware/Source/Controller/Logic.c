@@ -147,6 +147,7 @@ void LOGIC_EnableVoltageChannel(float Voltage)
 //---------------------
 void LOGIC_OffAllRelay()
 {
+	LL_SwitchOutBus(false);
 	LL_EnableRange20mA(false);
 	LL_EnableRange200mA(false);
 	LL_EnableRange2A(false);
@@ -162,10 +163,52 @@ void LOGIC_OffAllRelay()
 
 void LOGIC_FillEndPoint(float Voltage, float Current, float Error, float DataToDAC)
 {
+	uint16_t CurrentDivider;
+	uint16_t VoltageDivider;
+
+	if(CurrentAmplitude <= I_RANGE_20MA)
+	{
+		CurrentDivider = 1;
+	}
+	else if(CurrentAmplitude <= I_RANGE_200MA)
+	{
+		CurrentDivider = 10;
+	}
+	else if(CurrentAmplitude <= I_RANGE_2A)
+	{
+		CurrentDivider = 100;
+	}
+	else if(CurrentAmplitude <= I_RANGE_20A)
+	{
+		CurrentDivider = 1000;
+	}
+	else
+	{
+		CurrentDivider = 10000;
+	}
+
+
+	if(VoltageAmplitude <= V_RANGE_30MV)
+	{
+		VoltageDivider = 1;
+	}
+	else if(VoltageAmplitude <= V_RANGE_250MV)
+	{
+		VoltageDivider = 10;
+	}
+	else if(VoltageAmplitude <= V_RANGE_1500MV)
+	{
+		VoltageDivider = 100;
+	}
+	else
+	{
+		VoltageDivider = 1000;
+	}
+
 	CONTROL_ValuesCounter = PulseCounter;
 
-	CONTROL_AvrVoltageRaw[CONTROL_ValuesCounter] = (Int16U)(Voltage / 1000);
-	CONTROL_AvrCurrentRaw[CONTROL_ValuesCounter] = (Int16U)(Current / 1000);
+	CONTROL_AvrVoltageRaw[CONTROL_ValuesCounter] = (Int16U)(Voltage / VoltageDivider);
+	CONTROL_AvrCurrentRaw[CONTROL_ValuesCounter] = (Int16U)(Current / CurrentDivider);
 	CONTROL_RegulatorErrorRaw[CONTROL_ValuesCounter] = (Int16S)(Error);
 	CONTROL_OutDataRaw[CONTROL_ValuesCounter] = (Int16U)(DataToDAC / 1000);
 }
