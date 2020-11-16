@@ -22,6 +22,8 @@ void DBGACT_SwitchRange2A();
 void DBGACT_SwitchRange20A();
 void DBGACT_TurnOnRange270A();
 void DBGACT_TurnOffRange270A();
+void DBGACT_TurnOnOutBus();
+void DBGACT_TurnOffOutBus();
 void DBGACT_SwitchBatteryDischarge();
 void DBGACT_SwitchPsBoard();
 void DBGACT_ImpulseSync1();
@@ -121,6 +123,18 @@ void DBGACT_TurnOffRange270A()
 	DELAY_MS(15);
 	LL_EnableRange270A(false);
 	LL_DisableRange270A(false);
+}
+//-----------------------------
+
+void DBGACT_TurnOnOutBus()
+{
+	LL_SwitchOutBus(true);
+}
+//-----------------------------
+
+void DBGACT_TurnOffOutBus()
+{
+	LL_SwitchOutBus(false);
 }
 //-----------------------------
 
@@ -228,6 +242,18 @@ bool DBGACT_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			}
 			break;
 			
+		case ACT_DBG_TURNON_OUT_BUS:
+			{
+				DBGACT_TurnOnOutBus();
+			}
+			break;
+
+		case ACT_DBG_TURNOFF_OUT_BUS:
+			{
+				DBGACT_TurnOffOutBus();
+			}
+			break;
+
 		case ACT_DBG_ENABLE_DISCHARGE:
 			{
 				DBGACT_SwitchBatteryDischarge();
