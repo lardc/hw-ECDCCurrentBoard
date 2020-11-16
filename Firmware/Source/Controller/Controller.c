@@ -270,6 +270,8 @@ void CONTROL_StartPulseConfig()
 		{
 			case SS_PulseConfig:
 				{
+					LL_SwitchOutBus(true);
+
 					LL_SwitchPsBoard(true);
 					
 					LOGIC_ClearDataArrays();
