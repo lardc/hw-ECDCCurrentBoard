@@ -84,16 +84,16 @@ void LL_SwitchOutBus(bool State)
 	if (State)
 	{
 		LL_WriteOutReg(BUS_OUT_ON);
-		DELAY_MS(10);
-		LL_WriteOutReg(BUS_OUT_ON & BUS_OUT_CLEAN);
-		DELAY_MS(10);
+		DELAY_MS(15);
+		LL_WriteOutReg(0);
+		DELAY_MS(15);
 	}
 	else
 	{
 		LL_WriteOutReg(BUS_OUT_OFF);
-		DELAY_MS(10);
-		LL_WriteOutReg(BUS_OUT_OFF & BUS_OUT_CLEAN);
-		DELAY_MS(10);
+		DELAY_MS(15);
+		LL_WriteOutReg(0);
+		DELAY_MS(15);
 	}
 }
 //-----------------------------
