@@ -24,7 +24,7 @@ volatile uint16_t OutPulse;
 //
 void DMA2_Channel1_IRQHandler()
 {
-	float RegulatorError;
+	float RegulatorError, RegulatorRelativeError;
 	
 	if(DMA_IsTransferComplete(DMA2, DMA_ISR_TCIF1))
 	{
@@ -50,9 +50,15 @@ void DMA2_Channel1_IRQHandler()
 			Vdut = Vdut / VALUES_OUT_SIZE;
 			Idut = (Idut / VALUES_OUT_SIZE) / ShuntResistance;
 			
-			RegulatorError = (PulseCounter == 0) ? 0 : (PulseDataBuffer[PulseCounter - 1] - Idut);
+			if(PulseCounter == 0)
+				RegulatorError = RegulatorRelativeError = 0;
+			else
+			{
+				RegulatorError = (Idut - PulseDataBuffer[PulseCounter - 1]);
+				RegulatorRelativeError = RegulatorError / PulseDataBuffer[PulseCounter - 1] * 100;
+			}
 			
-			if(LOGIC_IsFollowingError(RegulatorError / Idut * 100))
+			if(LOGIC_IsFollowingError(RegulatorRelativeError))
 			{
 				LL_ExternalLed(false);
 				TIM_Stop(TIM6);
@@ -65,7 +71,7 @@ void DMA2_Channel1_IRQHandler()
 				Qp = RegulatorError * PropKoef;
 				Qi += RegulatorError * IntKoef;
 				
-				Correction = PulseDataBuffer[PulseCounter] + Qp + Qi;
+				Correction = PulseDataBuffer[PulseCounter] - (Qp + Qi);
 				
 				LOGIC_FillEndPoint(Vdut, Idut, RegulatorError, Correction);
 				
