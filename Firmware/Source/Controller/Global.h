@@ -18,7 +18,7 @@
 #define PULSE_DELAY						10000									// Время паузы между импульсами тока, мС
 #define PULSE_TIME_VALUE				10000									// Длительность импульса тока, мкС
 #define PULSE_BUFFER_SIZE				(PULSE_TIME_VALUE / PULSE_DIVIDER)		// Количество точек в буфере формы импульса
-#define OFFSET_BUFFER_SIZE				65										// Оффсет для начала усреднения измерений
+#define OFFSET_BUFFER_SIZE				66										// Оффсет для начала усреднения измерений
 #define SYNC_LINE_HIGHSTATE_TIMEOUT		25										// Таймаут пребывания линии синхронизации в высоком состоянии
 #define BLOCK_MAX_CURRENT				270000000								// Максимально возможный ток для канала до 250А (мА/10)
 #define PULSE_LITE_START				10										// Количество шагов перед выходом на полку

@@ -170,35 +170,15 @@ void LOGIC_FillEndPoint(float Voltage, float Current, float Error, float DataToD
 	{
 		CurrentDivider = 1;
 	}
-	else if(CurrentAmplitude <= I_RANGE_200MA)
-	{
-		CurrentDivider = 10;
-	}
-	else if(CurrentAmplitude <= I_RANGE_2A)
-	{
-		CurrentDivider = 100;
-	}
-	else if(CurrentAmplitude <= I_RANGE_20A)
-	{
-		CurrentDivider = 1000;
-	}
 	else
 	{
-		CurrentDivider = 10000;
+		CurrentDivider = 1000;
 	}
 
 
 	if(VoltageAmplitude <= V_RANGE_30MV)
 	{
 		VoltageDivider = 1;
-	}
-	else if(VoltageAmplitude <= V_RANGE_250MV)
-	{
-		VoltageDivider = 10;
-	}
-	else if(VoltageAmplitude <= V_RANGE_1500MV)
-	{
-		VoltageDivider = 100;
 	}
 	else
 	{
