@@ -87,7 +87,7 @@ void LOGIC_CacheVariables()
 	PulseToPulsePause = ((CurrentAmplitude / BLOCK_MAX_CURRENT) * ((float)DataTable[REG_MAX_PULSE_TO_PULSE_PAUSE]) + 1000);
 
 	EnableFollowingError = DataTable[REG_ENABLE_FOLLOWING_ERROR];
-	FollowingErrorThreshold = (float)DataTable[REG_FE_THRESHOLD] / 100;
+	FollowingErrorThreshold = (float)DataTable[REG_FE_THRESHOLD];
 	FollowingErrorCounterMax = DataTable[REG_FE_COUNTER_MAX];
 }
 //---------------------
