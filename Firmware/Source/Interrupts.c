@@ -73,12 +73,12 @@ void DMA2_Channel1_IRQHandler()
 				
 				Correction = PulseDataBuffer[PulseCounter] - (Qp + Qi);
 				
-				LOGIC_FillEndPoint(Vdut, Idut, RegulatorError, Correction);
+				LOGIC_FillEndPoint(Vdut, Idut, RegulatorRelativeError, Correction);
 				
-				if(PulseCounter >= (PULSE_BUFFER_SIZE - OFFSET_BUFFER_SIZE))
+				if(PulseCounter >= OFFSET_BUFFER_SIZE)
 				{
-					AverageVdut += Vdut/(PULSE_BUFFER_SIZE - OFFSET_BUFFER_SIZE);
-					AverageIdut += Idut/(PULSE_BUFFER_SIZE - OFFSET_BUFFER_SIZE);
+					AverageVdut += Vdut;
+					AverageIdut += Idut;
 				}
 
 				PulseCounter++;
@@ -92,6 +92,8 @@ void DMA2_Channel1_IRQHandler()
 			{
 				TIM_Stop(TIM6);
 				CC_SetCurrentPulse(END_CURRENT_PULSE, CurrentAmplitude);
+				AverageVdut /= PULSE_BUFFER_SIZE - OFFSET_BUFFER_SIZE;
+				AverageIdut /= PULSE_BUFFER_SIZE - OFFSET_BUFFER_SIZE;
 				DataTable[REG_IDUT_AVERAGE_LOW] = (Int16U)((uint32_t)AverageIdut & IV_MASK_LOW);
 				DataTable[REG_IDUT_AVERAGE_HIGH] = (Int16U)(((uint32_t)AverageIdut & IV_MASK_HIGH) >> 16);
 				DataTable[REG_VDUT_AVERAGE_LOW] = (Int16U)((uint32_t)AverageVdut & IV_MASK_LOW);
