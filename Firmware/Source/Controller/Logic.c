@@ -84,7 +84,7 @@ void LOGIC_CacheVariables()
 	
 	ShuntResistance = CC_EnableShuntRes(CurrentAmplitude);
 	
-	PulseToPulsePause = ((CurrentAmplitude / BLOCK_MAX_CURRENT) * ((float)DataTable[REG_MAX_PULSE_TO_PULSE_PAUSE]) + 1000);
+	PulseToPulsePause = ((CurrentAmplitude / BLOCK_MAX_CURRENT) * ((float)DataTable[REG_MAX_PULSE_TO_PULSE_PAUSE])) + 1000;
 
 	EnableFollowingError = DataTable[REG_ENABLE_FOLLOWING_ERROR];
 	FollowingErrorThreshold = (float)DataTable[REG_FE_THRESHOLD];
