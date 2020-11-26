@@ -158,7 +158,7 @@
 #define REG_IDUT_AVERAGE_HIGH			251	// Полученное значение тока старшие разряды (в мкА)
 #define REG_VDUT_AVERAGE_LOW			252	// Полученное значение напряжения младшие разряды (в мкВ)
 #define REG_VDUT_AVERAGE_HIGH			253	// Полученное значение напряжения старшие разряды (в мкВ)
-#define REG_ADC_VBAT_MEASURE			254	// Хранение напряжения заряда батареи (в мВ)
+#define REG_ADC_VBAT_MEASURE			255	// Хранение напряжения заряда батареи (в мВ)
 // -----------------------------
 #define REG_FWINFO_SLAVE_NID			256	// Device CAN slave node ID
 #define REG_FWINFO_MASTER_NID			257	// Device CAN master node ID (if presented)
