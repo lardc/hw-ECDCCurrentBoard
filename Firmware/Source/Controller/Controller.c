@@ -45,7 +45,7 @@ void CONTROL_Init();
 void CONTROL_UpdateWatchDog();
 void CONTROL_KeepBatteryCharge();
 void CONTROL_ResetToDefaultState();
-void CONTROL_ResetHardware();
+void CONTROL_ResetHardware(bool KeepCharge);
 void CONTROL_PowerOn();
 void CONTROL_PowerOff();
 void CONTROL_StartPulseConfig();
@@ -101,21 +101,28 @@ void CONTROL_ResetToDefaultState()
 {
 	CONTROL_ResetRegistersOutputs();
 	
-	CONTROL_ResetHardware();
+	CONTROL_ResetHardware(true);
 	CONTROL_SetDeviceSubState(SS_None);
 	CONTROL_SetDeviceState(DS_None);
 }
 //------------------------------------------
 
-void CONTROL_ResetHardware()
+void CONTROL_ResetHardware(bool KeepCharge)
 {
+	if (KeepCharge)
+	{
+		LL_DischargeBattery(false);
+	}
+	else
+	{
+		LL_DischargeBattery(true);
+	}
 	LOGIC_OffAllRelay();
 	LL_ExternalLed(false);
 	LL_EnableAmp11V(false);
 	LL_EnableAmp1500mV(false);
 	LL_EnableAmp250mV(false);
 	LL_EnableAmp30mV(false);
-	LL_DischargeBattery(false);
 	LL_SwitchPsBoard(true);
 	LL_ForceSync2(false);
 	LL_ForceSync2(false);
@@ -197,7 +204,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			{
 				if(CONTROL_State == DS_InProcess)
 				{
-					CONTROL_ResetHardware();
+					CONTROL_ResetHardware(false);
 					CONTROL_SetDeviceState(DS_Ready);
 					CONTROL_SetDeviceSubState(SS_None);
 				}
@@ -398,7 +405,7 @@ void CONTROL_KeepBatteryCharge()
 
 void CONTROL_SwitchToFault(Int16U Reason)
 {
-	CONTROL_ResetHardware();
+	CONTROL_ResetHardware(false);
 	CONTROL_SetDeviceState(DS_Fault);
 	CONTROL_SetDeviceSubState(SS_None);
 	DataTable[REG_FAULT_REASON] = Reason;
