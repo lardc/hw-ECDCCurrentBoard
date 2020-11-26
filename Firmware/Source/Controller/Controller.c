@@ -117,8 +117,8 @@ void CONTROL_ResetHardware()
 	LL_EnableAmp30mV(false);
 	LL_DischargeBattery(false);
 	LL_SwitchPsBoard(true);
-	LL_ForceSync1(false);
-	LL_ForceSync1(false);
+	LL_ForceSync2(false);
+	LL_ForceSync2(false);
 	LL_WriteOutReg(0);
 }
 //------------------------------------------
@@ -325,9 +325,9 @@ void CONTROL_StartPulseConfig()
 			case SS_WaitSync:
 				{
 					CONTROL_SetDeviceSubState(SS_StartPulse);
-					LL_ExternalLed(true);
-					LL_ForceSync1(true);
 					NextPulseTime = CONTROL_TimeCounter + (Int16U)PulseToPulsePause;
+					LL_ExternalLed(true);
+					LL_ForceSync2(true);
 				}
 				break;
 				
