@@ -185,10 +185,10 @@
 
 // ENDPOINTS
 //
-#define EP_DUT_V						1		// Оцифрованные данные напряжения DUT (в В)
-#define EP_DUT_I						2		// Оцифрованные данные напряжения DUT (в В)
-#define EP_REG_ERROE					3		// Оцифрованные данные тока DUT (в мА)
-#define EP_OUT_DATA						4		// Оцифрованные данные тока DUT (в мА)
+#define EP_DUT_V						1		// Оцифрованные данные напряжения DUT (в мкВ)
+#define EP_DUT_I						2		// Оцифрованные данные тока DUT (в мкА)
+#define EP_REG_ERROE					3		// Оцифрованные данные ошибка
+#define EP_OUT_DATA						4		// Оцифрованные данные задания
 //
 //  User Errors
 #define ERR_NONE						0
