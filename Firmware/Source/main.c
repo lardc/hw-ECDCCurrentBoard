@@ -14,9 +14,6 @@ int main()
 	// Настройка портов
 	INITCFG_ConfigIO();
 	
-	// Настройка внешних прерываний
-	INITCFG_ConfigExtInt();
-	
 	// Настройка SPI
 	INITCFG_ConfigSPI();
 	

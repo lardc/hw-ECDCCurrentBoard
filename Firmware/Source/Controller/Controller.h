@@ -27,11 +27,10 @@ typedef enum __DeviceSubState
 	SS_PulseToPulsePause = 5,
 	SS_WaitBatteryVoltage = 6,
 	SS_PreWaitSync = 7,
-	SS_WaitSync = 8,
-	SS_StartPulse = 9,
-	SS_StartRegulator = 10,
-	SS_AfterPulse = 11,
-	SS_AfterPulseSwitchDelay = 12
+	SS_StartPulse = 8,
+	SS_StartRegulator = 9,
+	SS_AfterPulse = 10,
+	SS_AfterPulseSwitchDelay = 11
 } DeviceSubState;
 
 // Variables

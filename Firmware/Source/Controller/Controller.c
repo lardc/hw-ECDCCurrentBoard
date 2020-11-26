@@ -325,22 +325,27 @@ void CONTROL_StartPulseConfig()
 			case SS_PreWaitSync:
 				{
 					if(CONTROL_TimeCounter > Timeout)
-						CONTROL_SetDeviceSubState(SS_WaitSync);
+						CONTROL_SetDeviceSubState(SS_StartPulse);
 				}
 				break;
 
-			case SS_WaitSync:
+			case SS_StartPulse:
 				{
-					CONTROL_SetDeviceSubState(SS_StartPulse);
 					NextPulseTime = CONTROL_TimeCounter + (Int16U)PulseToPulsePause;
 					LL_ExternalLed(true);
 					LL_ForceSync2(true);
+
+					ADC_SamplingStart(ADC1);
+					ADC_SamplingStart(ADC2);
+					TIM_Start(TIM6);
+					CONTROL_SetDeviceSubState(SS_StartRegulator);
 				}
 				break;
 				
 			case SS_AfterPulse:
 				{
 					LL_ExternalLed(false);
+					LL_ForceSync2(false);
 					LL_WriteOutReg(0);
 					LOGIC_OffAllRelay();
 					

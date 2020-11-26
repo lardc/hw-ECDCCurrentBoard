@@ -17,7 +17,6 @@
 // Functions
 //
 Boolean INITCFG_ConfigSystemClock();
-void INITCFG_ConfigExtInt();
 void INITCFG_ConfigIO();
 void INITCFG_ConfigCAN();
 void INITCFG_ConfigUART();

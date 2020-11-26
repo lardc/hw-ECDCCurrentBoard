@@ -17,13 +17,6 @@ Boolean INITCFG_ConfigSystemClock()
 }
 //------------------------------------------------
 
-void INITCFG_ConfigExtInt()
-{
-	EXTI_Config(EXTI_PB, EXTI_15, FALL_TRIG, 0);
-	EXTI_EnableInterrupt(EXTI15_10_IRQn, 0, true);
-}
-//------------------------------------------------
-
 void INITCFG_ConfigIO()
 {
 	// Включение тактирования портов

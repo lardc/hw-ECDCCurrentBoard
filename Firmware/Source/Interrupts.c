@@ -106,23 +106,6 @@ void DMA2_Channel1_IRQHandler()
 }
 //-----------------------------------------
 
-void EXTI15_10_IRQHandler()
-{
-	if(CONTROL_SubState == SS_StartPulse)
-	{
-		if(LL_GetSync1State())
-		{
-			ADC_SamplingStart(ADC1);
-			ADC_SamplingStart(ADC2);
-			TIM_Start(TIM6);
-			LL_ForceSync2(false);
-			CONTROL_SetDeviceSubState(SS_StartRegulator);
-		}
-	}
-	EXTI_FlagReset(EXTI_15);
-}
-//-----------------------------------------
-
 void USART1_IRQHandler()
 {
 	if(ZwSCI_RecieveCheck(USART1))
