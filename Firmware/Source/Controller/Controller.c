@@ -124,7 +124,7 @@ void CONTROL_ResetHardware(bool KeepCharge)
 	LL_EnableAmp250mV(false);
 	LL_EnableAmp30mV(false);
 	LL_SwitchPsBoard(true);
-	LL_ForceSync2(false);
+	LL_ForceSync1(false);
 	LL_ForceSync2(false);
 	LL_WriteOutReg(0);
 }
