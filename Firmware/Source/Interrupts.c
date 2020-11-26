@@ -115,11 +115,11 @@ void EXTI15_10_IRQHandler()
 			ADC_SamplingStart(ADC1);
 			ADC_SamplingStart(ADC2);
 			TIM_Start(TIM6);
-			LL_ForceSync1(false);
+			LL_ForceSync2(false);
 			CONTROL_SetDeviceSubState(SS_StartRegulator);
 		}
 	}
-	EXTI_FlagReset(EXTI_13);
+	EXTI_FlagReset(EXTI_15);
 }
 //-----------------------------------------
 
