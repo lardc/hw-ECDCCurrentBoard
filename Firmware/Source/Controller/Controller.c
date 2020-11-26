@@ -405,7 +405,7 @@ void CONTROL_KeepBatteryCharge()
 
 void CONTROL_SwitchToFault(Int16U Reason)
 {
-	CONTROL_ResetHardware(false);
+	CONTROL_ResetHardware(true);
 	CONTROL_SetDeviceState(DS_Fault);
 	CONTROL_SetDeviceSubState(SS_None);
 	DataTable[REG_FAULT_REASON] = Reason;
