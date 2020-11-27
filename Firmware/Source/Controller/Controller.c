@@ -271,6 +271,9 @@ void CONTROL_StartPulseConfig()
 {
 	static Int64U NextPulseTime = 0, Timeout = 0;
 
+	if(NextPulseTime < CONTROL_TimeCounter)
+		DataTable[REG_AFTER_PULSE_DELAY] = 0;
+
 	if(CONTROL_State == DS_InProcess)
 	{
 		switch (CONTROL_SubState)
@@ -278,21 +281,15 @@ void CONTROL_StartPulseConfig()
 			case SS_PulseConfig:
 				{
 					LL_SwitchOutBus(false);
-
 					LL_SwitchOutBus(true);
-
 					LL_SwitchPsBoard(true);
 					
 					LOGIC_ClearDataArrays();
-					
 					LOGIC_CacheVariables();
-					
 					LOGIC_PulseConfig();
-					
 					LOGIC_EnableVoltageChannel(VoltageAmplitude);
 					
 					CC_EnableCurrentChannel(CurrentAmplitude, (float)DataTable[REG_EN_CURRENT_FB]);
-					
 					CC_SetCurrentPulse(END_CURRENT_PULSE, CurrentAmplitude);
 					
 					CONTROL_SetDeviceSubState(SS_PulseToPulsePause);
@@ -366,6 +363,8 @@ void CONTROL_StartPulseConfig()
 							DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
 							DataTable[REG_PROBLEM] = Problem;
 						}
+
+						DataTable[REG_AFTER_PULSE_DELAY] = 1;
 
 						CONTROL_SetDeviceState(DS_Ready);
 						CONTROL_SetDeviceSubState(SS_None);
