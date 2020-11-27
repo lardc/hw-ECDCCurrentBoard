@@ -66,7 +66,7 @@ void DMA2_Channel1_IRQHandler()
 				CONTROL_SetDeviceSubState(SS_AfterPulse);
 				CONTROL_SetDeviceState(DS_InProcess);
 			}
-			else if(PulseCounter <= PULSE_BUFFER_SIZE)
+			else if(PulseCounter < PULSE_BUFFER_SIZE)
 			{
 				Qp = RegulatorError * PropKoef;
 				Qi += RegulatorError * IntKoef;
