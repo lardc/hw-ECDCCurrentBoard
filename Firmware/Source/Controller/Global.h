@@ -27,7 +27,7 @@
 // Временные параметры
 #define TIME_LED_BLINK					500										// Мигание светодиодом (в мс)
 #define TIME_EXT_LED_BLINK				500										// Время загорания внешнего светодиода (в мс)
-#define TIME_BAT_CHARGE					22000									// Время заряда батареи  (в мс)
+#define TIME_BAT_CHARGE					40000									// Время заряда батареи  (в мс)
 #define TIME_REG_STEP					50										// Время работы такта регулятора (в мс)
 #define TIME_TRANSIENT_DELAY			100										// Время на раскоммутацию (в мс)
 
