@@ -94,7 +94,7 @@
 #define VD11V_P1_MAX				60000	//
 #define VD11V_P1_DEF				1000	//
 #define VD11V_P2_MIN				0		//
-#define VD11V_P2_MAX				60000	//
+#define VD11V_P2_MAX				INT16U_MAX	//
 #define VD11V_P2_DEF				1000	//
 
 #define ID20MA_OFFSET_MIN			0		//
