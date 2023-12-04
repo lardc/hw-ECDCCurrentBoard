@@ -17,11 +17,11 @@ void MEASURE_ConvertRawArray(volatile uint16_t *InputArray, volatile float* Outp
 	uint16_t i;
 	float tmp;
 	
-	float Offset = (float)((int16_t)DataTable[RegisterOffset]);
+	float Offset = (float)((Int16S)DataTable[RegisterOffset]);
 	float K = (float)DataTable[RegisterK] / 1000;
-	float P0 = (float)((int16_t)DataTable[RegisterP0]);
+	float P0 = (float)((Int16S)DataTable[RegisterP0]);
 	float P1 = (float)DataTable[RegisterP1] / 1000;
-	float P2 = (float)((int16_t)DataTable[RegisterP2]) / 1e6;
+	float P2 = (float)((Int16S)DataTable[RegisterP2]) / 1e6;
 	
 	for(i = 0; i < DataLength; ++i)
 	{
